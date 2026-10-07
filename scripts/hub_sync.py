@@ -2,7 +2,7 @@
 
   python scripts/hub_sync.py push data results          # upload folders
   python scripts/hub_sync.py pull data results          # download folders
-  python scripts/hub_sync.py push outputs/lafiya-lora   # adapters too
+  python scripts/hub_sync.py push outputs/ahuike-lora   # adapters too
 
 Repo defaults to <your-hf-username>/lafiya-work (private). Requires HF_TOKEN.
 """

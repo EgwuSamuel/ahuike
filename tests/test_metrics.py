@@ -5,8 +5,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from lafiya.metrics import clcc, detect_lang, mcnemar_exact, score_item, summarize  # noqa: E402
-from lafiya.prompts import parse_output, target_json  # noqa: E402
+from ahuike.metrics import clcc, detect_lang, mcnemar_exact, score_item, summarize  # noqa: E402
+from ahuike.prompts import parse_output, target_json  # noqa: E402
 
 
 def out(tri, signs=(), advice="Go now"):

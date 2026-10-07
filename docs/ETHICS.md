@@ -13,7 +13,7 @@ maternal and child danger signs and **refer early**. It is not a diagnostic devi
   Voice recordings are made by consenting adult volunteers reading synthetic cases (docs/CONSENT_FORM.md).
 
 ## Protocol simplifications (to be reviewed by the faculty supervisor / a clinician)
-The rule engine (`lafiya/protocol/rules.py`) is a **simplified triage encoding** of WHO IMCI (2014 chart booklet),
+The rule engine (`ahuike/protocol/rules.py`) is a **simplified triage encoding** of WHO IMCI (2014 chart booklet),
 WHO young-infant (PSBI) signs and the maternal danger signs in Nigeria's National Standing Orders for CHEWs. Simplifications:
 - Three triage levels only (refer now / clinic within 24 h / home care). Treatments are not modelled.
 - Every child with fever goes to the clinic (Nigeria is malaria-endemic: test before treating).
@@ -30,4 +30,4 @@ WHO young-infant (PSBI) signs and the maternal danger signs in Nigeria's Nationa
 - **Licence cap.** N-ATLaS allows up to 1,000 active end-users without a separate agreement.
 
 ## Prohibited uses
-Surveillance, profiling, or any use the N-ATLaS licence prohibits. LAFIYA must not replace clinical assessment.
+Surveillance, profiling, or any use the N-ATLaS licence prohibits. AHỤIKE must not replace clinical assessment.

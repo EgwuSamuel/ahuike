@@ -1,11 +1,11 @@
-"""Voice end-to-end evaluation: recorded test cases -> N-ATLAS ASR -> LAFIYA -> triage.
+"""Voice end-to-end evaluation: recorded test cases -> N-ATLAS ASR -> AHỤIKE -> triage.
 
 Record speakers reading NaijaTriage test items aloud (the text from data/eval_items.jsonl),
 then list them in voice/manifest.csv:
   file,case_id,lang,speaker
   voice/ha_te00012_s1.wav,te00012,ha,s1
 
-  python scripts/eval_voice.py --backend hf --adapter outputs/lafiya-lora
+  python scripts/eval_voice.py --backend hf --adapter outputs/ahuike-lora
 Outputs results/voice_preds.jsonl and results/voice_eval.json (WER + end-to-end triage accuracy).
 """
 from __future__ import annotations
@@ -23,8 +23,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 sys.path.insert(0, str(ROOT))
 
-from lafiya.pipeline import ASR, Lafiya, TriageLLM  # noqa: E402
-from lafiya.protocol import EMERGENCY  # noqa: E402
+from ahuike.pipeline import ASR, Ahuike, TriageLLM  # noqa: E402
+from ahuike.protocol import EMERGENCY  # noqa: E402
 
 
 def words(s: str) -> list[str]:
@@ -57,7 +57,7 @@ def main() -> None:
         if it["variant"] == "plain":
             refs[(it["case_id"], it["lang"])] = it["text"]
 
-    app = Lafiya(TriageLLM(args.backend, gguf_path=args.gguf, adapter=args.adapter),
+    app = Ahuike(TriageLLM(args.backend, gguf_path=args.gguf, adapter=args.adapter),
                  ASR(device=0 if args.backend == "hf" else None))
     rows = list(csv.DictReader(open(args.manifest, encoding="utf-8")))
     out_rows = []

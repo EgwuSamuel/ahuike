@@ -33,7 +33,7 @@ _STOP = {
            "now", "with", "this", "do", "not", "be", "at", "has"},
     "ha": {"da", "ba", "kuma", "shi", "ita", "yana", "tana", "zuwa", "domin", "ko", "amma",
            "wannan", "yaro", "asibiti", "nan", "sai", "za", "idan", "gaggawa", "yanzu", "cikin",
-           "kada", "ki", "ku", "su", "mai", "lafiya"},
+           "kada", "ki", "ku", "su", "mai", "ahuike"},
     "yo": {"ni", "ti", "si", "awọn", "ọmọ", "lati", "fun", "pẹlu", "tabi", "ṣe", "lọ", "yii",
            "kan", "nitori", "bi", "ko", "ile", "iwosan", "rẹ", "wa", "ma", "maa", "jẹ", "ọ̀rọ̀"},
     "ig": {"nke", "ka", "ga", "dị", "nwa", "ọ", "ma", "ebe", "ụlọ", "ọgwụ", "gị", "anyị", "mee",
@@ -159,6 +159,8 @@ def bootstrap_ci(items: list[dict], fn, n_boot: int = 1000, seed: int = 0, alpha
     for i in items:
         by_case[i["case_id"]].append(i)
     ids = list(by_case)
+    if not ids:
+        return (float("nan"), float("nan"))
     rng = random.Random(seed)
     vals = []
     for _ in range(n_boot):

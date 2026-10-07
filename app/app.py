@@ -1,9 +1,9 @@
-"""LAFIYA demo: speak or type a case in English, Hausa, Yoruba or Igbo -> triage card.
+"""AHỤIKE demo: speak or type a case in English, Hausa, Yoruba or Igbo -> triage card.
 
   # CPU / HF Space (merged GGUF):
-  LAFIYA_GGUF=<user>/LAFIYA-N-ATLaS-8B-GGUF-Powered-by-Awarri/<file>.gguf python app/app.py
+  AHỤIKE_GGUF=<user>/AHUIKE-N-ATLaS-8B-GGUF-Powered-by-Awarri/<file>.gguf python app/app.py
   # GPU notebook (adapter):
-  python app/app.py --backend hf --adapter outputs/lafiya-lora --share
+  python app/app.py --backend hf --adapter outputs/ahuike-lora --share
 """
 from __future__ import annotations
 
@@ -17,8 +17,8 @@ sys.path.insert(0, str(ROOT))
 
 import gradio as gr  # noqa: E402
 
-from lafiya.pipeline import ASR, Lafiya, TriageLLM  # noqa: E402
-from lafiya.protocol import CLINIC, EMERGENCY, HOME, TRIGGERS  # noqa: E402
+from ahuike.pipeline import ASR, Ahuike, TriageLLM  # noqa: E402
+from ahuike.protocol import CLINIC, EMERGENCY, HOME, TRIGGERS  # noqa: E402
 
 LANG_CHOICES = {"English": "en", "Hausa": "ha", "Yorùbá": "yo", "Igbo": "ig"}
 
@@ -37,8 +37,8 @@ EXAMPLES = [
 ]
 
 ATTRIBUTION = ("N-ATLaS is an initiative of the Federal Ministry of Communications, Innovation and Digital "
-               "Economy, and powered by Awarri Technologies. LAFIYA — Powered by Awarri.")
-DISCLAIMER = ("LAFIYA is decision support for community health workers and caregivers, not a diagnosis. "
+               "Economy, and powered by Awarri Technologies. AHỤIKE — Powered by Awarri.")
+DISCLAIMER = ("AHỤIKE is decision support for community health workers and caregivers, not a diagnosis. "
               "It always errs toward referral. If you are worried, go to the health centre.")
 
 
@@ -58,7 +58,7 @@ def card_html(res: dict) -> str:
 </div>"""
 
 
-def build(app: Lafiya) -> gr.Blocks:
+def build(app: Ahuike) -> gr.Blocks:
     def run_text(text, lang_name):
         if not text or not text.strip():
             return "", "", {}
@@ -71,8 +71,8 @@ def build(app: Lafiya) -> gr.Blocks:
         res = app.triage_audio(audio, LANG_CHOICES[lang_name])
         return res["input"], card_html(res), {k: res[k] for k in ("triage", "danger_signs", "advice", "raw")}
 
-    with gr.Blocks(title="LAFIYA — maternal & child triage on N-ATLAS") as demo:
-        gr.Markdown("# LAFIYA\n**Same patient, four languages, one answer.** Maternal & child danger-sign "
+    with gr.Blocks(title="AHỤIKE — maternal & child triage on N-ATLAS") as demo:
+        gr.Markdown("# AHỤIKE\n**Same patient, four languages, one answer.** Maternal & child danger-sign "
                     "triage in English, Hausa, Yorùbá and Igbo, built on N-ATLAS (LLM + ASR).")
         with gr.Row():
             with gr.Column(scale=1):
@@ -102,7 +102,7 @@ def main() -> None:
     args = ap.parse_args()
     llm = TriageLLM(backend=args.backend, gguf_path=args.gguf, adapter=args.adapter)
     asr = ASR(device=0 if args.backend == "hf" else None)
-    build(Lafiya(llm, asr, log_path=args.log)).launch(share=args.share)
+    build(Ahuike(llm, asr, log_path=args.log)).launch(share=args.share)
 
 
 if __name__ == "__main__":

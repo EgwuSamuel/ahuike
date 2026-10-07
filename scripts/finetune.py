@@ -1,6 +1,6 @@
 """QLoRA fine-tune of N-ATLaS-8B with Unsloth (fits one Kaggle T4 16 GB).
 
-  python scripts/finetune.py --data data/sft_anchored.jsonl --out outputs/lafiya-lora
+  python scripts/finetune.py --data data/sft_anchored.jsonl --out outputs/ahuike-lora
   python scripts/finetune.py --data data/sft_ablation.jsonl --out outputs/ablation-lora
 
 Loss is computed on assistant tokens only. Checkpoints every --save-steps so a killed
@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from lafiya.inference import BASE_MODEL, DATE_STRING  # noqa: E402
+from ahuike.inference import BASE_MODEL, DATE_STRING  # noqa: E402
 
 USER_HEADER = "<|start_header_id|>user<|end_header_id|>\n\n"
 ASSISTANT_HEADER = "<|start_header_id|>assistant<|end_header_id|>\n\n"

@@ -1,4 +1,4 @@
-"""End-to-end LAFIYA pipeline: speech (N-ATLAS ASR) -> text -> triage (LAFIYA / N-ATLaS LLM).
+"""End-to-end AHỤIKE pipeline: speech (N-ATLAS ASR) -> text -> triage (AHỤIKE / N-ATLaS LLM).
 
 LLM backends:
   gguf - llama.cpp on CPU with the merged Q4_K_M GGUF (HF Space / laptop at a PHC)
@@ -50,7 +50,7 @@ class TriageLLM:
         self.backend = backend
         if backend == "gguf":
             from llama_cpp import Llama
-            path = gguf_path or os.environ.get("LAFIYA_GGUF")
+            path = gguf_path or os.environ.get("AHỤIKE_GGUF")
             if path and not Path(path).exists() and "/" in path:
                 # "<repo_id>/<filename>" on the Hugging Face Hub
                 from huggingface_hub import hf_hub_download
@@ -87,7 +87,7 @@ class TriageLLM:
                                 max_new_tokens=max_new_tokens)[0]
 
 
-class Lafiya:
+class Ahuike:
     def __init__(self, llm: TriageLLM, asr: ASR | None = None, log_path: str | None = None):
         self.llm = llm
         self.asr = asr or ASR()

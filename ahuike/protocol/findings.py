@@ -1,4 +1,4 @@
-"""Catalogue of clinical findings used by the LAFIYA protocol engine.
+"""Catalogue of clinical findings used by the AHỤIKE protocol engine.
 
 Each finding carries the surface text used to render case vignettes in
 Nigerian English. Labels never come from this text: they come from

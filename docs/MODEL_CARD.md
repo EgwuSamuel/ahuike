@@ -6,7 +6,7 @@ language: [en, ha, yo, ig]
 tags: [medical, triage, maternal-health, child-health, nigeria, n-atlas, powered-by-awarri]
 ---
 
-# LAFIYA-N-ATLaS-8B (Powered by Awarri)
+# AHUIKE-N-ATLaS-8B (Powered by Awarri)
 
 Maternal and child **danger-sign triage** fine-tuned from **N-ATLaS-8B** for English, Hausa, Yorùbá and Igbo.
 It returns one of `EMERGENCY_REFER_NOW`, `CLINIC_WITHIN_24H` or `HOME_CARE`, the protocol danger signs that triggered it,
@@ -27,7 +27,7 @@ See `results/REPORT.md` in the project repository: accuracy, under-triage rate, 
 Cross-Lingual Clinical Consistency (CLCC), compared with base N-ATLaS using paired McNemar tests.
 
 ## Prompt
-Use the system prompt in `lafiya/prompts.py` (`SYSTEM_PROMPT`). The model replies with one JSON object.
+Use the system prompt in `ahuike/prompts.py` (`SYSTEM_PROMPT`). The model replies with one JSON object.
 
 ## Intended use and limits
 Decision support for community health workers and caregivers. **Not a diagnostic device.** It errs toward referral.

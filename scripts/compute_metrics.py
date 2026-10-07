@@ -6,7 +6,6 @@ Runs on CPU in seconds; no GPU needed.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import sys
 from collections import defaultdict
@@ -17,12 +16,13 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 sys.path.insert(0, str(ROOT))
 
-from lafiya.metrics import (  # noqa: E402
+from ahuike.metrics import (  # noqa: E402
     CORE_LANGS, bootstrap_ci, clcc, confusion, paired, score_item, summarize,
 )
-from lafiya.protocol import EMERGENCY  # noqa: E402
+from ahuike.prompts import input_hash  # noqa: E402
+from ahuike.protocol import EMERGENCY  # noqa: E402
 
-ORDER = ["base", "base_fewshot", "ablation", "lafiya"]
+ORDER = ["base", "base_fewshot", "ablation", "ahuike"]
 
 
 def load_jsonl(p: Path) -> list[dict]:
@@ -55,7 +55,7 @@ def main() -> None:
     items_path = Path(args.cases).with_name("eval_items.jsonl")
     current = None
     if items_path.exists():
-        current = {(i["case_id"], i["lang"], i["variant"]): hashlib.sha1(i["text"].encode("utf-8")).hexdigest()[:12]
+        current = {(i["case_id"], i["lang"], i["variant"]): input_hash(i["text"])
                    for i in load_jsonl(items_path)}
     latest = {}
     for p in preds:
@@ -82,8 +82,8 @@ def main() -> None:
         r = {
             "overall": summarize(plain),
             "overall_ci": {
-                "accuracy": bootstrap_ci(plain, lambda x: summarize(x)["accuracy"], args.boot),
-                "under_triage_rate": bootstrap_ci(em, lambda x: summarize(x)["under_triage_rate"], args.boot),
+                "accuracy": bootstrap_ci(plain, lambda x: summarize(x).get("accuracy", float("nan")), args.boot),
+                "under_triage_rate": bootstrap_ci(em, lambda x: summarize(x).get("under_triage_rate", float("nan")), args.boot),
                 "clcc": bootstrap_ci(plain, lambda x: clcc(x).get("clcc", float("nan")), args.boot),
             },
             "by_language": {l: summarize([i for i in plain if i["lang"] == l]) for l in CORE_LANGS},
@@ -112,7 +112,7 @@ def main() -> None:
 
     # ------------------------------------------------------------------ markdown report
     L = ["# NaijaTriage-Bench results", "",
-         "Gold labels are produced by the LAFIYA protocol engine (WHO IMCI + Nigerian CHEW Standing Orders).",
+         "Gold labels are produced by the AHỤIKE protocol engine (WHO IMCI + Nigerian CHEW Standing Orders).",
          "Brackets are 95% case-clustered bootstrap CIs. Under-triage = emergency cases not referred.", "",
          "## Headline: all faithful items (en/ha/yo/ig, plain text)", "",
          "| System | N | Accuracy | Macro-F1 | Under-triage ↓ | Over-triage | Danger-sign F1 | CLCC ↑ | Worst-lang gap ↓ | JSON valid |",

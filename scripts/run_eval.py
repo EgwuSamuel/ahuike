@@ -1,6 +1,6 @@
-"""Run NaijaTriage-Bench through base N-ATLaS and LAFIYA adapters. Resumable.
+"""Run NaijaTriage-Bench through base N-ATLaS and AHỤIKE adapters. Resumable.
 
-  python scripts/run_eval.py --systems base base_fewshot lafiya=outputs/lafiya-lora \
+  python scripts/run_eval.py --systems base base_fewshot ahuike=outputs/ahuike-lora \
       ablation=outputs/ablation-lora --backend vllm
 
 System specs:
@@ -13,7 +13,6 @@ Predictions are appended to results/preds.jsonl as
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import sys
 from pathlib import Path
@@ -23,9 +22,9 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 sys.path.insert(0, str(ROOT))
 
-from lafiya.inference import ChatEngine  # noqa: E402
-from lafiya.prompts import advice_key, build_messages, load_advice, target_json  # noqa: E402
-from lafiya.protocol import CLINIC, EMERGENCY, HOME  # noqa: E402
+from ahuike.inference import ChatEngine  # noqa: E402
+from ahuike.prompts import advice_key, build_messages, input_hash, load_advice, target_json  # noqa: E402
+from ahuike.protocol import CLINIC, EMERGENCY, HOME  # noqa: E402
 
 
 def load_jsonl(p: Path) -> list[dict]:
@@ -33,10 +32,6 @@ def load_jsonl(p: Path) -> list[dict]:
         return []
     with open(p, encoding="utf-8") as fh:
         return [json.loads(l) for l in fh if l.strip()]
-
-
-def text_hash(text: str) -> str:
-    return hashlib.sha1(text.encode("utf-8")).hexdigest()[:12]
 
 
 def few_shot_examples(train: list[dict]) -> list[tuple[str, str]]:
@@ -80,7 +75,7 @@ def main() -> None:
 
     for name, adapter in specs:
         todo = [it for it in items
-                if (name, it["case_id"], it["lang"], it["variant"], text_hash(it["text"])) not in done]
+                if (name, it["case_id"], it["lang"], it["variant"], input_hash(it["text"])) not in done]
         print(f"[{name}] {len(todo)} items to run")
         if not todo:
             continue
@@ -89,7 +84,8 @@ def main() -> None:
         with open(out, "a", encoding="utf-8") as fh:
             for it, o in zip(todo, outs):
                 fh.write(json.dumps({"system": name, "case_id": it["case_id"], "lang": it["lang"],
-                                     "variant": it["variant"], "output": o}, ensure_ascii=False) + "\n")
+                                     "variant": it["variant"], "text_hash": input_hash(it["text"]),
+                                     "output": o}, ensure_ascii=False) + "\n")
         print(f"[{name}] done")
 
 

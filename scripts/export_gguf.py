@@ -1,7 +1,7 @@
-"""Merge the LAFIYA adapter into N-ATLaS and export a Q4_K_M GGUF for CPU inference (llama.cpp).
+"""Merge the AHỤIKE adapter into N-ATLaS and export a Q4_K_M GGUF for CPU inference (llama.cpp).
 
-  python scripts/export_gguf.py --adapter outputs/lafiya-lora --out /tmp/lafiya-gguf \
-      --push <user>/LAFIYA-N-ATLaS-8B-GGUF-Powered-by-Awarri
+  python scripts/export_gguf.py --adapter outputs/ahuike-lora --out /tmp/ahuike-gguf \
+      --push <user>/AHUIKE-N-ATLaS-8B-GGUF-Powered-by-Awarri
 
 Licence note: N-ATLaS derivatives must keep the N-ATLaS licence and carry the
 "Powered by Awarri" suffix. The model card in docs/MODEL_CARD.md is uploaded as README.md.
@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT))
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--adapter", required=True)
-    ap.add_argument("--out", default="/tmp/lafiya-gguf")
+    ap.add_argument("--out", default="/tmp/ahuike-gguf")
     ap.add_argument("--quant", default="q4_k_m")
     ap.add_argument("--push", default=None, help="HF repo id for the GGUF (public model repo)")
     args = ap.parse_args()

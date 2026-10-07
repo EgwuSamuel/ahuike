@@ -1,7 +1,7 @@
 """Assemble fine-tuning sets and the evaluation item list from cases + N-ATLAS translations.
 
 Outputs (data/):
-  sft_anchored.jsonl  - LAFIYA: anchored cases in every language that passed + code-switched variants
+  sft_anchored.jsonl  - AHỤIKE: anchored cases in every language that passed + code-switched variants
   sft_ablation.jsonl  - ablation: same size and language mix, each case in ONE language only
   eval_items.jsonl    - every faithful test item {case_id, lang, variant, text} for run_eval.py
   benchmark_cases.json - the parallel core (test cases faithful in all four languages)
@@ -20,8 +20,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 sys.path.insert(0, str(ROOT))
 
-from lafiya.backcheck import check  # noqa: E402
-from lafiya.prompts import advice_key, build_messages, load_advice, target_json  # noqa: E402
+from ahuike.backcheck import check  # noqa: E402
+from ahuike.prompts import advice_key, build_messages, load_advice, target_json  # noqa: E402
 
 
 def load_jsonl(p: Path) -> list[dict]:
@@ -34,7 +34,7 @@ def main() -> None:
     ap.add_argument("--data", default=str(ROOT / "data"))
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--max-anchored-examples", type=int, default=2000,
-                    help="cap on LAFIYA examples; the ablation needs as many UNIQUE cases")
+                    help="cap on AHỤIKE examples; the ablation needs as many UNIQUE cases")
     ap.add_argument("--allow-missing-advice", action="store_true",
                     help="fall back to English advice if advice_i18n.json is missing (debug only)")
     args = ap.parse_args()
@@ -81,7 +81,7 @@ def main() -> None:
 
     rng = random.Random(args.seed)
 
-    # LAFIYA set: anchored cases in EVERY language whose translation passed (en + at least one
+    # AHỤIKE set: anchored cases in EVERY language whose translation passed (en + at least one
     # Nigerian language), so the same clinical picture appears in parallel with one target.
     anchored, anchor_ids = [], []
     for c in train:

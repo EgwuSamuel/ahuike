@@ -29,7 +29,7 @@ def main() -> None:
     rng = random.Random(args.seed)
     out = Path(ROOT / "voice")
     out.mkdir(exist_ok=True)
-    sheet = ["# LAFIYA voice recording sheet", "",
+    sheet = ["# AHỤIKE voice recording sheet", "",
              "Read each passage naturally, as if you were calling a health worker. Record in a normal room "
              "(some background noise is fine). Save each recording with the file name shown. "
              "Every speaker signs the consent form first (docs/CONSENT_FORM.md).", ""]

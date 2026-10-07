@@ -21,8 +21,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 sys.path.insert(0, str(ROOT))
 
-from lafiya.cases import sample_case  # noqa: E402
-from lafiya.protocol import CHILD, CLINIC, EMERGENCY, HOME, INFANT, POSTPARTUM, PREGNANT  # noqa: E402
+from ahuike.cases import sample_case  # noqa: E402
+from ahuike.protocol import CHILD, CLINIC, EMERGENCY, HOME, INFANT, POSTPARTUM, PREGNANT  # noqa: E402
 
 POP_WEIGHTS = {CHILD: 0.40, INFANT: 0.15, PREGNANT: 0.30, POSTPARTUM: 0.15}
 LEVEL_MIX = {EMERGENCY: 0.40, CLINIC: 0.35, HOME: 0.25}

@@ -6,14 +6,14 @@ Add-ons > Secrets: HF_TOKEN (your Hugging Face read+write token, after N-ATLaS a
 import json
 from pathlib import Path
 
-REPO = "https://github.com/EgwuSamuel/lafiya.git"
+REPO = "https://github.com/EgwuSamuel/ahuike.git"
 
 SETUP = [
     ("md", "Kaggle settings: **GPU T4 x2**, **Internet on**, Secret **HF_TOKEN** attached."),
     ("code", "import os\nfrom kaggle_secrets import UserSecretsClient\n"
              "os.environ['HF_TOKEN'] = UserSecretsClient().get_secret('HF_TOKEN')\n"
              "!nvidia-smi --query-gpu=name,memory.total --format=csv"),
-    ("code", f"!git clone -q {REPO} lafiya || (cd lafiya && git pull -q)\n%cd lafiya"),
+    ("code", f"!git clone -q {REPO} ahuike || (cd ahuike && git pull -q)\n%cd ahuike"),
     ("md", "Pre-flight check: token, gated access to N-ATLaS + 4 ASR models, GPUs, chat template. "
            "Everything should say PASS before you continue."),
     ("code", "!python scripts/check_setup.py"),
@@ -24,7 +24,7 @@ INSTALL_VLLM = (
     "!nvidia-smi | head -4\n"
     "!pip install -q vllm\n"
     "# vLLM installs its own PyTorch build. Kaggle's preinstalled torchaudio no longer matches it and\n"
-    "# breaks every transformers import, so remove it (LAFIYA does not need torchaudio).\n"
+    "# breaks every transformers import, so remove it (AHỤIKE does not need torchaudio).\n"
     "!pip uninstall -y -q torchaudio\n"
     "!python -c \"import torch, vllm; print('torch', torch.__version__, '| cuda', torch.version.cuda, "
     "'| GPUs visible:', torch.cuda.device_count(), '| vllm', vllm.__version__)\"\n"
@@ -34,7 +34,7 @@ INSTALL_VLLM = (
 
 NOTEBOOKS = {
     "01_translate_and_baseline.ipynb": [
-        ("md", "# LAFIYA 01 — N-ATLAS translation + baseline benchmark\n"
+        ("md", "# AHỤIKE 01 — N-ATLAS translation + baseline benchmark\n"
                "Translates NaijaTriage-Bench into Hausa/Yoruba/Igbo **with N-ATLAS**, back-translates and "
                "filters, builds the fine-tuning sets, and scores **base N-ATLAS** (zero-shot and few-shot). "
                "Every step is resumable: if the session dies, re-run the cells."),
@@ -52,40 +52,40 @@ NOTEBOOKS = {
         ("code", "!python scripts/hub_sync.py push data results"),
     ],
     "02_finetune_unsloth.ipynb": [
-        ("md", "# LAFIYA 02 — QLoRA fine-tuning of N-ATLaS-8B (Unsloth)\n"
-               "Trains **LAFIYA** (parallel-anchored) and the **ablation** (same size, no parallel anchoring). "
+        ("md", "# AHỤIKE 02 — QLoRA fine-tuning of N-ATLaS-8B (Unsloth)\n"
+               "Trains **AHỤIKE** (parallel-anchored) and the **ablation** (same size, no parallel anchoring). "
                "Each run takes about 1.5–3 h on one T4. Checkpoints every 50 steps: if the session dies, "
                "re-run with `--resume`."),
         *SETUP,
         ("code", "!pip install -q unsloth\n!pip uninstall -y -q torchaudio  # avoid CUDA-version mismatch with the new torch"),
         ("code", "!python scripts/hub_sync.py pull data"),
-        ("md", "## 1. LAFIYA (parallel-anchored)"),
-        ("code", "!python scripts/finetune.py --data data/sft_anchored.jsonl --out outputs/lafiya-lora --epochs 2"),
-        ("code", "!python scripts/hub_sync.py push outputs/lafiya-lora"),
+        ("md", "## 1. AHỤIKE (parallel-anchored)"),
+        ("code", "!python scripts/finetune.py --data data/sft_anchored.jsonl --out outputs/ahuike-lora --epochs 2"),
+        ("code", "!python scripts/hub_sync.py push outputs/ahuike-lora"),
         ("md", "## 2. Ablation (no parallel anchoring) — run if time allows"),
         ("code", "!python scripts/finetune.py --data data/sft_ablation.jsonl --out outputs/ablation-lora --epochs 2"),
         ("code", "!python scripts/hub_sync.py push outputs/ablation-lora"),
         ("md", "## 3. Export merged Q4_K_M GGUF for the CPU demo (HF Space)\n"
                "Repo name must carry the **Powered-by-Awarri** suffix (N-ATLaS licence)."),
         ("code", "HF_USER = 'SamEgwu'\n"
-                 "!python scripts/export_gguf.py --adapter outputs/lafiya-lora --out /tmp/lafiya-gguf "
-                 "--push {HF_USER}/LAFIYA-N-ATLaS-8B-GGUF-Powered-by-Awarri"),
+                 "!python scripts/export_gguf.py --adapter outputs/ahuike-lora --out /tmp/ahuike-gguf "
+                 "--push {HF_USER}/AHUIKE-N-ATLaS-8B-GGUF-Powered-by-Awarri"),
     ],
     "03_eval_and_demo.ipynb": [
-        ("md", "# LAFIYA 03 — Benchmark LAFIYA vs base N-ATLAS, then live demo"),
+        ("md", "# AHỤIKE 03 — Benchmark AHỤIKE vs base N-ATLAS, then live demo"),
         *SETUP,
         INSTALL_VLLM,
-        ("code", "!python scripts/hub_sync.py pull data results outputs/lafiya-lora outputs/ablation-lora"),
-        ("code", "!python scripts/run_eval.py --backend auto --systems lafiya=outputs/lafiya-lora "
+        ("code", "!python scripts/hub_sync.py pull data results outputs/ahuike-lora outputs/ablation-lora"),
+        ("code", "!python scripts/run_eval.py --backend auto --systems ahuike=outputs/ahuike-lora "
                  "ablation=outputs/ablation-lora"),
         ("code", "!python scripts/compute_metrics.py\n!python scripts/hub_sync.py push results"),
         ("md", "## Live demo (restart the session first to free GPU memory from vLLM, re-run setup cells)\n"
                "Opens a public Gradio link: use it for the video and for live user sessions."),
         ("code", "!pip install -q gradio peft\n"
-                 "!python scripts/hub_sync.py pull data outputs/lafiya-lora\n"
-                 "!python app/app.py --backend hf --adapter outputs/lafiya-lora --share"),
+                 "!python scripts/hub_sync.py pull data outputs/ahuike-lora\n"
+                 "!python app/app.py --backend hf --adapter outputs/ahuike-lora --share"),
         ("md", "## Voice evaluation (after uploading recordings to voice/ and filling voice/manifest.csv)"),
-        ("code", "!python scripts/eval_voice.py --backend hf --adapter outputs/lafiya-lora"),
+        ("code", "!python scripts/eval_voice.py --backend hf --adapter outputs/ahuike-lora"),
     ],
 }
 

@@ -3,7 +3,7 @@
 Translation is done SENTENCE BY SENTENCE (long multi-symptom passages made N-ATLAS drop or
 invent content), with a small symptom glossary hint for the terms a sentence contains.
 Identical sentences are translated once and reused. Each case is then back-translated
-sentence by sentence and checked with lafiya.backcheck (label-preserving filter).
+sentence by sentence and checked with ahuike.backcheck (label-preserving filter).
 
 Resumable: finished jobs in --out are skipped, rows are re-checked with the current
 checker on load, and rows whose English source changed are discarded.
@@ -32,9 +32,9 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 sys.path.insert(0, str(ROOT))
 
-from lafiya.backcheck import check  # noqa: E402
-from lafiya.inference import ChatEngine  # noqa: E402
-from lafiya.prompts import ADVICE_EN, LANGS  # noqa: E402
+from ahuike.backcheck import check  # noqa: E402
+from ahuike.inference import ChatEngine  # noqa: E402
+from ahuike.prompts import ADVICE_EN, LANGS  # noqa: E402
 
 # Mild penalty against translation loops (the N-ATLaS card recommends 1.12 for free text).
 REP_PENALTY = 1.1

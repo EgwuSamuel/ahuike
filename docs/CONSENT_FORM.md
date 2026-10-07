@@ -1,6 +1,6 @@
-# Voice recording consent: LAFIYA (NAIC 2026 research project)
+# Voice recording consent: AHỤIKE (NAIC 2026 research project)
 
-**Project:** LAFIYA: cross-lingual maternal and child health triage on N-ATLAS
+**Project:** AHỤIKE: cross-lingual maternal and child health triage on N-ATLAS
 **Institution / Department:** ______________________  **Supervisor:** ______________________
 
 You are invited to record yourself reading short, **made-up** health scenarios in your language.

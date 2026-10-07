@@ -1,20 +1,22 @@
-# LAFIYA — Same patient, four languages, one answer
+# AHỤIKE — Same patient, four languages, one answer
 
-**Cross-lingual maternal & child danger-sign triage on N-ATLAS.**
+*Ahụike nne na nwa*: health for mother and child. (*Ahụike*, pronounced ah-HOO-ee-keh, is Igbo for "health".)
+
+**Cross-lingual maternal & child danger-sign triage on N-ATLAS, with Igbo as the in-depth human-validated case study.**
 National AI Innovation Challenge 2026 · Academia & Research track · Problem Statement 03 (Sectoral Fine-Tuning: Health)
 
 > *Your language should never change your diagnosis.*
 
 A mother in Kano, Ibadan or Enugu should get the same advice for the same danger sign whether she
-describes it in Hausa, Yorùbá, Igbo or Nigerian English. LAFIYA measures whether N-ATLAS does this,
+describes it in Hausa, Yorùbá, Igbo or Nigerian English. AHỤIKE measures whether N-ATLAS does this,
 and fine-tunes it so it does.
 
 **Why this matters now.** The N-ATLaS model card's own human evaluation shows uneven quality across languages
 (average 4.21/5 in English, 3.98 in Hausa, 3.87 in Igbo, 2.69 in Yorùbá). For general chat that is a quality gap.
-For a danger sign in pregnancy it is a safety gap. LAFIYA turns that gap into a measured, clinical number
+For a danger sign in pregnancy it is a safety gap. AHỤIKE turns that gap into a measured, clinical number
 (CLCC, under-triage per language) and shows how much fine-tuning closes it.
 
-**How LAFIYA differs from a health chatbot on N-ATLaS.** It doesn't wrap the base model in a prompt. It
+**How AHỤIKE differs from a health chatbot on N-ATLaS.** It doesn't wrap the base model in a prompt. It
 (1) fine-tunes N-ATLaS on protocol-grounded data, (2) proves the gain on a 640-item parallel benchmark with
 significance tests against base N-ATLaS, and (3) reports safety per language, not only on average.
 
@@ -22,7 +24,7 @@ significance tests against base N-ATLaS, and (3) reports safety per language, no
 
 | Contribution | What it is |
 |---|---|
-| **Protocol-compiled data** | WHO IMCI and Nigerian CHEW Standing Orders encoded as a rule engine ([`lafiya/protocol/rules.py`](lafiya/protocol/rules.py)). Cases are *generated from* the rules, so every gold label is correct by construction and auditable. |
+| **Protocol-compiled data** | WHO IMCI and Nigerian CHEW Standing Orders encoded as a rule engine ([`ahuike/protocol/rules.py`](ahuike/protocol/rules.py)). Cases are *generated from* the rules, so every gold label is correct by construction and auditable. |
 | **NaijaTriage-Bench** | Parallel benchmark of 160 held-out clinical cases × 4 languages (640 items) + 150 code-switched items. Train/test split by *clinical combination* so no test picture is seen in training. |
 | **CLCC metric** | *Cross-Lingual Clinical Consistency*: share of cases triaged identically in all four languages, plus the worst-language gap. Linguistic equity as a number. |
 | **Parallel-anchored fine-tuning** | Each training case appears in all four languages with one target. An equal-size ablation without anchoring isolates the effect. |
@@ -45,9 +47,9 @@ rules.py ─► generate_cases.py ─► English vignettes (Nigerian lay terms, 
                                        │
          build_sft.py ─► finetune.py (Unsloth QLoRA on N-ATLaS-8B) ─► LoRA adapter ─► GGUF
                                        │
-         run_eval.py (base, base few-shot, LAFIYA, ablation) ─► compute_metrics.py ─► REPORT.md
+         run_eval.py (base, base few-shot, AHỤIKE, ablation) ─► compute_metrics.py ─► REPORT.md
                                        │
-         app/app.py: mic ─► N-ATLAS ASR (ha/yo/ig/en) ─► LAFIYA ─► triage card
+         app/app.py: mic ─► N-ATLAS ASR (ha/yo/ig/en) ─► AHỤIKE ─► triage card
 ```
 
 ## Quickstart
@@ -62,7 +64,7 @@ python scripts/generate_cases.py
 GPU parts run on Kaggle (free 2×T4). Build the notebooks with `python notebooks/build_notebooks.py`, then run, in order:
 
 1. `notebooks/01_translate_and_baseline.ipynb`: N-ATLAS translation, back-translation filter, baseline benchmark
-2. `notebooks/02_finetune_unsloth.ipynb`: LAFIYA + ablation fine-tunes, GGUF export
+2. `notebooks/02_finetune_unsloth.ipynb`: AHỤIKE + ablation fine-tunes, GGUF export
 3. `notebooks/03_eval_and_demo.ipynb`: benchmark, live demo, voice evaluation
 
 You need: Hugging Face access to `NCAIR1/N-ATLaS` and the four `NCAIR1/*-ASR` models, and an `HF_TOKEN` secret.
@@ -70,13 +72,13 @@ You need: Hugging Face access to `NCAIR1/N-ATLaS` and the four `NCAIR1/*-ASR` mo
 ## Repository map
 
 ```
-lafiya/protocol/   findings catalogue + rule engine (gold labels)
-lafiya/cases.py    case sampler + Nigerian-English renderer
-lafiya/prompts.py  system prompt, targets, output parser (shared by train/eval/app)
-lafiya/metrics.py  accuracy, under-triage, danger-sign F1, CLCC, bootstrap, McNemar
-lafiya/backcheck.py back-translation fidelity filter
-lafiya/inference.py vLLM / transformers chat engine (base + LoRA adapters)
-lafiya/pipeline.py ASR → LLM end-to-end pipeline
+ahuike/protocol/   findings catalogue + rule engine (gold labels)
+ahuike/cases.py    case sampler + Nigerian-English renderer
+ahuike/prompts.py  system prompt, targets, output parser (shared by train/eval/app)
+ahuike/metrics.py  accuracy, under-triage, danger-sign F1, CLCC, bootstrap, McNemar
+ahuike/backcheck.py back-translation fidelity filter
+ahuike/inference.py vLLM / transformers chat engine (base + LoRA adapters)
+ahuike/pipeline.py ASR → LLM end-to-end pipeline
 scripts/           generate, translate, build_sft, finetune, run_eval, compute_metrics, eval_voice, export_gguf
 app/app.py         Gradio voice demo
 docs/              architecture, N-ATLAS integration, model & dataset cards, ethics, consent form
@@ -84,7 +86,7 @@ docs/              architecture, N-ATLAS integration, model & dataset cards, eth
 
 ## Safety
 
-LAFIYA is **decision support for community health workers and caregivers, not a diagnosis**.
+AHỤIKE is **decision support for community health workers and caregivers, not a diagnosis**.
 The protocol always errs toward referral. No real patient data is used. See [`docs/ETHICS.md`](docs/ETHICS.md).
 
 ## Licence & attribution

@@ -1,4 +1,4 @@
-"""LAFIYA protocol engine: the single source of truth for gold labels.
+"""AHỤIKE protocol engine: the single source of truth for gold labels.
 
 `triage(case)` maps a structured case (never its text) to a triage level and
 the list of protocol triggers that justify it. Every gold label in

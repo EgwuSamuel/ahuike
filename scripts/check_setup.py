@@ -15,9 +15,9 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 sys.path.insert(0, str(ROOT))
 
-from lafiya.inference import BASE_MODEL, DATE_STRING  # noqa: E402
-from lafiya.pipeline import ASR_MODELS  # noqa: E402
-from lafiya.prompts import build_messages  # noqa: E402
+from ahuike.inference import BASE_MODEL, DATE_STRING  # noqa: E402
+from ahuike.pipeline import ASR_MODELS  # noqa: E402
+from ahuike.prompts import build_messages  # noqa: E402
 
 ok = True
 

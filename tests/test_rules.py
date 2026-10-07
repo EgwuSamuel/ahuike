@@ -5,9 +5,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from lafiya.cases import sample_case  # noqa: E402
-from lafiya.protocol import BY_ID, CLINIC, EMERGENCY, HOME, POPULATIONS, triage  # noqa: E402
-from lafiya.protocol.rules import TRIGGERS, effective_findings, rr_threshold  # noqa: E402
+from ahuike.cases import sample_case  # noqa: E402
+from ahuike.protocol import BY_ID, CLINIC, EMERGENCY, HOME, POPULATIONS, triage  # noqa: E402
+from ahuike.protocol.rules import TRIGGERS, effective_findings, rr_threshold  # noqa: E402
 
 
 def child(findings, months=24, durations=None, vitals=None):

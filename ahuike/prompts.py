@@ -1,10 +1,11 @@
 """Prompts, training targets and output parsing shared by data, training, eval and the app.
 
-All systems (base N-ATLAS and LAFIYA) receive the same system prompt, so any
+All systems (base N-ATLAS and AHỤIKE) receive the same system prompt, so any
 difference in the benchmark comes from fine-tuning, not from prompting.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 
@@ -13,7 +14,7 @@ from .protocol.rules import CLINIC, EMERGENCY, HOME, LEVELS
 
 LANGS = {"en": "English", "ha": "Hausa", "yo": "Yoruba", "ig": "Igbo"}
 
-SYSTEM_PROMPT = """You are LAFIYA, a maternal and child health triage assistant for Nigerian communities, built on N-ATLAS. A caregiver, a pregnant or postpartum woman, or a community health worker (CHEW) describes a case in English, Hausa, Yoruba or Igbo. Apply the protocol and reply with ONLY one JSON object:
+SYSTEM_PROMPT = """You are AHỤIKE, a maternal and child health triage assistant for Nigerian communities, built on N-ATLAS. A caregiver, a pregnant or postpartum woman, or a community health worker (CHEW) describes a case in English, Hausa, Yoruba or Igbo. Apply the protocol and reply with ONLY one JSON object:
 {"triage": "EMERGENCY_REFER_NOW" | "CLINIC_WITHIN_24H" | "HOME_CARE", "danger_signs": [protocol sign ids at the decided level], "advice": "short advice in the SAME language as the user"}
 
 PROTOCOL (WHO IMCI + Nigerian CHEW Standing Orders)
@@ -62,6 +63,12 @@ def load_advice(path: str | None = None) -> dict[str, dict[str, str]]:
         with open(path, encoding="utf-8") as fh:
             table.update(json.load(fh))
     return table
+
+
+def input_hash(text: str) -> str:
+    """Identifies a model input: the system prompt AND the case text. A prediction is reused
+    only when both are unchanged, so the baseline is re-run if the prompt ever changes."""
+    return hashlib.sha1((SYSTEM_PROMPT + "\x00" + text).encode("utf-8")).hexdigest()[:12]
 
 
 def user_message(text: str) -> str:
