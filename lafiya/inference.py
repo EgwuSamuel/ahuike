@@ -75,7 +75,7 @@ class ChatEngine:
 
     # ------------------------------------------------------------------ public
     def chat(self, conversations: list[list[dict]], adapter: str | None = None,
-             max_new_tokens: int = 256, temperature: float = 0.0, batch_size: int = 16,
+             max_new_tokens: int = 256, temperature: float = 0.0, batch_size: int = 32,
              repetition_penalty: float = 1.0) -> list[str]:
         """repetition_penalty: the N-ATLaS card recommends 1.12 for free text; keep 1.0 for JSON."""
         if self.backend == "vllm":

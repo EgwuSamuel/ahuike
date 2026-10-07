@@ -19,6 +19,19 @@ SETUP = [
     ("code", "!python scripts/check_setup.py"),
 ]
 
+INSTALL_VLLM = (
+    "code",
+    "!nvidia-smi | head -4\n"
+    "!pip install -q vllm\n"
+    "# vLLM installs its own PyTorch build. Kaggle's preinstalled torchaudio no longer matches it and\n"
+    "# breaks every transformers import, so remove it (LAFIYA does not need torchaudio).\n"
+    "!pip uninstall -y -q torchaudio\n"
+    "!python -c \"import torch, vllm; print('torch', torch.__version__, '| cuda', torch.version.cuda, "
+    "'| GPUs visible:', torch.cuda.device_count(), '| vllm', vllm.__version__)\"\n"
+    "# GPUs visible must be 2. If it is 0, the GPU driver is too old for this PyTorch build:\n"
+    "# Run > Factory reset, re-run the setup cells, SKIP this cell, and use --backend hf below.",
+)
+
 NOTEBOOKS = {
     "01_translate_and_baseline.ipynb": [
         ("md", "# LAFIYA 01 — N-ATLAS translation + baseline benchmark\n"
@@ -26,8 +39,7 @@ NOTEBOOKS = {
                "filters, builds the fine-tuning sets, and scores **base N-ATLAS** (zero-shot and few-shot). "
                "Every step is resumable: if the session dies, re-run the cells."),
         *SETUP,
-        ("code", "!pip install -q vllm\n# --backend auto tries vLLM and falls back to transformers automatically.\n"
-                 "# If the fallback runs out of GPU memory, restart the session and use --backend hf."),
+        INSTALL_VLLM,
         ("md", "## 1. Test set first (so the baseline can start early)"),
         ("code", "!python scripts/translate_natlas.py --backend auto --test-only"),
         ("md", "## 2. Training translations (anchored set, ablation set, code-switched)"),
@@ -45,7 +57,7 @@ NOTEBOOKS = {
                "Each run takes about 1.5–3 h on one T4. Checkpoints every 50 steps: if the session dies, "
                "re-run with `--resume`."),
         *SETUP,
-        ("code", "!pip install -q unsloth"),
+        ("code", "!pip install -q unsloth\n!pip uninstall -y -q torchaudio  # avoid CUDA-version mismatch with the new torch"),
         ("code", "!python scripts/hub_sync.py pull data"),
         ("md", "## 1. LAFIYA (parallel-anchored)"),
         ("code", "!python scripts/finetune.py --data data/sft_anchored.jsonl --out outputs/lafiya-lora --epochs 2"),
@@ -55,14 +67,14 @@ NOTEBOOKS = {
         ("code", "!python scripts/hub_sync.py push outputs/ablation-lora"),
         ("md", "## 3. Export merged Q4_K_M GGUF for the CPU demo (HF Space)\n"
                "Repo name must carry the **Powered-by-Awarri** suffix (N-ATLaS licence)."),
-        ("code", "HF_USER = 'YOUR_HF_USERNAME'\n"
+        ("code", "HF_USER = 'SamEgwu'\n"
                  "!python scripts/export_gguf.py --adapter outputs/lafiya-lora --out /tmp/lafiya-gguf "
                  "--push {HF_USER}/LAFIYA-N-ATLaS-8B-GGUF-Powered-by-Awarri"),
     ],
     "03_eval_and_demo.ipynb": [
         ("md", "# LAFIYA 03 — Benchmark LAFIYA vs base N-ATLAS, then live demo"),
         *SETUP,
-        ("code", "!pip install -q vllm"),
+        INSTALL_VLLM,
         ("code", "!python scripts/hub_sync.py pull data results outputs/lafiya-lora outputs/ablation-lora"),
         ("code", "!python scripts/run_eval.py --backend auto --systems lafiya=outputs/lafiya-lora "
                  "ablation=outputs/ablation-lora"),
