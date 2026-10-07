@@ -20,6 +20,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 sys.path.insert(0, str(ROOT))
 
+from lafiya.backcheck import check  # noqa: E402
 from lafiya.prompts import advice_key, build_messages, load_advice, target_json  # noqa: E402
 
 
@@ -41,12 +42,21 @@ def main() -> None:
 
     train = load_jsonl(data / "cases_train.jsonl")
     test = load_jsonl(data / "cases_test.jsonl")
+    all_cases = {c["id"]: c for c in train + test}
     trans = {}
+    rejected = Counter()
     tpath = data / "translations.jsonl"
     if tpath.exists():
         for r in load_jsonl(tpath):
-            if r["bt_ok"]:
+            c = all_cases.get(r["case_id"])
+            if c is None:
+                continue
+            # Re-check with the CURRENT back-check so improved filters apply to existing rows.
+            ok, problems = check(c, r["text"], r.get("back_translation", ""))
+            if ok:
                 trans[(r["case_id"], r["lang"], r["variant"])] = r["text"]
+            elif r["bt_ok"]:
+                rejected[next((p for p in problems if p in ("meta_text", "label_changed")), "other")] += 1
 
     apath = data / "advice_i18n.json"
     if not apath.exists() and not args.allow_missing_advice:
@@ -142,6 +152,7 @@ def main() -> None:
         "eval_items": len(items),
         "eval_by_lang_variant": Counter(f"{r['lang']}/{r['variant']}" for r in items),
         "parallel_core_cases": len(core),
+        "previously_passed_now_rejected": rejected,
     }
     print(json.dumps(report, indent=2))
 

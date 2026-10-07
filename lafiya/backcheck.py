@@ -8,7 +8,8 @@ label:
   * removing the lost findings does not change the protocol label or triggers,
   * for child/infant cases every number (age, duration, RR, temperature) survives,
     with English number words normalised ("three" -> 3),
-  * no new red-flag symptom (convulsions, bleeding, unconsciousness) appears.
+  * no new red-flag symptom (convulsions, bleeding, unconsciousness) appears,
+  * the model did not refuse or comment instead of translating ("Sorry, I can't translate...").
 Coarse by design: it cannot tell "slow" from "very slow". See docs/DATASET_CARD.md.
 """
 from __future__ import annotations
@@ -85,6 +86,10 @@ RED_FLAGS: dict[str, tuple[str, ...]] = {
     "bleeding": ("vaginal_bleeding", "heavy_bleeding", "normal_lochia", "blood_in_stool"),
 }
 
+# Signs that N-ATLAS answered ABOUT the text instead of translating it (refusals, commentary).
+META = re.compile(r"\b(sorry|translat\w*|fulfil+|provide more|more context|happy to help|as an ai|"
+                  r"language|igbo|hausa|yor[uù]b[aá])\b", re.IGNORECASE)
+
 # ----------------------------------------------------------------------------- numbers
 
 _UNITS = {w: i for i, w in enumerate(
@@ -152,6 +157,10 @@ def check(case: dict, translation: str, back_translation: str) -> tuple[bool, li
         if kw in bt and not any(o in case["findings"] for o in owners):
             problems.append(f"spurious:{kw}")
             fatal = True
+
+    if META.search(back_translation or ""):
+        problems.append("meta_text")
+        fatal = True
 
     if not translation or len(translation) < 0.3 * len(case["text_en"]):
         problems.append("too_short")

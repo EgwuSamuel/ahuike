@@ -19,8 +19,13 @@ def load(name):
 class TestSplitAndGlossary(unittest.TestCase):
     def test_split_keeps_decimals(self):
         s = "CHEW note: 3 weeks old male infant. Findings: RR 44/min, temp 37.5°C. Please advise on triage."
+        # Decimals never split; the short closing sentence is merged into its neighbour.
         self.assertEqual(split_sentences(s), [
-            "CHEW note: 3 weeks old male infant.", "Findings: RR 44/min, temp 37.5°C.", "Please advise on triage."])
+            "CHEW note: 3 weeks old male infant.", "Findings: RR 44/min, temp 37.5°C. Please advise on triage."])
+
+    def test_short_sentences_merged(self):
+        self.assertEqual(split_sentences("Good evening. I am 9 months pregnant. I have leg cramps at night. What should I do?"),
+                         ["Good evening. I am 9 months pregnant.", "I have leg cramps at night. What should I do?"])
 
     def test_split_roundtrip_all_cases(self):
         for c in load("cases_test.jsonl") + load("cases_train.jsonl")[:500]:
@@ -69,6 +74,13 @@ class TestBackcheck(unittest.TestCase):
         bt = ("My daughter is 2 years and 7 months old. She has had a cough for 3 days and had a convulsion. "
               "Her eyes are sunken. She breathes fast. She has had watery stool for 6 days.")
         self.assertFalse(check(self.case, "x" * 200, bt)[0])
+
+    def test_refusal_rejected(self):
+        bt = ("Sorry, but I can't fulfill this request. My daughter is 2 years and 7 months old. She has had a cough "
+              "for 3 days. Her eyes are sunken. She breathes fast. She has had watery stool for 6 days.")
+        ok, problems = check(self.case, "x" * 200, bt)
+        self.assertFalse(ok)
+        self.assertIn("meta_text", problems)
 
     def test_identity_passes_for_all_cases(self):
         for c in load("cases_test.jsonl") + load("cases_train.jsonl"):

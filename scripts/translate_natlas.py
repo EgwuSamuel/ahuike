@@ -70,8 +70,24 @@ GLOSSARY: dict[str, list[tuple[tuple[str, ...], str, str]]] = {
 _SENT = re.compile(r"(?<=[.?!])\s+(?=[A-Z])")
 
 
-def split_sentences(text: str) -> list[str]:
-    return [s for s in _SENT.split(text.strip()) if s]
+def split_sentences(text: str, min_words: int = 5) -> list[str]:
+    """Split into sentences, merging very short ones ("Good evening.", "What should I do?")
+    into a neighbour: alone, N-ATLAS tends to comment on them instead of translating."""
+    out: list[str] = []
+    carry = ""
+    for s in (x for x in _SENT.split(text.strip()) if x):
+        s = f"{carry} {s}" if carry else s
+        carry = ""
+        if len(s.split()) < min_words:
+            carry = s
+        else:
+            out.append(s)
+    if carry:
+        if out:
+            out[-1] = f"{out[-1]} {carry}"
+        else:
+            out.append(carry)
+    return out
 
 
 def glossary_hint(sentence: str, lang: str) -> str:
