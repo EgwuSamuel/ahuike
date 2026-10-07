@@ -1,9 +1,10 @@
 """Assemble fine-tuning sets and the evaluation item list from cases + N-ATLAS translations.
 
 Outputs (data/):
-  sft_anchored.jsonl  - LAFIYA: anchored cases in all 4 languages + code-switched variants
-  sft_ablation.jsonl  - ablation: same size, every case in ONE language (no parallel anchoring)
-  eval_items.jsonl    - test items {case_id, lang, variant, text} for run_eval.py
+  sft_anchored.jsonl  - LAFIYA: anchored cases in every language that passed + code-switched variants
+  sft_ablation.jsonl  - ablation: same size and language mix, each case in ONE language only
+  eval_items.jsonl    - every faithful test item {case_id, lang, variant, text} for run_eval.py
+  benchmark_cases.json - the parallel core (test cases faithful in all four languages)
 """
 from __future__ import annotations
 
@@ -31,8 +32,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", default=str(ROOT / "data"))
     ap.add_argument("--seed", type=int, default=7)
-    ap.add_argument("--max-anchored", type=int, default=600, help="max anchored cases (x4 languages)")
-    ap.add_argument("--max-test-cases", type=int, default=0, help="cap on benchmark cases (0 = all complete)")
+    ap.add_argument("--max-anchored-examples", type=int, default=2000,
+                    help="cap on LAFIYA examples; the ablation needs as many UNIQUE cases")
     ap.add_argument("--allow-missing-advice", action="store_true",
                     help="fall back to English advice if advice_i18n.json is missing (debug only)")
     args = ap.parse_args()
@@ -63,39 +64,44 @@ def main() -> None:
         msgs.append({"role": "assistant", "content": target_json(case["triage"], case["triggers"], adv)})
         return {"case_id": case["id"], "lang": lang, "messages": msgs}
 
-    def complete(c: dict) -> bool:
-        return all(text_for(c, lang) for lang in ("en", "ha", "yo", "ig"))
+    LANGS4 = ("en", "ha", "yo", "ig")
 
-    anchored, ablation, cs = [], [], []
-    missing = Counter()
-    n_anchor_cases = 0
+    def available(c: dict) -> list[str]:
+        return [lang for lang in LANGS4 if text_for(c, lang)]
+
+    rng = random.Random(args.seed)
+
+    # LAFIYA set: anchored cases in EVERY language whose translation passed (en + at least one
+    # Nigerian language), so the same clinical picture appears in parallel with one target.
+    anchored, anchor_ids = [], []
     for c in train:
-        if c["anchored"]:
-            # Parallel anchoring needs the SAME case in all four languages.
-            if complete(c) and n_anchor_cases < args.max_anchored:
-                n_anchor_cases += 1
-                for lang in ("en", "ha", "yo", "ig"):
-                    anchored.append(example(c, lang, text_for(c, lang)))
-            elif not complete(c):
-                for lang in ("ha", "yo", "ig"):
-                    if not text_for(c, lang):
-                        missing[f"anchored/{lang}"] += 1
-        lang = c["ablation_lang"]
-        t = text_for(c, lang)
-        if t:
-            ablation.append(example(c, lang, t))
-        else:
-            missing[f"ablation/{lang}"] += 1
+        if not c["anchored"] or len(available(c)) < 2:
+            continue
+        if len(anchored) >= args.max_anchored_examples:
+            break
+        anchor_ids.append(c["id"])
+        anchored += [example(c, lang, text_for(c, lang)) for lang in available(c)]
+    target = Counter(r["lang"] for r in anchored)
+
+    # Ablation set: SAME size and SAME language mix, but every case appears in ONE language only
+    # (no parallel anchoring). Scarcest language first so it gets the cases that have it.
+    ablation, used = [], set()
+    for lang in sorted(target, key=lambda l: sum(1 for c in train if text_for(c, l))):
+        pool = [c for c in train if c["id"] not in used and text_for(c, lang)]
+        rng.shuffle(pool)
+        for c in pool[: target[lang]]:
+            ablation.append(example(c, lang, text_for(c, lang)))
+            used.add(c["id"])
+    shortfall = {l: target[l] - sum(r["lang"] == l for r in ablation) for l in target}
+
+    cs = []
+    for c in train:
         if c.get("code_switch"):
             for lang in ("ha", "yo", "ig"):
                 t = text_for(c, lang, "cs")
                 if t:
                     cs.append(example(c, lang, t))
 
-    rng = random.Random(args.seed)
-    # Equalise size: the ablation set is trimmed/kept to the anchored set's size.
-    rng.shuffle(ablation)
-    ablation = ablation[: len(anchored)]
     sets = {"sft_anchored.jsonl": anchored + cs, "sft_ablation.jsonl": ablation + cs}
     for name, rows in sets.items():
         rng.shuffle(rows)
@@ -103,18 +109,17 @@ def main() -> None:
             for r in rows:
                 fh.write(json.dumps(r, ensure_ascii=False) + "\n")
 
-    # The benchmark is the PARALLEL test set: cases whose translation passed in every language.
-    bench = [c for c in test if complete(c)]
-    if args.max_test_cases:
-        bench = bench[: args.max_test_cases]
+    # Benchmark = every faithful test item. The PARALLEL CORE (cases faithful in all four
+    # languages) is used for CLCC and for fair per-language comparison.
+    core = [c for c in test if len(available(c)) == 4]
     (data / "benchmark_cases.json").write_text(json.dumps({
-        "n_cases": len(bench), "n_test_pool": len(test),
-        "triage": Counter(c["triage"] for c in bench),
-        "population": Counter(c["population"] for c in bench),
-        "case_ids": [c["id"] for c in bench]}, indent=1), encoding="utf-8")
+        "n_test_pool": len(test),
+        "parallel_core_cases": len(core),
+        "parallel_core_triage": Counter(c["triage"] for c in core),
+        "parallel_core_case_ids": [c["id"] for c in core]}, indent=1), encoding="utf-8")
     items = []
-    for c in bench:
-        for lang in ("en", "ha", "yo", "ig"):
+    for c in test:
+        for lang in LANGS4:
             t = text_for(c, lang)
             if t:
                 items.append({"case_id": c["id"], "lang": lang, "variant": "plain", "text": t})
@@ -127,17 +132,16 @@ def main() -> None:
             fh.write(json.dumps(r, ensure_ascii=False) + "\n")
 
     report = {
-        "anchored_cases_complete": n_anchor_cases,
-        "benchmark_cases": len(bench),
-        "benchmark_triage": Counter(c["triage"] for c in bench),
+        "anchored_cases": len(anchor_ids),
         "sft_anchored": len(sets["sft_anchored.jsonl"]),
         "sft_ablation": len(sets["sft_ablation.jsonl"]),
         "code_switched_train": len(cs),
-        "anchored_lang_counts": Counter(r["lang"] for r in anchored),
+        "anchored_lang_counts": target,
         "ablation_lang_counts": Counter(r["lang"] for r in ablation),
+        "ablation_shortfall": shortfall,
         "eval_items": len(items),
         "eval_by_lang_variant": Counter(f"{r['lang']}/{r['variant']}" for r in items),
-        "missing_translations": missing,
+        "parallel_core_cases": len(core),
     }
     print(json.dumps(report, indent=2))
 

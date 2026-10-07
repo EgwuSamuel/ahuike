@@ -64,6 +64,11 @@ def main() -> None:
         plain = [i for i in items if i["variant"] == "plain"]
         csw = [i for i in items if i["variant"] == "cs"]
         em = [i for i in plain if i["gold"] == EMERGENCY]
+        langs_by_case = defaultdict(set)
+        for i in plain:
+            langs_by_case[i["case_id"]].add(i["lang"])
+        core_ids = {c for c, ls in langs_by_case.items() if set(CORE_LANGS) <= ls}
+        core = [i for i in plain if i["case_id"] in core_ids]
         r = {
             "overall": summarize(plain),
             "overall_ci": {
@@ -72,6 +77,8 @@ def main() -> None:
                 "clcc": bootstrap_ci(plain, lambda x: clcc(x).get("clcc", float("nan")), args.boot),
             },
             "by_language": {l: summarize([i for i in plain if i["lang"] == l]) for l in CORE_LANGS},
+            "parallel_core": summarize(core),
+            "parallel_core_by_language": {l: summarize([i for i in core if i["lang"] == l]) for l in CORE_LANGS},
             "code_switched": {l: summarize([i for i in csw if i["lang"] == l]) for l in ("ha", "yo", "ig")},
             "code_switched_all": summarize(csw),
             "by_population": {p: summarize([i for i in plain if i["population"] == p])
@@ -97,7 +104,7 @@ def main() -> None:
     L = ["# NaijaTriage-Bench results", "",
          "Gold labels are produced by the LAFIYA protocol engine (WHO IMCI + Nigerian CHEW Standing Orders).",
          "Brackets are 95% case-clustered bootstrap CIs. Under-triage = emergency cases not referred.", "",
-         "## Headline (en/ha/yo/ig, plain text)", "",
+         "## Headline: all faithful items (en/ha/yo/ig, plain text)", "",
          "| System | N | Accuracy | Macro-F1 | Under-triage ↓ | Over-triage | Danger-sign F1 | CLCC ↑ | Worst-lang gap ↓ | JSON valid |",
          "|---|---|---|---|---|---|---|---|---|---|"]
     for s in systems:
@@ -106,13 +113,20 @@ def main() -> None:
                  f"{pct(o['under_triage_rate'])}{ci(c['under_triage_rate'])} | {pct(o['over_triage_rate'])} | "
                  f"{pct(o['danger_sign_f1'])} | {pct(k.get('clcc'))}{ci(c['clcc'])} | "
                  f"{pct(k.get('worst_language_gap'))} | {pct(o['json_validity'])} |")
-    L += ["", "## Accuracy / under-triage by language", "",
+    L += ["", "## Accuracy / under-triage by language (all faithful items; case mix differs by language)", "",
           "| System | " + " | ".join(f"{l} acc | {l} under" for l in CORE_LANGS) + " |",
           "|---|" + "---|" * (2 * len(CORE_LANGS))]
     for s in systems:
         b = report[s]["by_language"]
         L.append(f"| {s} | " + " | ".join(f"{pct(b[l].get('accuracy'))} | {pct(b[l].get('under_triage_rate'))}"
                                           for l in CORE_LANGS) + " |")
+    L += ["", "## Parallel core: the same cases in every language (fair language comparison)", "",
+          "| System | Cases | " + " | ".join(f"{l} acc | {l} under" for l in CORE_LANGS) + " |",
+          "|---|---|" + "---|" * (2 * len(CORE_LANGS))]
+    for s in systems:
+        b = report[s]["parallel_core_by_language"]
+        L.append(f"| {s} | {report[s]['clcc'].get('n_cases', 0)} | " + " | ".join(
+            f"{pct(b[l].get('accuracy'))} | {pct(b[l].get('under_triage_rate'))}" for l in CORE_LANGS) + " |")
     L += ["", "## Cross-lingual consistency", "",
           "| System | Cases (all 4 langs) | CLCC | Consistent & correct | Emergency missed in ≥1 language | Worst language |",
           "|---|---|---|---|---|---|"]
