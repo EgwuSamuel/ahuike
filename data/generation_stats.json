@@ -37,61 +37,61 @@
     }
   },
   "train_anchored": {
-    "n": 600,
-    "unique_combos": 542,
+    "n": 1000,
+    "unique_combos": 852,
     "triage": {
-      "HOME_CARE": 157,
-      "CLINIC_WITHIN_24H": 187,
-      "EMERGENCY_REFER_NOW": 256
+      "HOME_CARE": 269,
+      "CLINIC_WITHIN_24H": 328,
+      "EMERGENCY_REFER_NOW": 403
     },
     "population": {
-      "postpartum": 114,
-      "pregnant": 181,
-      "child": 246,
-      "infant": 59
+      "postpartum": 192,
+      "pregnant": 309,
+      "child": 407,
+      "infant": 92
     },
     "persona": {
-      "self": 160,
-      "chew": 156,
-      "grandmother": 45,
-      "partner": 55,
-      "father": 50,
-      "mother": 134
+      "self": 263,
+      "chew": 261,
+      "grandmother": 80,
+      "partner": 100,
+      "father": 84,
+      "mother": 212
     },
     "reasoning_tags": {
-      "combination": 328,
-      "duration_threshold": 129,
-      "rr_threshold": 42,
-      "temp_threshold": 5
+      "combination": 543,
+      "duration_threshold": 223,
+      "rr_threshold": 67,
+      "temp_threshold": 8
     }
   },
   "test": {
-    "n": 160,
-    "unique_combos": 154,
+    "n": 385,
+    "unique_combos": 334,
     "triage": {
-      "CLINIC_WITHIN_24H": 56,
-      "EMERGENCY_REFER_NOW": 64,
-      "HOME_CARE": 40
+      "CLINIC_WITHIN_24H": 140,
+      "HOME_CARE": 85,
+      "EMERGENCY_REFER_NOW": 160
     },
     "population": {
-      "child": 62,
-      "pregnant": 50,
-      "postpartum": 35,
-      "infant": 13
+      "postpartum": 76,
+      "child": 148,
+      "pregnant": 131,
+      "infant": 30
     },
     "persona": {
-      "mother": 47,
-      "partner": 14,
-      "self": 50,
-      "chew": 32,
-      "father": 9,
-      "grandmother": 8
+      "self": 118,
+      "father": 28,
+      "chew": 93,
+      "partner": 34,
+      "mother": 87,
+      "grandmother": 25
     },
     "reasoning_tags": {
-      "combination": 78,
-      "duration_threshold": 37,
-      "rr_threshold": 5,
-      "temp_threshold": 1
+      "combination": 195,
+      "duration_threshold": 88,
+      "rr_threshold": 22,
+      "temp_threshold": 2
     }
   }
 }

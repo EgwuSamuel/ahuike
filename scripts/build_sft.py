@@ -31,6 +31,8 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", default=str(ROOT / "data"))
     ap.add_argument("--seed", type=int, default=7)
+    ap.add_argument("--max-anchored", type=int, default=600, help="max anchored cases (x4 languages)")
+    ap.add_argument("--max-test-cases", type=int, default=0, help="cap on benchmark cases (0 = all complete)")
     ap.add_argument("--allow-missing-advice", action="store_true",
                     help="fall back to English advice if advice_i18n.json is missing (debug only)")
     args = ap.parse_args()
@@ -61,16 +63,23 @@ def main() -> None:
         msgs.append({"role": "assistant", "content": target_json(case["triage"], case["triggers"], adv)})
         return {"case_id": case["id"], "lang": lang, "messages": msgs}
 
+    def complete(c: dict) -> bool:
+        return all(text_for(c, lang) for lang in ("en", "ha", "yo", "ig"))
+
     anchored, ablation, cs = [], [], []
     missing = Counter()
+    n_anchor_cases = 0
     for c in train:
         if c["anchored"]:
-            for lang in ("en", "ha", "yo", "ig"):
-                t = text_for(c, lang)
-                if t:
-                    anchored.append(example(c, lang, t))
-                else:
-                    missing[f"anchored/{lang}"] += 1
+            # Parallel anchoring needs the SAME case in all four languages.
+            if complete(c) and n_anchor_cases < args.max_anchored:
+                n_anchor_cases += 1
+                for lang in ("en", "ha", "yo", "ig"):
+                    anchored.append(example(c, lang, text_for(c, lang)))
+            elif not complete(c):
+                for lang in ("ha", "yo", "ig"):
+                    if not text_for(c, lang):
+                        missing[f"anchored/{lang}"] += 1
         lang = c["ablation_lang"]
         t = text_for(c, lang)
         if t:
@@ -94,8 +103,17 @@ def main() -> None:
             for r in rows:
                 fh.write(json.dumps(r, ensure_ascii=False) + "\n")
 
+    # The benchmark is the PARALLEL test set: cases whose translation passed in every language.
+    bench = [c for c in test if complete(c)]
+    if args.max_test_cases:
+        bench = bench[: args.max_test_cases]
+    (data / "benchmark_cases.json").write_text(json.dumps({
+        "n_cases": len(bench), "n_test_pool": len(test),
+        "triage": Counter(c["triage"] for c in bench),
+        "population": Counter(c["population"] for c in bench),
+        "case_ids": [c["id"] for c in bench]}, indent=1), encoding="utf-8")
     items = []
-    for c in test:
+    for c in bench:
         for lang in ("en", "ha", "yo", "ig"):
             t = text_for(c, lang)
             if t:
@@ -109,6 +127,9 @@ def main() -> None:
             fh.write(json.dumps(r, ensure_ascii=False) + "\n")
 
     report = {
+        "anchored_cases_complete": n_anchor_cases,
+        "benchmark_cases": len(bench),
+        "benchmark_triage": Counter(c["triage"] for c in bench),
         "sft_anchored": len(sets["sft_anchored.jsonl"]),
         "sft_ablation": len(sets["sft_ablation.jsonl"]),
         "code_switched_train": len(cs),

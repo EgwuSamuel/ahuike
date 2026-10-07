@@ -47,9 +47,9 @@ def main() -> None:
     ap.add_argument("--seed", type=int, default=2026)
     ap.add_argument("--pool", type=int, default=60000)
     ap.add_argument("--train", type=int, default=2400)
-    ap.add_argument("--anchor", type=int, default=600, help="train cases translated into all 4 languages")
+    ap.add_argument("--anchor", type=int, default=1000, help="train cases translated into all 4 languages (pool; complete ones are kept)")
     ap.add_argument("--cs-train", type=int, default=100, help="anchored cases also given code-switched versions")
-    ap.add_argument("--test", type=int, default=160)
+    ap.add_argument("--test", type=int, default=400, help="test pool; cases complete in all 4 languages form the benchmark")
     ap.add_argument("--cs-test", type=int, default=50)
     ap.add_argument("--test-frac", type=float, default=0.2)
     ap.add_argument("--out", default=str(ROOT / "data"))
@@ -82,7 +82,7 @@ def main() -> None:
         rng.shuffle(ks)
         n_test_combos = max(1, round(len(ks) * args.test_frac))
         test_ks, train_ks = ks[:n_test_combos], ks[n_test_combos:]
-        test += round_robin(test_ks, by_combo, round(args.test * mix), cap=2)
+        test += round_robin(test_ks, by_combo, round(args.test * mix), cap=3)
         train += round_robin(train_ks, by_combo, round(args.train * mix), cap=10)
 
     rng.shuffle(train)
