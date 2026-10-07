@@ -1,0 +1,12 @@
+# CPU parts (data generation, tests, metrics) need only the Python standard library.
+# GPU / app parts:
+transformers>=4.44
+peft>=0.12
+torch
+huggingface_hub
+tqdm
+gradio>=4.40
+# Optional backends
+# vllm            # fast batched inference (Kaggle/Colab)
+# unsloth         # QLoRA fine-tuning + GGUF export
+# llama-cpp-python  # CPU GGUF inference for the HF Space

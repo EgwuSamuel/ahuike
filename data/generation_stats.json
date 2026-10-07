@@ -1,0 +1,97 @@
+{
+  "seed": 2026,
+  "pool_size": 60000,
+  "pool_unique_combos": 7292,
+  "combos_per_level": {
+    "CLINIC_WITHIN_24H": 1585,
+    "EMERGENCY_REFER_NOW": 5535,
+    "HOME_CARE": 172
+  },
+  "train": {
+    "n": 2400,
+    "unique_combos": 1938,
+    "triage": {
+      "HOME_CARE": 600,
+      "CLINIC_WITHIN_24H": 840,
+      "EMERGENCY_REFER_NOW": 960
+    },
+    "population": {
+      "postpartum": 451,
+      "pregnant": 780,
+      "child": 980,
+      "infant": 189
+    },
+    "persona": {
+      "self": 659,
+      "chew": 593,
+      "grandmother": 174,
+      "partner": 259,
+      "father": 185,
+      "mother": 530
+    },
+    "reasoning_tags": {
+      "combination": 1297,
+      "duration_threshold": 543,
+      "rr_threshold": 143,
+      "temp_threshold": 16
+    }
+  },
+  "train_anchored": {
+    "n": 600,
+    "unique_combos": 542,
+    "triage": {
+      "HOME_CARE": 157,
+      "CLINIC_WITHIN_24H": 187,
+      "EMERGENCY_REFER_NOW": 256
+    },
+    "population": {
+      "postpartum": 114,
+      "pregnant": 181,
+      "child": 246,
+      "infant": 59
+    },
+    "persona": {
+      "self": 160,
+      "chew": 156,
+      "grandmother": 45,
+      "partner": 55,
+      "father": 50,
+      "mother": 134
+    },
+    "reasoning_tags": {
+      "combination": 328,
+      "duration_threshold": 129,
+      "rr_threshold": 42,
+      "temp_threshold": 5
+    }
+  },
+  "test": {
+    "n": 160,
+    "unique_combos": 154,
+    "triage": {
+      "CLINIC_WITHIN_24H": 56,
+      "EMERGENCY_REFER_NOW": 64,
+      "HOME_CARE": 40
+    },
+    "population": {
+      "child": 62,
+      "pregnant": 50,
+      "postpartum": 35,
+      "infant": 13
+    },
+    "persona": {
+      "mother": 47,
+      "partner": 14,
+      "self": 50,
+      "chew": 32,
+      "father": 9,
+      "grandmother": 8
+    },
+    "reasoning_tags": {
+      "combination": 78,
+      "duration_threshold": 37,
+      "rr_threshold": 5,
+      "temp_threshold": 1
+    }
+  }
+}
