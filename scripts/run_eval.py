@@ -13,6 +13,7 @@ Predictions are appended to results/preds.jsonl as
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -32,6 +33,10 @@ def load_jsonl(p: Path) -> list[dict]:
         return []
     with open(p, encoding="utf-8") as fh:
         return [json.loads(l) for l in fh if l.strip()]
+
+
+def text_hash(text: str) -> str:
+    return hashlib.sha1(text.encode("utf-8")).hexdigest()[:12]
 
 
 def few_shot_examples(train: list[dict]) -> list[tuple[str, str]]:
@@ -64,7 +69,8 @@ def main() -> None:
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    done = {(r["system"], r["case_id"], r["lang"], r["variant"]) for r in load_jsonl(out)}
+    # An answer is reused only if it was produced for exactly the same input text.
+    done = {(r["system"], r["case_id"], r["lang"], r["variant"], r.get("text_hash")) for r in load_jsonl(out)}
 
     specs = []
     for s in args.systems:
@@ -73,7 +79,8 @@ def main() -> None:
     engine = ChatEngine(backend=args.backend, enable_lora=any(p for _, p in specs))
 
     for name, adapter in specs:
-        todo = [it for it in items if (name, it["case_id"], it["lang"], it["variant"]) not in done]
+        todo = [it for it in items
+                if (name, it["case_id"], it["lang"], it["variant"], text_hash(it["text"])) not in done]
         print(f"[{name}] {len(todo)} items to run")
         if not todo:
             continue

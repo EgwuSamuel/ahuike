@@ -6,6 +6,7 @@ Runs on CPU in seconds; no GPU needed.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from collections import defaultdict
@@ -50,9 +51,18 @@ def main() -> None:
     gold = {c["id"]: c for c in load_jsonl(Path(args.cases))}
     preds = load_jsonl(Path(args.preds))
     # Last write wins if a system/item was re-run.
+    # Score only answers given to the CURRENT benchmark text (translations can be redone).
+    items_path = Path(args.cases).with_name("eval_items.jsonl")
+    current = None
+    if items_path.exists():
+        current = {(i["case_id"], i["lang"], i["variant"]): hashlib.sha1(i["text"].encode("utf-8")).hexdigest()[:12]
+                   for i in load_jsonl(items_path)}
     latest = {}
     for p in preds:
-        latest[(p["system"], p["case_id"], p["lang"], p.get("variant", "plain"))] = p
+        key = (p["case_id"], p["lang"], p.get("variant", "plain"))
+        if current is not None and (key not in current or p.get("text_hash", current[key]) != current[key]):
+            continue
+        latest[(p["system"], *key)] = p
     by_sys: dict[str, list[dict]] = defaultdict(list)
     for p in latest.values():
         by_sys[p["system"]].append(score_item(p, gold[p["case_id"]]))
