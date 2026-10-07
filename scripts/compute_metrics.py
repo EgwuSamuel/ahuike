@@ -98,6 +98,15 @@ def main() -> None:
             "clcc": clcc(plain),
             "confusion": confusion(plain),
         }
+        # Human-validated subsets: native-written cases, and AI translations a native speaker marked SAME.
+        r["native_written"] = {l: summarize([i for i in items if i["variant"] == "native" and i["lang"] == l])
+                               for l in ("ha", "yo", "ig")}
+        r["native_verified"] = {}
+        for l in ("ha", "yo", "ig"):
+            vpath = Path(args.cases).with_name(f"verified_{l}.json")
+            if vpath.exists():
+                same = {cid for cid, v in json.loads(vpath.read_text(encoding="utf-8")).items() if v["verdict"] == "same"}
+                r["native_verified"][l] = summarize([i for i in plain if i["lang"] == l and i["case_id"] in same])
         if s != args.reference and args.reference in by_sys:
             ref = by_sys[args.reference]
             r[f"vs_{args.reference}"] = {
@@ -149,6 +158,16 @@ def main() -> None:
     for s in systems:
         o = report[s]["code_switched_all"]
         L.append(f"| {s} | {o.get('n', 0)} | {pct(o.get('accuracy'))} | {pct(o.get('under_triage_rate'))} |")
+    if any(report[s]["native_written"][l].get("n") or report[s]["native_verified"].get(l, {}).get("n")
+           for s in systems for l in ("ha", "yo", "ig")):
+        L += ["", "## Human-validated subsets", "",
+              "| System | Subset | Language | N | Accuracy | Under-triage |", "|---|---|---|---|---|---|"]
+        for s in systems:
+            for l in ("ha", "yo", "ig"):
+                for label, o in (("written by native speaker", report[s]["native_written"][l]),
+                                 ("AI translation verified by native speaker", report[s]["native_verified"].get(l, {}))):
+                    if o.get("n"):
+                        L.append(f"| {s} | {label} | {l} | {o['n']} | {pct(o.get('accuracy'))} | {pct(o.get('under_triage_rate'))} |")
     tags = sorted({t for s in systems for t in report[s]["by_reasoning_tag"]})
     pops = sorted({p for s in systems for p in report[s]["by_population"]})
     L += ["", "## Accuracy by population and reasoning type", "",

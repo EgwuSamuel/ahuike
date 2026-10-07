@@ -137,6 +137,11 @@ def main() -> None:
                 t = text_for(c, lang, "cs")
                 if t:
                     items.append({"case_id": c["id"], "lang": lang, "variant": "cs", "text": t})
+    # Cases written directly by native speakers (scripts/ingest_review.py), benchmarked as variant "native".
+    native_path = data / "native_items.jsonl"
+    test_ids = {c["id"] for c in test}
+    if native_path.exists():
+        items += [r for r in load_jsonl(native_path) if r["case_id"] in test_ids and r["text"].strip()]
     with open(data / "eval_items.jsonl", "w", encoding="utf-8") as fh:
         for r in items:
             fh.write(json.dumps(r, ensure_ascii=False) + "\n")
