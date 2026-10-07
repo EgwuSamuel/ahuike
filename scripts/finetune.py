@@ -34,6 +34,7 @@ def main() -> None:
     ap.add_argument("--grad-accum", type=int, default=4)
     ap.add_argument("--max-len", type=int, default=1536)
     ap.add_argument("--save-steps", type=int, default=50)
+    ap.add_argument("--max-steps", type=int, default=-1, help="stop after N steps (smoke test); -1 = full epochs")
     ap.add_argument("--resume", action="store_true")
     ap.add_argument("--push", default=None, help="optional HF repo id to push the adapter to")
     args = ap.parse_args()
@@ -68,6 +69,7 @@ def main() -> None:
         per_device_train_batch_size=args.batch,
         gradient_accumulation_steps=args.grad_accum,
         num_train_epochs=args.epochs,
+        max_steps=args.max_steps,
         learning_rate=args.lr,
         lr_scheduler_type="cosine",
         warmup_ratio=0.03,
