@@ -48,7 +48,7 @@ def few_shot_examples(train: list[dict]) -> list[tuple[str, str]]:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--systems", nargs="+", required=True)
-    ap.add_argument("--backend", default="vllm", choices=("vllm", "hf"))
+    ap.add_argument("--backend", default="auto", choices=("auto", "vllm", "hf"))
     ap.add_argument("--data", default=str(ROOT / "data"))
     ap.add_argument("--out", default=str(ROOT / "results" / "preds.jsonl"))
     ap.add_argument("--limit", type=int, default=0)

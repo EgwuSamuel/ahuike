@@ -14,6 +14,9 @@ SETUP = [
              "os.environ['HF_TOKEN'] = UserSecretsClient().get_secret('HF_TOKEN')\n"
              "!nvidia-smi --query-gpu=name,memory.total --format=csv"),
     ("code", f"!git clone -q {REPO} lafiya || (cd lafiya && git pull -q)\n%cd lafiya"),
+    ("md", "Pre-flight check: token, gated access to N-ATLaS + 4 ASR models, GPUs, chat template. "
+           "Everything should say PASS before you continue."),
+    ("code", "!python scripts/check_setup.py"),
 ]
 
 NOTEBOOKS = {
@@ -23,14 +26,15 @@ NOTEBOOKS = {
                "filters, builds the fine-tuning sets, and scores **base N-ATLAS** (zero-shot and few-shot). "
                "Every step is resumable: if the session dies, re-run the cells."),
         *SETUP,
-        ("code", "!pip install -q vllm\n# If vLLM fails on T4, use --backend hf in the cells below (slower)."),
+        ("code", "!pip install -q vllm\n# --backend auto tries vLLM and falls back to transformers automatically.\n"
+                 "# If the fallback runs out of GPU memory, restart the session and use --backend hf."),
         ("md", "## 1. Test set first (so the baseline can start early)"),
-        ("code", "!python scripts/translate_natlas.py --backend vllm --test-only"),
+        ("code", "!python scripts/translate_natlas.py --backend auto --test-only"),
         ("md", "## 2. Training translations (anchored set, ablation set, code-switched)"),
-        ("code", "!python scripts/translate_natlas.py --backend vllm"),
+        ("code", "!python scripts/translate_natlas.py --backend auto"),
         ("code", "!python scripts/build_sft.py\n!cat data/translation_stats.json | head -60"),
         ("md", "## 3. Baseline: base N-ATLAS zero-shot and few-shot"),
-        ("code", "!python scripts/run_eval.py --backend vllm --systems base base_fewshot"),
+        ("code", "!python scripts/run_eval.py --backend auto --systems base base_fewshot"),
         ("code", "!python scripts/compute_metrics.py"),
         ("md", "## 4. Save everything for the fine-tuning notebook"),
         ("code", "!python scripts/hub_sync.py push data results"),
@@ -60,7 +64,7 @@ NOTEBOOKS = {
         *SETUP,
         ("code", "!pip install -q vllm"),
         ("code", "!python scripts/hub_sync.py pull data results outputs/lafiya-lora outputs/ablation-lora"),
-        ("code", "!python scripts/run_eval.py --backend vllm --systems lafiya=outputs/lafiya-lora "
+        ("code", "!python scripts/run_eval.py --backend auto --systems lafiya=outputs/lafiya-lora "
                  "ablation=outputs/ablation-lora"),
         ("code", "!python scripts/compute_metrics.py\n!python scripts/hub_sync.py push results"),
         ("md", "## Live demo (restart the session first to free GPU memory from vLLM, re-run setup cells)\n"

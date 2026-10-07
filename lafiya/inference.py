@@ -17,37 +17,61 @@ DATE_STRING = "01 Oct 2026"
 
 
 class ChatEngine:
-    def __init__(self, backend: str = "vllm", enable_lora: bool = False,
+    """backend: "vllm", "hf", or "auto" (try vLLM, fall back to transformers if it fails)."""
+
+    def __init__(self, backend: str = "auto", enable_lora: bool = False,
                  max_model_len: int = 4096, base_model: str = BASE_MODEL):
-        self.backend = backend
         self.base_model = base_model
         self._lora_ids: dict[str, int] = {}
-        token = os.environ.get("HF_TOKEN")
-        if backend == "vllm":
-            import torch
-            from vllm import LLM
-            self.llm = LLM(
-                model=base_model,
-                dtype="half",
-                max_model_len=max_model_len,
-                tensor_parallel_size=max(1, torch.cuda.device_count()),
-                gpu_memory_utilization=0.90,
-                enable_lora=enable_lora,
-                max_lora_rank=64,
-                max_loras=2,
-            )
+        if backend == "auto":
+            try:
+                self._init_vllm(enable_lora, max_model_len)
+                backend = "vllm"
+            except Exception as e:  # noqa: BLE001 - any vLLM failure means fall back
+                print(f"[ChatEngine] vLLM unavailable ({type(e).__name__}: {e}); falling back to transformers")
+                import gc
+                gc.collect()
+                try:
+                    import torch
+                    torch.cuda.empty_cache()
+                except Exception:  # noqa: BLE001
+                    pass
+                self._init_hf()
+                backend = "hf"
+        elif backend == "vllm":
+            self._init_vllm(enable_lora, max_model_len)
         elif backend == "hf":
-            import torch
-            from transformers import AutoModelForCausalLM, AutoTokenizer
-            self.tok = AutoTokenizer.from_pretrained(base_model, token=token)
-            self.tok.padding_side = "left"
-            if self.tok.pad_token is None:
-                self.tok.pad_token = self.tok.eos_token
-            self.model = AutoModelForCausalLM.from_pretrained(
-                base_model, token=token, torch_dtype=torch.float16, device_map="auto").eval()
-            self._peft = False
+            self._init_hf()
         else:
             raise ValueError(backend)
+        self.backend = backend
+        print(f"[ChatEngine] backend = {backend}")
+
+    def _init_vllm(self, enable_lora: bool, max_model_len: int) -> None:
+        import torch
+        from vllm import LLM
+        self.llm = LLM(
+            model=self.base_model,
+            dtype="half",
+            max_model_len=max_model_len,
+            tensor_parallel_size=max(1, torch.cuda.device_count()),
+            gpu_memory_utilization=0.90,
+            enable_lora=enable_lora,
+            max_lora_rank=64,
+            max_loras=2,
+        )
+
+    def _init_hf(self) -> None:
+        import torch
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+        token = os.environ.get("HF_TOKEN")
+        self.tok = AutoTokenizer.from_pretrained(self.base_model, token=token)
+        self.tok.padding_side = "left"
+        if self.tok.pad_token is None:
+            self.tok.pad_token = self.tok.eos_token
+        self.model = AutoModelForCausalLM.from_pretrained(
+            self.base_model, token=token, torch_dtype=torch.float16, device_map="auto").eval()
+        self._peft = False
 
     # ------------------------------------------------------------------ public
     def chat(self, conversations: list[list[dict]], adapter: str | None = None,

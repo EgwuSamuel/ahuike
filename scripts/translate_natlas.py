@@ -85,7 +85,7 @@ def build_jobs(train: list[dict], test: list[dict]) -> list[tuple[str, str, str]
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--backend", default="vllm", choices=("vllm", "hf"))
+    ap.add_argument("--backend", default="auto", choices=("auto", "vllm", "hf"))
     ap.add_argument("--data", default=str(ROOT / "data"))
     ap.add_argument("--out", default=None, help="default: <data>/translations.jsonl")
     ap.add_argument("--chunk", type=int, default=512)
