@@ -23,7 +23,7 @@ if hasattr(sys.stdout, "reconfigure"):
 sys.path.insert(0, str(ROOT))
 
 from ahuike.inference import ChatEngine  # noqa: E402
-from ahuike.prompts import advice_key, build_messages, input_hash, load_advice, target_json  # noqa: E402
+from ahuike.prompts import advice_group, build_messages, input_hash, target_json  # noqa: E402
 from ahuike.protocol import CLINIC, EMERGENCY, HOME  # noqa: E402
 
 
@@ -36,12 +36,10 @@ def load_jsonl(p: Path) -> list[dict]:
 
 def few_shot_examples(train: list[dict]) -> list[tuple[str, str]]:
     """One English example per triage level, deterministic, from the training split."""
-    adv = load_advice()["en"]
     out = []
     for level in (EMERGENCY, CLINIC, HOME):
         c = next(c for c in train if c["triage"] == level and c["persona"] != "chew")
-        out.append((c["text_en"], target_json(c["triage"], c["triggers"],
-                                              adv[advice_key(c["population"], c["triage"])])))
+        out.append((c["text_en"], target_json(c["triage"], c["triggers"], advice_group(c["population"]))))
     return out
 
 
@@ -52,7 +50,7 @@ def main() -> None:
     ap.add_argument("--data", default=str(ROOT / "data"))
     ap.add_argument("--out", default=str(ROOT / "results" / "preds.jsonl"))
     ap.add_argument("--limit", type=int, default=0)
-    ap.add_argument("--max-new-tokens", type=int, default=320)
+    ap.add_argument("--max-new-tokens", type=int, default=96, help="answers are short JSON (no advice text)")
     ap.add_argument("--batch-size", type=int, default=8, help="transformers backend only; lower it on OOM")
     args = ap.parse_args()
 

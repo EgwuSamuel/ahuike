@@ -9,15 +9,16 @@ tags: [medical, triage, maternal-health, child-health, nigeria, n-atlas, powered
 # AHUIKE-N-ATLaS-8B (Powered by Awarri)
 
 Maternal and child **danger-sign triage** fine-tuned from **N-ATLaS-8B** for English, Hausa, Yorùbá and Igbo.
-It returns one of `EMERGENCY_REFER_NOW`, `CLINIC_WITHIN_24H` or `HOME_CARE`, the protocol danger signs that triggered it,
-and short advice in the user's language.
+It returns one of `EMERGENCY_REFER_NOW`, `CLINIC_WITHIN_24H` or `HOME_CARE`, the patient group (child, pregnant,
+postpartum) and the protocol danger signs that triggered it. **It never writes advice**: the app shows one of nine
+advice messages per language that a clinician and native speakers reviewed, selected by triage level and patient group.
 
 **Powered by Awarri.** This is a derivative of N-ATLaS and is distributed under the N-ATLaS licence (same terms).
 
 *N-ATLaS is an initiative of the Federal Ministry of Communications, Innovation and Digital Economy, and powered by Awarri Technologies.*
 
 ## Training
-- QLoRA (r=16, α=32, all attention + MLP projections), 2 epochs, lr 2e-4, Unsloth, one T4 GPU.
+- QLoRA (r=16, α=32, all attention + MLP projections), 1 epoch, lr 2e-4, Unsloth, Kaggle T4 GPUs.
 - Data: ~2,700 parallel-anchored examples from NaijaTriage-Bench (train split). Each case appears in en/ha/yo/ig with an
   identical target, plus code-switched variants. Labels come from a rule engine encoding WHO IMCI and Nigerian CHEW Standing Orders.
 - Hausa/Yorùbá/Igbo text translated by N-ATLaS and filtered by back-translation.

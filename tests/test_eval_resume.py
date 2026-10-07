@@ -29,8 +29,8 @@ class TestResume(unittest.TestCase):
             (d / "cases_test.jsonl").write_text(json.dumps(case) + "\n", encoding="utf-8")
             item = {"case_id": case["id"], "lang": "en", "variant": "plain", "text": case["text_en"]}
             (d / "eval_items.jsonl").write_text(json.dumps(item) + "\n", encoding="utf-8")
-            right = target_json(case["triage"], case["triggers"], "x")
-            wrong = target_json("HOME_CARE" if case["triage"] != "HOME_CARE" else "EMERGENCY_REFER_NOW", [], "x")
+            right = target_json(case["triage"], case["triggers"], "child")
+            wrong = target_json("HOME_CARE" if case["triage"] != "HOME_CARE" else "EMERGENCY_REFER_NOW", [], "child")
             preds = [
                 {"system": "base", **{k: item[k] for k in ("case_id", "lang", "variant")},
                  "text_hash": input_hash(item["text"]), "output": right},

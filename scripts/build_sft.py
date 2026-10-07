@@ -21,7 +21,7 @@ if hasattr(sys.stdout, "reconfigure"):
 sys.path.insert(0, str(ROOT))
 
 from ahuike.backcheck import check  # noqa: E402
-from ahuike.prompts import advice_key, build_messages, load_advice, target_json  # noqa: E402
+from ahuike.prompts import advice_group, build_messages, target_json  # noqa: E402
 
 
 def load_jsonl(p: Path) -> list[dict]:
@@ -58,10 +58,6 @@ def main() -> None:
             elif r["bt_ok"]:
                 rejected[next((p for p in problems if p in ("meta_text", "label_changed")), "other")] += 1
 
-    apath = data / "advice_i18n.json"
-    if not apath.exists() and not args.allow_missing_advice:
-        sys.exit("data/advice_i18n.json missing: run translate_natlas.py first")
-    advice = load_advice(str(apath) if apath.exists() else None)
 
     def text_for(case: dict, lang: str, variant: str = "plain") -> str | None:
         if lang == "en" and variant == "plain":
@@ -69,9 +65,9 @@ def main() -> None:
         return trans.get((case["id"], lang, variant))
 
     def example(case: dict, lang: str, text: str) -> dict:
-        adv = advice.get(lang, advice["en"]).get(advice_key(case["population"], case["triage"]))
         msgs = build_messages(text)
-        msgs.append({"role": "assistant", "content": target_json(case["triage"], case["triggers"], adv)})
+        msgs.append({"role": "assistant",
+                     "content": target_json(case["triage"], case["triggers"], advice_group(case["population"]))})
         return {"case_id": case["id"], "lang": lang, "messages": msgs}
 
     LANGS4 = ("en", "ha", "yo", "ig")

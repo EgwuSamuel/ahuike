@@ -9,8 +9,8 @@ from ahuike.metrics import clcc, detect_lang, mcnemar_exact, score_item, summari
 from ahuike.prompts import parse_output, target_json  # noqa: E402
 
 
-def out(tri, signs=(), advice="Go now"):
-    return target_json(tri, list(signs), advice)
+def out(tri, signs=(), patient="child"):
+    return target_json(tri, list(signs), patient)
 
 
 GOLD = {
@@ -67,8 +67,19 @@ class TestMetrics(unittest.TestCase):
         self.assertEqual(detect_lang("Ẹ gbé ọmọ náà lọ sí ilé ìwòsàn lẹ́sẹ̀kẹsẹ̀."), "yo")
         self.assertEqual(detect_lang("Kpọga nwa ahụ gaa ụlọ ọgwụ ozugbo."), "ig")
 
+    def test_advice_is_looked_up_not_generated(self):
+        from ahuike.prompts import advice_for, load_advice
+        table = load_advice()
+        table["ig"] = {"child|EMERGENCY_REFER_NOW": "IGBO TEXT"}
+        p = parse_output(out("EMERGENCY_REFER_NOW", ["convulsions"], "child"))
+        self.assertEqual(p["patient"], "child")
+        self.assertEqual(advice_for(p, "ig", table), "IGBO TEXT")
+        self.assertTrue(advice_for(p, "yo", table).startswith("DANGER SIGN"))  # falls back to English
+        p2 = parse_output(out("HOME_CARE", [], "pregnant"))
+        self.assertIn("pregnancy", advice_for(p2, "en", table))
+
     def test_target_roundtrip(self):
-        s = out("CLINIC_WITHIN_24H", ["fever"], "Je ka asibiti")
+        s = out("CLINIC_WITHIN_24H", ["fever"], "pregnant")
         self.assertEqual(json.loads(s)["danger_signs"], ["fever"])
 
 

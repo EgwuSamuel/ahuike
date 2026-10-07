@@ -7,6 +7,8 @@ maternal and child danger signs and **refer early**. It is not a diagnostic devi
 ## Safety design
 - **Errs toward referral.** The system prompt instructs the model to choose the more urgent level when unsure, and
   the headline metric is the **under-triage rate** (missed emergencies), not accuracy.
+- **Advice is never generated.** The model outputs only a triage level, patient group and danger signs; the advice
+  shown is one of nine fixed messages per language, reviewed by a clinician and native speakers.
 - **Unparseable output fails safe.** The app shows "When in doubt, go to the health centre today."
 - **Closed vocabulary.** Danger signs are protocol ids, so a health worker can audit why a case was escalated.
 - **No real patient data.** All training and test cases are synthetic, generated from protocol rules.

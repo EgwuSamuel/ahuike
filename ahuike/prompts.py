@@ -15,7 +15,8 @@ from .protocol.rules import CLINIC, EMERGENCY, HOME, LEVELS
 LANGS = {"en": "English", "ha": "Hausa", "yo": "Yoruba", "ig": "Igbo"}
 
 SYSTEM_PROMPT = """You are AHỤIKE, a maternal and child health triage assistant for Nigerian communities, built on N-ATLAS. A caregiver, a pregnant or postpartum woman, or a community health worker (CHEW) describes a case in English, Hausa, Yoruba or Igbo. Apply the protocol and reply with ONLY one JSON object:
-{"triage": "EMERGENCY_REFER_NOW" | "CLINIC_WITHIN_24H" | "HOME_CARE", "danger_signs": [protocol sign ids at the decided level], "advice": "short advice in the SAME language as the user"}
+{"triage": "EMERGENCY_REFER_NOW" | "CLINIC_WITHIN_24H" | "HOME_CARE", "patient": "child" | "pregnant" | "postpartum", "danger_signs": [protocol sign ids at the decided level]}
+Use "patient": "child" for any baby or child under five, including newborns. Do not write advice: the app shows reviewed advice for the triage level.
 
 PROTOCOL (WHO IMCI + Nigerian CHEW Standing Orders)
 EMERGENCY_REFER_NOW if any of:
@@ -75,9 +76,24 @@ def user_message(text: str) -> str:
     return text.strip()
 
 
-def target_json(triage: str, triggers: list[str], advice: str) -> str:
-    return json.dumps({"triage": triage, "danger_signs": list(triggers), "advice": advice},
+PATIENT_GROUPS = ("child", "pregnant", "postpartum")
+
+
+def target_json(triage: str, triggers: list[str], patient: str) -> str:
+    """The model's whole answer. Advice is NOT generated: it is looked up (advice_for) from
+    messages reviewed by a clinician and native speakers, so it can never be hallucinated."""
+    return json.dumps({"triage": triage, "patient": patient, "danger_signs": list(triggers)},
                       ensure_ascii=False)
+
+
+def advice_for(parsed: dict, lang: str, table: dict[str, dict[str, str]]) -> str:
+    """Reviewed advice for a parsed answer, in the user's language (English if not available)."""
+    level = parsed.get("triage")
+    if level is None:
+        return ""
+    group = parsed.get("patient") if parsed.get("patient") in PATIENT_GROUPS else "child"
+    key = f"{group}|{level}"
+    return table.get(lang, {}).get(key) or table["en"][key]
 
 
 def build_messages(text: str, few_shot: list[tuple[str, str]] | None = None) -> list[dict]:
@@ -97,7 +113,7 @@ def parse_output(text: str) -> dict:
 
     Returns {"triage": level|None, "danger_signs": [...], "advice": str, "valid_json": bool}.
     """
-    out = {"triage": None, "danger_signs": [], "advice": "", "valid_json": False}
+    out = {"triage": None, "patient": None, "danger_signs": [], "advice": "", "valid_json": False}
     if not text:
         return out
     start, end = text.find("{"), text.rfind("}")
@@ -111,6 +127,8 @@ def parse_output(text: str) -> dict:
                 ds = obj.get("danger_signs") or []
                 if isinstance(ds, list):
                     out["danger_signs"] = [str(x) for x in ds]
+                if obj.get("patient") in PATIENT_GROUPS:
+                    out["patient"] = obj["patient"]
                 adv = obj.get("advice")
                 out["advice"] = adv if isinstance(adv, str) else ""
                 out["valid_json"] = out["triage"] is not None

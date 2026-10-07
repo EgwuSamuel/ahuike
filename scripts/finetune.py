@@ -27,7 +27,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True)
     ap.add_argument("--out", required=True)
-    ap.add_argument("--epochs", type=float, default=2.0)
+    ap.add_argument("--epochs", type=float, default=1.0)
     ap.add_argument("--lr", type=float, default=2e-4)
     ap.add_argument("--r", type=int, default=16)
     ap.add_argument("--batch", type=int, default=4)
@@ -72,7 +72,7 @@ def main() -> None:
         max_steps=args.max_steps,
         learning_rate=args.lr,
         lr_scheduler_type="cosine",
-        warmup_ratio=0.03,
+        warmup_steps=10,
         weight_decay=0.01,
         optim="adamw_8bit",
         fp16=not is_bfloat16_supported(),
