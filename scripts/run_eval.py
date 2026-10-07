@@ -53,6 +53,7 @@ def main() -> None:
     ap.add_argument("--out", default=str(ROOT / "results" / "preds.jsonl"))
     ap.add_argument("--limit", type=int, default=0)
     ap.add_argument("--max-new-tokens", type=int, default=320)
+    ap.add_argument("--batch-size", type=int, default=8, help="transformers backend only; lower it on OOM")
     args = ap.parse_args()
 
     data = Path(args.data)
@@ -80,7 +81,8 @@ def main() -> None:
         if not todo:
             continue
         convs = [build_messages(it["text"], shots if name == "base_fewshot" else None) for it in todo]
-        outs = engine.chat(convs, adapter=adapter, max_new_tokens=args.max_new_tokens)
+        outs = engine.chat(convs, adapter=adapter, max_new_tokens=args.max_new_tokens,
+                           batch_size=args.batch_size)
         with open(out, "a", encoding="utf-8") as fh:
             for it, o in zip(todo, outs):
                 fh.write(json.dumps({"system": name, "case_id": it["case_id"], "lang": it["lang"],

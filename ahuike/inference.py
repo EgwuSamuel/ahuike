@@ -11,6 +11,9 @@ from __future__ import annotations
 import os
 from contextlib import nullcontext
 
+# Less fragmentation on 16 GB T4s (must be set before torch allocates).
+os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
+
 BASE_MODEL = os.environ.get("NATLAS_MODEL", "NCAIR1/N-ATLaS")
 # Fixed so that training and inference see exactly the same rendered system header.
 DATE_STRING = "01 Oct 2026"
@@ -75,7 +78,7 @@ class ChatEngine:
 
     # ------------------------------------------------------------------ public
     def chat(self, conversations: list[list[dict]], adapter: str | None = None,
-             max_new_tokens: int = 256, temperature: float = 0.0, batch_size: int = 32,
+             max_new_tokens: int = 256, temperature: float = 0.0, batch_size: int = 8,
              repetition_penalty: float = 1.0) -> list[str]:
         """repetition_penalty: the N-ATLaS card recommends 1.12 for free text; keep 1.0 for JSON."""
         if self.backend == "vllm":
