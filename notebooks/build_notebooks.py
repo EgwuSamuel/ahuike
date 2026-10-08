@@ -38,38 +38,50 @@ NOTEBOOKS = {
     ],
     "02_finetune_unsloth.ipynb": [
         ("md", "# AHỤIKE 02: QLoRA fine-tuning of N-ATLaS-8B (Unsloth, ~3.5 h)\n"
-               "Trains **AHỤIKE** (parallel-anchored) and the **ablation** (same size and language mix, "
-               "each case in one language only). 1 epoch each, ~1.5 h on Kaggle T4s. Each adapter is "
+               "Trains the **parallel-anchored variant** (each case in all four languages) and **AHỤIKE**, the "
+               "released model (same size and language mix, more distinct cases, each in one language). "
+               "1 epoch each, ~1.5 h on Kaggle T4s. Each adapter is "
                "pushed to the private work repo as soon as it finishes."),
         SETTINGS, TOKEN,
         ("code", UNSLOTH[1] + "\n!python scripts/hub_sync.py pull data\n!python scripts/build_sft.py"),
-        ("md", "## 1. AHỤIKE (parallel-anchored)"),
+        ("md", "## 1. Parallel-anchored variant"),
         ("code", "!python scripts/finetune.py --data data/sft_anchored.jsonl --out outputs/ahuike-lora\n"
                  "!python scripts/hub_sync.py push outputs/ahuike-lora"),
-        ("md", "## 2. Ablation (no parallel anchoring)"),
+        ("md", "## 2. AHỤIKE: diverse cases (the released model; adapter folder name kept from the experiment)"),
         ("code", "!python scripts/finetune.py --data data/sft_ablation.jsonl --out outputs/ablation-lora\n"
                  "!python scripts/hub_sync.py push outputs/ablation-lora"),
         ("md", "## 3. (Optional) merged Q4_K_M GGUF for the CPU demo\n"
                "The repo name must carry the **Powered-by-Awarri** suffix (N-ATLaS licence)."),
         ("code", "HF_USER = 'SamEgwu'\n"
-                 "!python scripts/export_gguf.py --adapter outputs/ahuike-lora --out /tmp/ahuike-gguf "
+                 "!python scripts/export_gguf.py --adapter outputs/ablation-lora --out /tmp/ahuike-gguf "
                  "--push {HF_USER}/AHUIKE-N-ATLaS-8B-GGUF-Powered-by-Awarri"),
     ],
     "03_eval_and_demo.ipynb": [
         ("md", "# AHỤIKE 03: benchmark AHỤIKE vs base N-ATLAS (vLLM, ~30-45 min), then live demo"),
         SETTINGS, TOKEN, VLLM,
-        ("code", "!python scripts/hub_sync.py pull data results outputs/ahuike-lora outputs/ablation-lora\n"
+        ("code", "!python scripts/hub_sync.py pull data outputs/ahuike-lora outputs/ablation-lora\n"
                  "!python scripts/build_sft.py"),
         ("md", "## Benchmark (base is re-run automatically if the prompt changed)"),
-        ("code", "!python scripts/run_eval.py --systems base base_fewshot ahuike=outputs/ahuike-lora "
-                 "ablation=outputs/ablation-lora\n"
+        ("code", "!python scripts/run_eval.py --systems base base_fewshot ahuike=outputs/ablation-lora "
+                 "ahuike_parallel=outputs/ahuike-lora\n"
                  "!python scripts/compute_metrics.py\n!python scripts/hub_sync.py push results\n"
                  "!cat results/REPORT.md"),
         ("md", "## Live demo (restart the session first to free GPU memory, re-run the setup cells)\n"
                "Opens a public Gradio link: use it for the video and for live user sessions."),
-        ("code", "!pip install -q gradio\n!python app/app.py --backend hf --adapter outputs/ahuike-lora --share"),
+        ("code", "!pip install -q gradio\n!python app/app.py --backend hf --adapter outputs/ablation-lora --share"),
         ("md", "## Voice evaluation (after uploading recordings to voice/ and filling voice/manifest.csv)"),
-        ("code", "!python scripts/eval_voice.py --backend hf --adapter outputs/ahuike-lora"),
+        ("code", "!python scripts/eval_voice.py --backend hf --adapter outputs/ablation-lora"),
+    ],
+    "04_release_and_demo.ipynb": [
+        ("md", "# AHỤIKE 04: publish the model + benchmark, then open the live demo (~15 min)\n"
+               "Makes **AHUIKE-N-ATLaS-8B-LoRA-Powered-by-Awarri** and **NaijaTriage-Bench** public on Hugging Face, "
+               "then starts the voice demo with a public link (valid 72 h while the notebook runs). "
+               "Run this one **interactively** (Edit, then Run All), not as a saved version, so you can open the link."),
+        SETTINGS, TOKEN, VLLM,
+        ("md", "## 1. Publish (public Hugging Face repos)"),
+        ("code", "!python scripts/release_hf.py"),
+        ("md", "## 2. Live demo: open the **gradio.live** link printed below"),
+        ("code", "!pip install -q gradio\n!python app/app.py --backend hf --adapter outputs/ablation-lora --share"),
     ],
 }
 

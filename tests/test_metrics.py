@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from ahuike.metrics import clcc, detect_lang, mcnemar_exact, score_item, summarize  # noqa: E402
+from ahuike.metrics import clcc, detect_lang, mcnemar_exact, paired_cases, score_item, summarize  # noqa: E402
 from ahuike.prompts import parse_output, target_json  # noqa: E402
 
 
@@ -60,6 +60,15 @@ class TestMetrics(unittest.TestCase):
         self.assertEqual(mcnemar_exact([True] * 5, [True] * 5)["p_value"], 1.0)
         r = mcnemar_exact([False] * 20, [True] * 20)
         self.assertLess(r["p_value"], 1e-5)
+
+    def test_paired_cases_counts_each_case_once(self):
+        def item(cid, lang, ok):
+            return {"case_id": cid, "lang": lang, "variant": "plain", "gold": "EMERGENCY_REFER_NOW", "correct": ok}
+        langs = ("en", "ha", "yo", "ig")
+        a = [item("a", l, l == "en") for l in langs] + [item("b", l, True) for l in langs]
+        b = [item("a", l, True) for l in langs] + [item("b", l, True) for l in langs]
+        r = paired_cases(a, b)
+        self.assertEqual((r["n_cases"], r["a_only"], r["b_only"]), (2, 0, 1))  # 3 item wins = 1 case win
 
     def test_langid(self):
         self.assertEqual(detect_lang("Take the child to the health centre now."), "en")

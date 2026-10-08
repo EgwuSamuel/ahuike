@@ -194,3 +194,21 @@ def paired(items_a: list[dict], items_b: list[dict], key: str = "correct",
     kb = {(i["case_id"], i["lang"], i["variant"]): i for i in items_b}
     common = sorted(k for k in ka.keys() & kb.keys() if only_gold is None or ka[k]["gold"] == only_gold)
     return mcnemar_exact([bool(ka[k][key]) for k in common], [bool(kb[k][key]) for k in common])
+
+
+def paired_cases(items_a: list[dict], items_b: list[dict], key: str = "correct",
+                 only_gold: str | None = None) -> dict:
+    """Case-level exact sign test: the 4 language versions of a case count as ONE unit, not four.
+
+    A case favours a system if that system gets more of its language versions right.
+    """
+    ka = {(i["case_id"], i["lang"], i["variant"]): i for i in items_a}
+    kb = {(i["case_id"], i["lang"], i["variant"]): i for i in items_b}
+    score: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    for k in ka.keys() & kb.keys():
+        if only_gold is None or ka[k]["gold"] == only_gold:
+            score[k[0]][0] += bool(ka[k][key])
+            score[k[0]][1] += bool(kb[k][key])
+    a = [sa >= sb for sa, sb in score.values()]
+    b = [sb >= sa for sa, sb in score.values()]
+    return {"n_cases": len(score), **mcnemar_exact(a, b)}

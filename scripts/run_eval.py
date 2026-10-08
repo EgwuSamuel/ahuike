@@ -1,7 +1,7 @@
 """Run NaijaTriage-Bench through base N-ATLaS and AHỤIKE adapters. Resumable.
 
-  python scripts/run_eval.py --systems base base_fewshot ahuike=outputs/ahuike-lora \
-      ablation=outputs/ablation-lora --backend vllm
+  python scripts/run_eval.py --systems base base_fewshot ahuike=outputs/ablation-lora \
+      ahuike_parallel=outputs/ahuike-lora --backend vllm
 
 System specs:
   base            - N-ATLaS, protocol system prompt, zero-shot

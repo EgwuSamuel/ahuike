@@ -5,7 +5,7 @@ then list them in voice/manifest.csv:
   file,case_id,lang,speaker
   voice/ha_te00012_s1.wav,te00012,ha,s1
 
-  python scripts/eval_voice.py --backend hf --adapter outputs/ahuike-lora
+  python scripts/eval_voice.py --backend hf --adapter outputs/ablation-lora
 Outputs results/voice_preds.jsonl and results/voice_eval.json (WER + end-to-end triage accuracy).
 """
 from __future__ import annotations

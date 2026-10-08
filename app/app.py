@@ -3,7 +3,7 @@
   # CPU / HF Space (merged GGUF):
   AHỤIKE_GGUF=<user>/AHUIKE-N-ATLaS-8B-GGUF-Powered-by-Awarri/<file>.gguf python app/app.py
   # GPU notebook (adapter):
-  python app/app.py --backend hf --adapter outputs/ahuike-lora --share
+  python app/app.py --backend hf --adapter outputs/ablation-lora --share
 """
 from __future__ import annotations
 

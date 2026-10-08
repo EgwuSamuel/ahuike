@@ -1,0 +1,1470 @@
+{
+  "base": {
+    "overall": {
+      "n": 1091,
+      "accuracy": 0.3721356553620532,
+      "macro_f1": 0.2193915028994028,
+      "under_triage_rate": 0.9649890590809628,
+      "over_triage_rate": 0.37381703470031546,
+      "json_validity": 0.9816681943171403,
+      "danger_sign_precision": 0.16057953516450346,
+      "danger_sign_recall": 0.4039483675018983,
+      "danger_sign_f1": 0.22980561555075593,
+      "advice_language_match": NaN
+    },
+    "overall_ci": {
+      "accuracy": [
+        0.3187732342007435,
+        0.42149532710280374
+      ],
+      "under_triage_rate": [
+        0.9447004608294931,
+        0.9823008849557522
+      ],
+      "clcc": [
+        0.8333333333333334,
+        0.9344262295081968
+      ]
+    },
+    "by_language": {
+      "en": {
+        "n": 385,
+        "accuracy": 0.3922077922077922,
+        "macro_f1": 0.2387830672909775,
+        "under_triage_rate": 0.93125,
+        "over_triage_rate": 0.3688888888888889,
+        "json_validity": 0.9922077922077922,
+        "danger_sign_precision": 0.24531668153434433,
+        "danger_sign_recall": 0.5753138075313807,
+        "danger_sign_f1": 0.3439649781113196,
+        "advice_language_match": NaN
+      },
+      "ha": {
+        "n": 341,
+        "accuracy": 0.3782991202346041,
+        "macro_f1": 0.20332595561404557,
+        "under_triage_rate": 0.9645390070921985,
+        "over_triage_rate": 0.365,
+        "json_validity": 0.967741935483871,
+        "danger_sign_precision": 0.13541666666666666,
+        "danger_sign_recall": 0.33568075117370894,
+        "danger_sign_f1": 0.19298245614035087,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 138,
+        "accuracy": 0.34782608695652173,
+        "macro_f1": 0.20455840455840454,
+        "under_triage_rate": 1.0,
+        "over_triage_rate": 0.3950617283950617,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.0936768149882904,
+        "danger_sign_recall": 0.25806451612903225,
+        "danger_sign_f1": 0.13745704467353953,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 227,
+        "accuracy": 0.3436123348017621,
+        "macro_f1": 0.21186440677966098,
+        "under_triage_rate": 1.0,
+        "over_triage_rate": 0.3828125,
+        "json_validity": 0.973568281938326,
+        "danger_sign_precision": 0.10437235543018336,
+        "danger_sign_recall": 0.2868217054263566,
+        "danger_sign_f1": 0.15305067218200621,
+        "advice_language_match": NaN
+      }
+    },
+    "parallel_core": {
+      "n": 380,
+      "accuracy": 0.3368421052631579,
+      "macro_f1": 0.2035094202289969,
+      "under_triage_rate": 0.9583333333333334,
+      "over_triage_rate": 0.419811320754717,
+      "json_validity": 0.9894736842105263,
+      "danger_sign_precision": 0.1374113475177305,
+      "danger_sign_recall": 0.3762135922330097,
+      "danger_sign_f1": 0.20129870129870128,
+      "advice_language_match": NaN
+    },
+    "parallel_core_by_language": {
+      "en": {
+        "n": 95,
+        "accuracy": 0.3684210526315789,
+        "macro_f1": 0.23758865248226949,
+        "under_triage_rate": 0.8809523809523809,
+        "over_triage_rate": 0.4339622641509434,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.22813688212927757,
+        "danger_sign_recall": 0.5825242718446602,
+        "danger_sign_f1": 0.3278688524590164,
+        "advice_language_match": NaN
+      },
+      "ha": {
+        "n": 95,
+        "accuracy": 0.3368421052631579,
+        "macro_f1": 0.19423745653253852,
+        "under_triage_rate": 0.9523809523809523,
+        "over_triage_rate": 0.41509433962264153,
+        "json_validity": 0.9789473684210527,
+        "danger_sign_precision": 0.13818181818181818,
+        "danger_sign_recall": 0.36893203883495146,
+        "danger_sign_f1": 0.20105820105820105,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 95,
+        "accuracy": 0.3263157894736842,
+        "macro_f1": 0.20873015873015874,
+        "under_triage_rate": 1.0,
+        "over_triage_rate": 0.39622641509433965,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.09271523178807947,
+        "danger_sign_recall": 0.27184466019417475,
+        "danger_sign_f1": 0.1382716049382716,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 95,
+        "accuracy": 0.3157894736842105,
+        "macro_f1": 0.16129032258064518,
+        "under_triage_rate": 1.0,
+        "over_triage_rate": 0.4339622641509434,
+        "json_validity": 0.9789473684210527,
+        "danger_sign_precision": 0.10069444444444445,
+        "danger_sign_recall": 0.2815533980582524,
+        "danger_sign_f1": 0.14833759590792842,
+        "advice_language_match": NaN
+      }
+    },
+    "code_switched": {
+      "ha": {
+        "n": 43,
+        "accuracy": 0.3953488372093023,
+        "macro_f1": 0.28693957115009744,
+        "under_triage_rate": 0.9444444444444444,
+        "over_triage_rate": 0.32,
+        "json_validity": 0.9069767441860465,
+        "danger_sign_precision": 0.1724137931034483,
+        "danger_sign_recall": 0.3508771929824561,
+        "danger_sign_f1": 0.23121387283236994,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 20,
+        "accuracy": 0.3,
+        "macro_f1": 0.15384615384615385,
+        "under_triage_rate": 1.0,
+        "over_triage_rate": 0.3,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.058823529411764705,
+        "danger_sign_recall": 0.13043478260869565,
+        "danger_sign_f1": 0.08108108108108109,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 29,
+        "accuracy": 0.2413793103448276,
+        "macro_f1": 0.1843137254901961,
+        "under_triage_rate": 1.0,
+        "over_triage_rate": 0.5333333333333333,
+        "json_validity": 0.9655172413793104,
+        "danger_sign_precision": 0.07042253521126761,
+        "danger_sign_recall": 0.1724137931034483,
+        "danger_sign_f1": 0.1,
+        "advice_language_match": NaN
+      }
+    },
+    "code_switched_all": {
+      "n": 92,
+      "accuracy": 0.32608695652173914,
+      "macro_f1": 0.22895416836665303,
+      "under_triage_rate": 0.9761904761904762,
+      "over_triage_rate": 0.38,
+      "json_validity": 0.9456521739130435,
+      "danger_sign_precision": 0.11764705882352941,
+      "danger_sign_recall": 0.25688073394495414,
+      "danger_sign_f1": 0.16138328530259363,
+      "advice_language_match": NaN
+    },
+    "by_population": {
+      "child": {
+        "n": 391,
+        "accuracy": 0.46035805626598464,
+        "macro_f1": 0.254013989754062,
+        "under_triage_rate": 0.9622641509433962,
+        "over_triage_rate": 0.37894736842105264,
+        "json_validity": 0.9846547314578005,
+        "danger_sign_precision": 0.1299000768639508,
+        "danger_sign_recall": 0.39211136890951276,
+        "danger_sign_f1": 0.19515011547344108,
+        "advice_language_match": NaN
+      },
+      "infant": {
+        "n": 85,
+        "accuracy": 0.15294117647058825,
+        "macro_f1": 0.17364117364117368,
+        "under_triage_rate": 0.9154929577464789,
+        "over_triage_rate": 0.5,
+        "json_validity": 0.9764705882352941,
+        "danger_sign_precision": 0.24803149606299213,
+        "danger_sign_recall": 0.4090909090909091,
+        "danger_sign_f1": 0.30882352941176466,
+        "advice_language_match": NaN
+      },
+      "postpartum": {
+        "n": 217,
+        "accuracy": 0.3686635944700461,
+        "macro_f1": 0.225103443385954,
+        "under_triage_rate": 0.97,
+        "over_triage_rate": 0.29914529914529914,
+        "json_validity": 0.967741935483871,
+        "danger_sign_precision": 0.13015873015873017,
+        "danger_sign_recall": 0.30711610486891383,
+        "danger_sign_f1": 0.18283166109253066,
+        "advice_language_match": NaN
+      },
+      "pregnant": {
+        "n": 398,
+        "accuracy": 0.3341708542713568,
+        "macro_f1": 0.18332214757752027,
+        "under_triage_rate": 0.9833333333333333,
+        "over_triage_rate": 0.39908256880733944,
+        "json_validity": 0.9874371859296482,
+        "danger_sign_precision": 0.19326241134751773,
+        "danger_sign_recall": 0.46881720430107526,
+        "danger_sign_f1": 0.27369742623979915,
+        "advice_language_match": NaN
+      }
+    },
+    "by_reasoning_tag": {
+      "combination": {
+        "n": 541,
+        "accuracy": 0.5046210720887245,
+        "macro_f1": 0.267940838034296,
+        "under_triage_rate": 0.9711538461538461,
+        "over_triage_rate": 0.1921921921921922,
+        "json_validity": 0.9815157116451017,
+        "danger_sign_precision": 0.15479528883903534,
+        "danger_sign_recall": 0.3655629139072848,
+        "danger_sign_f1": 0.21749408983451538,
+        "advice_language_match": NaN
+      },
+      "duration_threshold": {
+        "n": 235,
+        "accuracy": 0.5148936170212766,
+        "macro_f1": 0.24851604278074868,
+        "under_triage_rate": 0.9850746268656716,
+        "over_triage_rate": 0.2857142857142857,
+        "json_validity": 0.9957446808510638,
+        "danger_sign_precision": 0.1275252525252525,
+        "danger_sign_recall": 0.3389261744966443,
+        "danger_sign_f1": 0.1853211009174312,
+        "advice_language_match": NaN
+      },
+      "rr_threshold": {
+        "n": 57,
+        "accuracy": 0.5263157894736842,
+        "macro_f1": 0.27507002801120456,
+        "under_triage_rate": 1.0,
+        "over_triage_rate": 0.2857142857142857,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.1724137931034483,
+        "danger_sign_recall": 0.42857142857142855,
+        "danger_sign_f1": 0.24590163934426235,
+        "advice_language_match": NaN
+      },
+      "temp_threshold": {
+        "n": 5,
+        "accuracy": 0.0,
+        "macro_f1": 0.0,
+        "under_triage_rate": 1.0,
+        "over_triage_rate": NaN,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.45454545454545453,
+        "danger_sign_recall": 0.5,
+        "danger_sign_f1": 0.47619047619047616,
+        "advice_language_match": NaN
+      }
+    },
+    "clcc": {
+      "n_cases": 95,
+      "clcc": 0.8842105263157894,
+      "consistent_and_correct": 0.30526315789473685,
+      "emergency_missed_in_any_language": 1.0,
+      "per_language_accuracy": {
+        "en": 0.3684210526315789,
+        "ha": 0.3368421052631579,
+        "yo": 0.3263157894736842,
+        "ig": 0.3157894736842105
+      },
+      "per_language_under_triage": {
+        "en": 0.8809523809523809,
+        "ha": 0.9523809523809523,
+        "yo": 1.0,
+        "ig": 1.0
+      },
+      "worst_language_gap": 0.05263157894736842,
+      "worst_language": "ig"
+    },
+    "confusion": {
+      "HOME_CARE": {
+        "CLINIC_WITHIN_24H": 237,
+        "HOME_CARE": 8,
+        "INVALID": 2
+      },
+      "CLINIC_WITHIN_24H": {
+        "CLINIC_WITHIN_24H": 382,
+        "HOME_CARE": 4,
+        "INVALID": 1
+      },
+      "EMERGENCY_REFER_NOW": {
+        "CLINIC_WITHIN_24H": 437,
+        "HOME_CARE": 3,
+        "EMERGENCY_REFER_NOW": 16,
+        "INVALID": 1
+      }
+    },
+    "native_written": {
+      "ha": {
+        "n": 0
+      },
+      "yo": {
+        "n": 0
+      },
+      "ig": {
+        "n": 0
+      }
+    },
+    "native_verified": {
+      "ig": {
+        "n": 14,
+        "accuracy": 0.21428571428571427,
+        "macro_f1": 0.11764705882352942,
+        "under_triage_rate": 1.0,
+        "over_triage_rate": 0.5714285714285714,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.09523809523809523,
+        "danger_sign_recall": 0.3333333333333333,
+        "danger_sign_f1": 0.14814814814814814,
+        "advice_language_match": NaN
+      }
+    }
+  },
+  "base_fewshot": {
+    "overall": {
+      "n": 1091,
+      "accuracy": 0.538038496791934,
+      "macro_f1": 0.4853088057946688,
+      "under_triage_rate": 0.34573304157549234,
+      "over_triage_rate": 0.5362776025236593,
+      "json_validity": 0.9670027497708524,
+      "danger_sign_precision": 0.21505027570548169,
+      "danger_sign_recall": 0.5034168564920274,
+      "danger_sign_f1": 0.30136363636363633,
+      "advice_language_match": NaN
+    },
+    "overall_ci": {
+      "accuracy": [
+        0.4981651376146789,
+        0.5783242258652095
+      ],
+      "under_triage_rate": [
+        0.2882882882882883,
+        0.4074074074074074
+      ],
+      "clcc": [
+        0.4126984126984127,
+        0.576271186440678
+      ]
+    },
+    "by_language": {
+      "en": {
+        "n": 385,
+        "accuracy": 0.6077922077922078,
+        "macro_f1": 0.5800406399740473,
+        "under_triage_rate": 0.2875,
+        "over_triage_rate": 0.4444444444444444,
+        "json_validity": 0.987012987012987,
+        "danger_sign_precision": 0.29071969696969696,
+        "danger_sign_recall": 0.6422594142259415,
+        "danger_sign_f1": 0.4002607561929596,
+        "advice_language_match": NaN
+      },
+      "ha": {
+        "n": 341,
+        "accuracy": 0.49560117302052786,
+        "macro_f1": 0.387677304964539,
+        "under_triage_rate": 0.24822695035460993,
+        "over_triage_rate": 0.68,
+        "json_validity": 0.9618768328445748,
+        "danger_sign_precision": 0.17967145790554415,
+        "danger_sign_recall": 0.4107981220657277,
+        "danger_sign_f1": 0.25,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 138,
+        "accuracy": 0.4855072463768116,
+        "macro_f1": 0.40297465297465296,
+        "under_triage_rate": 0.5087719298245614,
+        "over_triage_rate": 0.5185185185185185,
+        "json_validity": 0.927536231884058,
+        "danger_sign_precision": 0.1834625322997416,
+        "danger_sign_recall": 0.45806451612903226,
+        "danger_sign_f1": 0.26199261992619927,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 227,
+        "accuracy": 0.5154185022026432,
+        "macro_f1": 0.4835000201150581,
+        "under_triage_rate": 0.48484848484848486,
+        "over_triage_rate": 0.484375,
+        "json_validity": 0.9647577092511013,
+        "danger_sign_precision": 0.16516516516516516,
+        "danger_sign_recall": 0.4263565891472868,
+        "danger_sign_f1": 0.23809523809523808,
+        "advice_language_match": NaN
+      }
+    },
+    "parallel_core": {
+      "n": 380,
+      "accuracy": 0.5236842105263158,
+      "macro_f1": 0.46133234951568686,
+      "under_triage_rate": 0.4166666666666667,
+      "over_triage_rate": 0.5141509433962265,
+      "json_validity": 0.9763157894736842,
+      "danger_sign_precision": 0.20253164556962025,
+      "danger_sign_recall": 0.5048543689320388,
+      "danger_sign_f1": 0.28908964558721334,
+      "advice_language_match": NaN
+    },
+    "parallel_core_by_language": {
+      "en": {
+        "n": 95,
+        "accuracy": 0.5789473684210527,
+        "macro_f1": 0.5202995202995203,
+        "under_triage_rate": 0.35714285714285715,
+        "over_triage_rate": 0.4528301886792453,
+        "json_validity": 0.9894736842105263,
+        "danger_sign_precision": 0.27800829875518673,
+        "danger_sign_recall": 0.6504854368932039,
+        "danger_sign_f1": 0.38953488372093026,
+        "advice_language_match": NaN
+      },
+      "ha": {
+        "n": 95,
+        "accuracy": 0.5052631578947369,
+        "macro_f1": 0.39964421543368905,
+        "under_triage_rate": 0.23809523809523808,
+        "over_triage_rate": 0.6792452830188679,
+        "json_validity": 0.968421052631579,
+        "danger_sign_precision": 0.184,
+        "danger_sign_recall": 0.44660194174757284,
+        "danger_sign_f1": 0.2606232294617564,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 95,
+        "accuracy": 0.49473684210526314,
+        "macro_f1": 0.41997606354041994,
+        "under_triage_rate": 0.5714285714285714,
+        "over_triage_rate": 0.4528301886792453,
+        "json_validity": 0.9578947368421052,
+        "danger_sign_precision": 0.17204301075268819,
+        "danger_sign_recall": 0.46601941747572817,
+        "danger_sign_f1": 0.2513089005235602,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 95,
+        "accuracy": 0.5157894736842106,
+        "macro_f1": 0.48148148148148145,
+        "under_triage_rate": 0.5,
+        "over_triage_rate": 0.4716981132075472,
+        "json_validity": 0.9894736842105263,
+        "danger_sign_precision": 0.1828793774319066,
+        "danger_sign_recall": 0.4563106796116505,
+        "danger_sign_f1": 0.26111111111111107,
+        "advice_language_match": NaN
+      }
+    },
+    "code_switched": {
+      "ha": {
+        "n": 43,
+        "accuracy": 0.6046511627906976,
+        "macro_f1": 0.5467643467643467,
+        "under_triage_rate": 0.2777777777777778,
+        "over_triage_rate": 0.44,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.1937984496124031,
+        "danger_sign_recall": 0.43859649122807015,
+        "danger_sign_f1": 0.2688172043010753,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 20,
+        "accuracy": 0.3,
+        "macro_f1": 0.22222222222222224,
+        "under_triage_rate": 0.8,
+        "over_triage_rate": 0.5,
+        "json_validity": 0.95,
+        "danger_sign_precision": 0.1568627450980392,
+        "danger_sign_recall": 0.34782608695652173,
+        "danger_sign_f1": 0.21621621621621623,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 29,
+        "accuracy": 0.41379310344827586,
+        "macro_f1": 0.40923076923076923,
+        "under_triage_rate": 0.5714285714285714,
+        "over_triage_rate": 0.4666666666666667,
+        "json_validity": 0.9310344827586207,
+        "danger_sign_precision": 0.08450704225352113,
+        "danger_sign_recall": 0.20689655172413793,
+        "danger_sign_f1": 0.12000000000000001,
+        "advice_language_match": NaN
+      }
+    },
+    "code_switched_all": {
+      "n": 92,
+      "accuracy": 0.4782608695652174,
+      "macro_f1": 0.4408070474566638,
+      "under_triage_rate": 0.5,
+      "over_triage_rate": 0.46,
+      "json_validity": 0.967391304347826,
+      "danger_sign_precision": 0.1553784860557769,
+      "danger_sign_recall": 0.3577981651376147,
+      "danger_sign_f1": 0.21666666666666667,
+      "advice_language_match": NaN
+    },
+    "by_population": {
+      "child": {
+        "n": 391,
+        "accuracy": 0.5140664961636828,
+        "macro_f1": 0.4809724496738925,
+        "under_triage_rate": 0.27358490566037735,
+        "over_triage_rate": 0.5543859649122806,
+        "json_validity": 0.9386189258312021,
+        "danger_sign_precision": 0.16942148760330578,
+        "danger_sign_recall": 0.4756380510440835,
+        "danger_sign_f1": 0.2498476538695917,
+        "advice_language_match": NaN
+      },
+      "infant": {
+        "n": 85,
+        "accuracy": 0.7294117647058823,
+        "macro_f1": 0.5705454545454546,
+        "under_triage_rate": 0.2535211267605634,
+        "over_triage_rate": 0.35714285714285715,
+        "json_validity": 0.9882352941176471,
+        "danger_sign_precision": 0.2641509433962264,
+        "danger_sign_recall": 0.36363636363636365,
+        "danger_sign_f1": 0.3060109289617486,
+        "advice_language_match": NaN
+      },
+      "postpartum": {
+        "n": 217,
+        "accuracy": 0.5529953917050692,
+        "macro_f1": 0.5218919459555834,
+        "under_triage_rate": 0.27,
+        "over_triage_rate": 0.5811965811965812,
+        "json_validity": 0.9723502304147466,
+        "danger_sign_precision": 0.25127334465195245,
+        "danger_sign_recall": 0.5543071161048689,
+        "danger_sign_f1": 0.34579439252336447,
+        "advice_language_match": NaN
+      },
+      "pregnant": {
+        "n": 398,
+        "accuracy": 0.5125628140703518,
+        "macro_f1": 0.42936475778162003,
+        "under_triage_rate": 0.4666666666666667,
+        "over_triage_rate": 0.5,
+        "json_validity": 0.9874371859296482,
+        "danger_sign_precision": 0.23694029850746268,
+        "danger_sign_recall": 0.546236559139785,
+        "danger_sign_f1": 0.3305139882888744,
+        "advice_language_match": NaN
+      }
+    },
+    "by_reasoning_tag": {
+      "combination": {
+        "n": 541,
+        "accuracy": 0.5970425138632163,
+        "macro_f1": 0.49188994958299775,
+        "under_triage_rate": 0.24519230769230768,
+        "over_triage_rate": 0.4954954954954955,
+        "json_validity": 0.9519408502772643,
+        "danger_sign_precision": 0.2178041543026706,
+        "danger_sign_recall": 0.4860927152317881,
+        "danger_sign_f1": 0.3008196721311475,
+        "advice_language_match": NaN
+      },
+      "duration_threshold": {
+        "n": 235,
+        "accuracy": 0.5319148936170213,
+        "macro_f1": 0.4761392729134665,
+        "under_triage_rate": 0.2835820895522388,
+        "over_triage_rate": 0.5357142857142857,
+        "json_validity": 0.9276595744680851,
+        "danger_sign_precision": 0.16942148760330578,
+        "danger_sign_recall": 0.412751677852349,
+        "danger_sign_f1": 0.240234375,
+        "advice_language_match": NaN
+      },
+      "rr_threshold": {
+        "n": 57,
+        "accuracy": 0.6140350877192983,
+        "macro_f1": 0.5204232804232805,
+        "under_triage_rate": 0.8,
+        "over_triage_rate": 0.23809523809523808,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.2482758620689655,
+        "danger_sign_recall": 0.5142857142857142,
+        "danger_sign_f1": 0.3348837209302325,
+        "advice_language_match": NaN
+      },
+      "temp_threshold": {
+        "n": 5,
+        "accuracy": 0.2,
+        "macro_f1": 0.11111111111111112,
+        "under_triage_rate": 0.8,
+        "over_triage_rate": NaN,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.7142857142857143,
+        "danger_sign_recall": 0.5,
+        "danger_sign_f1": 0.588235294117647,
+        "advice_language_match": NaN
+      }
+    },
+    "clcc": {
+      "n_cases": 95,
+      "clcc": 0.49473684210526314,
+      "consistent_and_correct": 0.2736842105263158,
+      "emergency_missed_in_any_language": 0.6904761904761905,
+      "per_language_accuracy": {
+        "en": 0.5789473684210527,
+        "ha": 0.5052631578947369,
+        "yo": 0.49473684210526314,
+        "ig": 0.5157894736842106
+      },
+      "per_language_under_triage": {
+        "en": 0.35714285714285715,
+        "ha": 0.23809523809523808,
+        "yo": 0.5714285714285714,
+        "ig": 0.5
+      },
+      "worst_language_gap": 0.08421052631578951,
+      "worst_language": "yo"
+    },
+    "confusion": {
+      "HOME_CARE": {
+        "CLINIC_WITHIN_24H": 187,
+        "HOME_CARE": 45,
+        "EMERGENCY_REFER_NOW": 15
+      },
+      "CLINIC_WITHIN_24H": {
+        "CLINIC_WITHIN_24H": 243,
+        "EMERGENCY_REFER_NOW": 138,
+        "HOME_CARE": 6
+      },
+      "EMERGENCY_REFER_NOW": {
+        "CLINIC_WITHIN_24H": 153,
+        "EMERGENCY_REFER_NOW": 299,
+        "HOME_CARE": 5
+      }
+    },
+    "native_written": {
+      "ha": {
+        "n": 0
+      },
+      "yo": {
+        "n": 0
+      },
+      "ig": {
+        "n": 0
+      }
+    },
+    "native_verified": {
+      "ig": {
+        "n": 14,
+        "accuracy": 0.5,
+        "macro_f1": 0.48717948717948717,
+        "under_triage_rate": 0.5714285714285714,
+        "over_triage_rate": 0.42857142857142855,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.1388888888888889,
+        "danger_sign_recall": 0.4166666666666667,
+        "danger_sign_f1": 0.20833333333333334,
+        "advice_language_match": NaN
+      }
+    },
+    "vs_base": {
+      "accuracy_mcnemar": {
+        "a_only": 155,
+        "b_only": 350,
+        "p_value": 2.256846780835951e-18
+      },
+      "emergency_detection_mcnemar": {
+        "a_only": 0,
+        "b_only": 303,
+        "p_value": 1.2272733663244316e-91
+      }
+    }
+  },
+  "ahuike_parallel": {
+    "overall": {
+      "n": 1091,
+      "accuracy": 0.9083409715857012,
+      "macro_f1": 0.906792806999785,
+      "under_triage_rate": 0.09409190371991247,
+      "over_triage_rate": 0.031545741324921134,
+      "json_validity": 1.0,
+      "danger_sign_precision": 0.8743922204213939,
+      "danger_sign_recall": 0.8192862566438877,
+      "danger_sign_f1": 0.8459427675421404,
+      "advice_language_match": NaN
+    },
+    "overall_ci": {
+      "accuracy": [
+        0.884304932735426,
+        0.9288288288288288
+      ],
+      "under_triage_rate": [
+        0.057569296375266525,
+        0.13733905579399142
+      ],
+      "clcc": [
+        0.75,
+        0.875
+      ]
+    },
+    "by_language": {
+      "en": {
+        "n": 385,
+        "accuracy": 0.9428571428571428,
+        "macro_f1": 0.9417493415711201,
+        "under_triage_rate": 0.06875,
+        "over_triage_rate": 0.0044444444444444444,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.9235807860262009,
+        "danger_sign_recall": 0.8849372384937239,
+        "danger_sign_f1": 0.9038461538461539,
+        "advice_language_match": NaN
+      },
+      "ha": {
+        "n": 341,
+        "accuracy": 0.8973607038123167,
+        "macro_f1": 0.8956987753779199,
+        "under_triage_rate": 0.10638297872340426,
+        "over_triage_rate": 0.025,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8753180661577609,
+        "danger_sign_recall": 0.8075117370892019,
+        "danger_sign_f1": 0.8400488400488401,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 138,
+        "accuracy": 0.9202898550724637,
+        "macro_f1": 0.9192365470250551,
+        "under_triage_rate": 0.10526315789473684,
+        "over_triage_rate": 0.024691358024691357,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8181818181818182,
+        "danger_sign_recall": 0.7548387096774194,
+        "danger_sign_f1": 0.785234899328859,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 227,
+        "accuracy": 0.8590308370044053,
+        "macro_f1": 0.8554044026507078,
+        "under_triage_rate": 0.1111111111111111,
+        "over_triage_rate": 0.09375,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8125,
+        "danger_sign_recall": 0.7558139534883721,
+        "danger_sign_f1": 0.783132530120482,
+        "advice_language_match": NaN
+      }
+    },
+    "parallel_core": {
+      "n": 380,
+      "accuracy": 0.9184210526315789,
+      "macro_f1": 0.9189107585088649,
+      "under_triage_rate": 0.11904761904761904,
+      "over_triage_rate": 0.018867924528301886,
+      "json_validity": 1.0,
+      "danger_sign_precision": 0.8711340206185567,
+      "danger_sign_recall": 0.8203883495145631,
+      "danger_sign_f1": 0.8450000000000001,
+      "advice_language_match": NaN
+    },
+    "parallel_core_by_language": {
+      "en": {
+        "n": 95,
+        "accuracy": 0.9473684210526315,
+        "macro_f1": 0.9497861082967466,
+        "under_triage_rate": 0.09523809523809523,
+        "over_triage_rate": 0.0,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.9090909090909091,
+        "danger_sign_recall": 0.8737864077669902,
+        "danger_sign_f1": 0.891089108910891,
+        "advice_language_match": NaN
+      },
+      "ha": {
+        "n": 95,
+        "accuracy": 0.9368421052631579,
+        "macro_f1": 0.9382125750522836,
+        "under_triage_rate": 0.09523809523809523,
+        "over_triage_rate": 0.018867924528301886,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8877551020408163,
+        "danger_sign_recall": 0.8446601941747572,
+        "danger_sign_f1": 0.8656716417910448,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 95,
+        "accuracy": 0.9052631578947369,
+        "macro_f1": 0.9055461022342118,
+        "under_triage_rate": 0.14285714285714285,
+        "over_triage_rate": 0.018867924528301886,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8125,
+        "danger_sign_recall": 0.7572815533980582,
+        "danger_sign_f1": 0.7839195979899497,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 95,
+        "accuracy": 0.8842105263157894,
+        "macro_f1": 0.8826870887187052,
+        "under_triage_rate": 0.14285714285714285,
+        "over_triage_rate": 0.03773584905660377,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8736842105263158,
+        "danger_sign_recall": 0.8058252427184466,
+        "danger_sign_f1": 0.8383838383838383,
+        "advice_language_match": NaN
+      }
+    },
+    "code_switched": {
+      "ha": {
+        "n": 43,
+        "accuracy": 0.8372093023255814,
+        "macro_f1": 0.8350625668112935,
+        "under_triage_rate": 0.1111111111111111,
+        "over_triage_rate": 0.12,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8235294117647058,
+        "danger_sign_recall": 0.7368421052631579,
+        "danger_sign_f1": 0.7777777777777778,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 20,
+        "accuracy": 0.95,
+        "macro_f1": 0.9584859584859585,
+        "under_triage_rate": 0.0,
+        "over_triage_rate": 0.1,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8636363636363636,
+        "danger_sign_recall": 0.8260869565217391,
+        "danger_sign_f1": 0.8444444444444444,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 29,
+        "accuracy": 0.7931034482758621,
+        "macro_f1": 0.7540610786224821,
+        "under_triage_rate": 0.21428571428571427,
+        "over_triage_rate": 0.13333333333333333,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8148148148148148,
+        "danger_sign_recall": 0.7586206896551724,
+        "danger_sign_f1": 0.7857142857142857,
+        "advice_language_match": NaN
+      }
+    },
+    "code_switched_all": {
+      "n": 92,
+      "accuracy": 0.8478260869565217,
+      "macro_f1": 0.8466810966810966,
+      "under_triage_rate": 0.11904761904761904,
+      "over_triage_rate": 0.12,
+      "json_validity": 1.0,
+      "danger_sign_precision": 0.83,
+      "danger_sign_recall": 0.7614678899082569,
+      "danger_sign_f1": 0.7942583732057417,
+      "advice_language_match": NaN
+    },
+    "by_population": {
+      "child": {
+        "n": 391,
+        "accuracy": 0.8772378516624041,
+        "macro_f1": 0.8782193318924953,
+        "under_triage_rate": 0.12264150943396226,
+        "over_triage_rate": 0.03859649122807018,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8201058201058201,
+        "danger_sign_recall": 0.7192575406032483,
+        "danger_sign_f1": 0.7663782447466008,
+        "advice_language_match": NaN
+      },
+      "infant": {
+        "n": 85,
+        "accuracy": 0.8823529411764706,
+        "macro_f1": 0.6745513418582952,
+        "under_triage_rate": 0.07042253521126761,
+        "over_triage_rate": 0.14285714285714285,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.9020979020979021,
+        "danger_sign_recall": 0.8376623376623377,
+        "danger_sign_f1": 0.8686868686868687,
+        "advice_language_match": NaN
+      },
+      "postpartum": {
+        "n": 217,
+        "accuracy": 0.8847926267281107,
+        "macro_f1": 0.8886490418032774,
+        "under_triage_rate": 0.15,
+        "over_triage_rate": 0.03418803418803419,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8314606741573034,
+        "danger_sign_recall": 0.8314606741573034,
+        "danger_sign_f1": 0.8314606741573034,
+        "advice_language_match": NaN
+      },
+      "pregnant": {
+        "n": 398,
+        "accuracy": 0.957286432160804,
+        "macro_f1": 0.9581039795408439,
+        "under_triage_rate": 0.05555555555555555,
+        "over_triage_rate": 0.013761467889908258,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.9372197309417041,
+        "danger_sign_recall": 0.8989247311827957,
+        "danger_sign_f1": 0.9176728869374313,
+        "advice_language_match": NaN
+      }
+    },
+    "by_reasoning_tag": {
+      "combination": {
+        "n": 541,
+        "accuracy": 0.88909426987061,
+        "macro_f1": 0.8744096509041576,
+        "under_triage_rate": 0.125,
+        "over_triage_rate": 0.036036036036036036,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8525280898876404,
+        "danger_sign_recall": 0.8039735099337748,
+        "danger_sign_f1": 0.8275391956373551,
+        "advice_language_match": NaN
+      },
+      "duration_threshold": {
+        "n": 235,
+        "accuracy": 0.8680851063829788,
+        "macro_f1": 0.863641158723126,
+        "under_triage_rate": 0.14925373134328357,
+        "over_triage_rate": 0.011904761904761904,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8326530612244898,
+        "danger_sign_recall": 0.6845637583892618,
+        "danger_sign_f1": 0.7513812154696133,
+        "advice_language_match": NaN
+      },
+      "rr_threshold": {
+        "n": 57,
+        "accuracy": 0.8771929824561403,
+        "macro_f1": 0.8771159874608151,
+        "under_triage_rate": 0.0,
+        "over_triage_rate": 0.047619047619047616,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8524590163934426,
+        "danger_sign_recall": 0.7428571428571429,
+        "danger_sign_f1": 0.7938931297709924,
+        "advice_language_match": NaN
+      },
+      "temp_threshold": {
+        "n": 5,
+        "accuracy": 1.0,
+        "macro_f1": 0.3333333333333333,
+        "under_triage_rate": 0.0,
+        "over_triage_rate": NaN,
+        "json_validity": 1.0,
+        "danger_sign_precision": 1.0,
+        "danger_sign_recall": 1.0,
+        "danger_sign_f1": 1.0,
+        "advice_language_match": NaN
+      }
+    },
+    "clcc": {
+      "n_cases": 95,
+      "clcc": 0.8105263157894737,
+      "consistent_and_correct": 0.8,
+      "emergency_missed_in_any_language": 0.23809523809523808,
+      "per_language_accuracy": {
+        "en": 0.9473684210526315,
+        "ha": 0.9368421052631579,
+        "yo": 0.9052631578947369,
+        "ig": 0.8842105263157894
+      },
+      "per_language_under_triage": {
+        "en": 0.09523809523809523,
+        "ha": 0.09523809523809523,
+        "yo": 0.14285714285714285,
+        "ig": 0.14285714285714285
+      },
+      "worst_language_gap": 0.06315789473684208,
+      "worst_language": "ig"
+    },
+    "confusion": {
+      "HOME_CARE": {
+        "HOME_CARE": 242,
+        "CLINIC_WITHIN_24H": 3,
+        "EMERGENCY_REFER_NOW": 2
+      },
+      "CLINIC_WITHIN_24H": {
+        "CLINIC_WITHIN_24H": 335,
+        "HOME_CARE": 37,
+        "EMERGENCY_REFER_NOW": 15
+      },
+      "EMERGENCY_REFER_NOW": {
+        "EMERGENCY_REFER_NOW": 414,
+        "CLINIC_WITHIN_24H": 35,
+        "HOME_CARE": 8
+      }
+    },
+    "native_written": {
+      "ha": {
+        "n": 0
+      },
+      "yo": {
+        "n": 0
+      },
+      "ig": {
+        "n": 0
+      }
+    },
+    "native_verified": {
+      "ig": {
+        "n": 14,
+        "accuracy": 0.8571428571428571,
+        "macro_f1": 0.7740740740740741,
+        "under_triage_rate": 0.0,
+        "over_triage_rate": 0.14285714285714285,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.9090909090909091,
+        "danger_sign_recall": 0.8333333333333334,
+        "danger_sign_f1": 0.8695652173913043,
+        "advice_language_match": NaN
+      }
+    },
+    "vs_base": {
+      "accuracy_mcnemar": {
+        "a_only": 59,
+        "b_only": 692,
+        "p_value": 5.896829103705403e-138
+      },
+      "emergency_detection_mcnemar": {
+        "a_only": 0,
+        "b_only": 434,
+        "p_value": 4.5082903407156913e-131
+      }
+    }
+  },
+  "ahuike": {
+    "overall": {
+      "n": 1091,
+      "accuracy": 0.9092575618698442,
+      "macro_f1": 0.9065013648086059,
+      "under_triage_rate": 0.05689277899343545,
+      "over_triage_rate": 0.056782334384858045,
+      "json_validity": 1.0,
+      "danger_sign_precision": 0.8829953198127926,
+      "danger_sign_recall": 0.8595292331055429,
+      "danger_sign_f1": 0.8711042708734128,
+      "advice_language_match": NaN
+    },
+    "overall_ci": {
+      "accuracy": [
+        0.8834688346883469,
+        0.9320036264732547
+      ],
+      "under_triage_rate": [
+        0.027600849256900213,
+        0.09190371991247265
+      ],
+      "clcc": [
+        0.75,
+        0.873015873015873
+      ]
+    },
+    "by_language": {
+      "en": {
+        "n": 385,
+        "accuracy": 0.9324675324675324,
+        "macro_f1": 0.9306468292889347,
+        "under_triage_rate": 0.05,
+        "over_triage_rate": 0.044444444444444446,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8941908713692946,
+        "danger_sign_recall": 0.9016736401673641,
+        "danger_sign_f1": 0.8979166666666667,
+        "advice_language_match": NaN
+      },
+      "ha": {
+        "n": 341,
+        "accuracy": 0.9090909090909091,
+        "macro_f1": 0.9056527967019529,
+        "under_triage_rate": 0.06382978723404255,
+        "over_triage_rate": 0.045,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.9133663366336634,
+        "danger_sign_recall": 0.8661971830985915,
+        "danger_sign_f1": 0.889156626506024,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 138,
+        "accuracy": 0.8985507246376812,
+        "macro_f1": 0.8967727674624227,
+        "under_triage_rate": 0.05263157894736842,
+        "over_triage_rate": 0.07407407407407407,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8601398601398601,
+        "danger_sign_recall": 0.7935483870967742,
+        "danger_sign_f1": 0.825503355704698,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 227,
+        "accuracy": 0.8766519823788547,
+        "macro_f1": 0.8698103684476169,
+        "under_triage_rate": 0.06060606060606061,
+        "over_triage_rate": 0.0859375,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8260869565217391,
+        "danger_sign_recall": 0.810077519379845,
+        "danger_sign_f1": 0.8180039138943248,
+        "advice_language_match": NaN
+      }
+    },
+    "parallel_core": {
+      "n": 380,
+      "accuracy": 0.9157894736842105,
+      "macro_f1": 0.9146965691912223,
+      "under_triage_rate": 0.07142857142857142,
+      "over_triage_rate": 0.05188679245283019,
+      "json_validity": 1.0,
+      "danger_sign_precision": 0.8691358024691358,
+      "danger_sign_recall": 0.8543689320388349,
+      "danger_sign_f1": 0.8616891064871481,
+      "advice_language_match": NaN
+    },
+    "parallel_core_by_language": {
+      "en": {
+        "n": 95,
+        "accuracy": 0.9157894736842105,
+        "macro_f1": 0.9203509071747984,
+        "under_triage_rate": 0.09523809523809523,
+        "over_triage_rate": 0.05660377358490566,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8490566037735849,
+        "danger_sign_recall": 0.8737864077669902,
+        "danger_sign_f1": 0.8612440191387559,
+        "advice_language_match": NaN
+      },
+      "ha": {
+        "n": 95,
+        "accuracy": 0.9157894736842105,
+        "macro_f1": 0.9139117803569631,
+        "under_triage_rate": 0.047619047619047616,
+        "over_triage_rate": 0.07547169811320754,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.9,
+        "danger_sign_recall": 0.8737864077669902,
+        "danger_sign_f1": 0.8866995073891626,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 95,
+        "accuracy": 0.9263157894736842,
+        "macro_f1": 0.9237836515341978,
+        "under_triage_rate": 0.07142857142857142,
+        "over_triage_rate": 0.018867924528301886,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.865979381443299,
+        "danger_sign_recall": 0.8155339805825242,
+        "danger_sign_f1": 0.8399999999999999,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 95,
+        "accuracy": 0.9052631578947369,
+        "macro_f1": 0.901294443309963,
+        "under_triage_rate": 0.07142857142857142,
+        "over_triage_rate": 0.05660377358490566,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8627450980392157,
+        "danger_sign_recall": 0.8543689320388349,
+        "danger_sign_f1": 0.8585365853658536,
+        "advice_language_match": NaN
+      }
+    },
+    "code_switched": {
+      "ha": {
+        "n": 43,
+        "accuracy": 0.8604651162790697,
+        "macro_f1": 0.8564102564102565,
+        "under_triage_rate": 0.0,
+        "over_triage_rate": 0.16,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.92,
+        "danger_sign_recall": 0.8070175438596491,
+        "danger_sign_f1": 0.8598130841121495,
+        "advice_language_match": NaN
+      },
+      "yo": {
+        "n": 20,
+        "accuracy": 0.7,
+        "macro_f1": 0.5863636363636363,
+        "under_triage_rate": 0.0,
+        "over_triage_rate": 0.2,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8125,
+        "danger_sign_recall": 0.5652173913043478,
+        "danger_sign_f1": 0.6666666666666667,
+        "advice_language_match": NaN
+      },
+      "ig": {
+        "n": 29,
+        "accuracy": 0.8275862068965517,
+        "macro_f1": 0.7781144781144782,
+        "under_triage_rate": 0.14285714285714285,
+        "over_triage_rate": 0.06666666666666667,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.92,
+        "danger_sign_recall": 0.7931034482758621,
+        "danger_sign_f1": 0.851851851851852,
+        "advice_language_match": NaN
+      }
+    },
+    "code_switched_all": {
+      "n": 92,
+      "accuracy": 0.8152173913043478,
+      "macro_f1": 0.7870328755722014,
+      "under_triage_rate": 0.047619047619047616,
+      "over_triage_rate": 0.14,
+      "json_validity": 1.0,
+      "danger_sign_precision": 0.9010989010989011,
+      "danger_sign_recall": 0.7522935779816514,
+      "danger_sign_f1": 0.8200000000000001,
+      "advice_language_match": NaN
+    },
+    "by_population": {
+      "child": {
+        "n": 391,
+        "accuracy": 0.8644501278772379,
+        "macro_f1": 0.86741185298485,
+        "under_triage_rate": 0.09433962264150944,
+        "over_triage_rate": 0.04912280701754386,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8272506082725061,
+        "danger_sign_recall": 0.7888631090487239,
+        "danger_sign_f1": 0.8076009501187649,
+        "advice_language_match": NaN
+      },
+      "infant": {
+        "n": 85,
+        "accuracy": 0.8588235294117647,
+        "macro_f1": 0.637380134535566,
+        "under_triage_rate": 0.08450704225352113,
+        "over_triage_rate": 0.21428571428571427,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.88,
+        "danger_sign_recall": 0.8571428571428571,
+        "danger_sign_f1": 0.8684210526315789,
+        "advice_language_match": NaN
+      },
+      "postpartum": {
+        "n": 217,
+        "accuracy": 0.9032258064516129,
+        "macro_f1": 0.9064595535183771,
+        "under_triage_rate": 0.06,
+        "over_triage_rate": 0.09401709401709402,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8697318007662835,
+        "danger_sign_recall": 0.850187265917603,
+        "danger_sign_f1": 0.8598484848484849,
+        "advice_language_match": NaN
+      },
+      "pregnant": {
+        "n": 398,
+        "accuracy": 0.9673366834170855,
+        "macro_f1": 0.97002099188157,
+        "under_triage_rate": 0.022222222222222223,
+        "over_triage_rate": 0.03669724770642202,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.941304347826087,
+        "danger_sign_recall": 0.9311827956989247,
+        "danger_sign_f1": 0.9362162162162162,
+        "advice_language_match": NaN
+      }
+    },
+    "by_reasoning_tag": {
+      "combination": {
+        "n": 541,
+        "accuracy": 0.8724584103512015,
+        "macro_f1": 0.859792853279827,
+        "under_triage_rate": 0.07692307692307693,
+        "over_triage_rate": 0.08408408408408409,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8592896174863388,
+        "danger_sign_recall": 0.833112582781457,
+        "danger_sign_f1": 0.8459986550100874,
+        "advice_language_match": NaN
+      },
+      "duration_threshold": {
+        "n": 235,
+        "accuracy": 0.8468085106382979,
+        "macro_f1": 0.841584388971684,
+        "under_triage_rate": 0.14925373134328357,
+        "over_triage_rate": 0.03571428571428571,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8152173913043478,
+        "danger_sign_recall": 0.7550335570469798,
+        "danger_sign_f1": 0.7839721254355401,
+        "advice_language_match": NaN
+      },
+      "rr_threshold": {
+        "n": 57,
+        "accuracy": 0.8070175438596491,
+        "macro_f1": 0.8025652645600735,
+        "under_triage_rate": 0.06666666666666667,
+        "over_triage_rate": 0.09523809523809523,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.746268656716418,
+        "danger_sign_recall": 0.7142857142857143,
+        "danger_sign_f1": 0.7299270072992701,
+        "advice_language_match": NaN
+      },
+      "temp_threshold": {
+        "n": 5,
+        "accuracy": 0.8,
+        "macro_f1": 0.29629629629629634,
+        "under_triage_rate": 0.2,
+        "over_triage_rate": NaN,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8888888888888888,
+        "danger_sign_recall": 0.8,
+        "danger_sign_f1": 0.8421052631578948,
+        "advice_language_match": NaN
+      }
+    },
+    "clcc": {
+      "n_cases": 95,
+      "clcc": 0.8105263157894737,
+      "consistent_and_correct": 0.8105263157894737,
+      "emergency_missed_in_any_language": 0.14285714285714285,
+      "per_language_accuracy": {
+        "en": 0.9157894736842105,
+        "ha": 0.9157894736842105,
+        "yo": 0.9263157894736842,
+        "ig": 0.9052631578947369
+      },
+      "per_language_under_triage": {
+        "en": 0.09523809523809523,
+        "ha": 0.047619047619047616,
+        "yo": 0.07142857142857142,
+        "ig": 0.07142857142857142
+      },
+      "worst_language_gap": 0.021052631578947323,
+      "worst_language": "ig"
+    },
+    "confusion": {
+      "HOME_CARE": {
+        "HOME_CARE": 241,
+        "CLINIC_WITHIN_24H": 5,
+        "EMERGENCY_REFER_NOW": 1
+      },
+      "CLINIC_WITHIN_24H": {
+        "CLINIC_WITHIN_24H": 320,
+        "HOME_CARE": 37,
+        "EMERGENCY_REFER_NOW": 30
+      },
+      "EMERGENCY_REFER_NOW": {
+        "EMERGENCY_REFER_NOW": 431,
+        "CLINIC_WITHIN_24H": 19,
+        "HOME_CARE": 7
+      }
+    },
+    "native_written": {
+      "ha": {
+        "n": 0
+      },
+      "yo": {
+        "n": 0
+      },
+      "ig": {
+        "n": 0
+      }
+    },
+    "native_verified": {
+      "ig": {
+        "n": 14,
+        "accuracy": 0.9285714285714286,
+        "macro_f1": 0.9111111111111111,
+        "under_triage_rate": 0.0,
+        "over_triage_rate": 0.14285714285714285,
+        "json_validity": 1.0,
+        "danger_sign_precision": 0.8461538461538461,
+        "danger_sign_recall": 0.9166666666666666,
+        "danger_sign_f1": 0.8799999999999999,
+        "advice_language_match": NaN
+      }
+    },
+    "vs_base": {
+      "accuracy_mcnemar": {
+        "a_only": 81,
+        "b_only": 712,
+        "p_value": 7.528805546055271e-127
+      },
+      "emergency_detection_mcnemar": {
+        "a_only": 0,
+        "b_only": 454,
+        "p_value": 4.299440708842937e-137
+      }
+    }
+  },
+  "data_design": {
+    "accuracy_mcnemar": {
+      "a_only": 47,
+      "b_only": 45,
+      "p_value": 0.917040519652471
+    },
+    "emergency_mcnemar": {
+      "a_only": 5,
+      "b_only": 25,
+      "p_value": 0.00032491423189640045
+    },
+    "emergency_case_sign_test": {
+      "n_cases": 160,
+      "a_only": 4,
+      "b_only": 15,
+      "p_value": 0.0192108154296875
+    },
+    "under_triage_gap": 0.04008016032064128,
+    "under_triage_gap_ci": [
+      0.014117647058823526,
+      0.07116104868913857
+    ]
+  }
+}

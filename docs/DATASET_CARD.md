@@ -1,3 +1,11 @@
+---
+license: other
+license_name: n-atlas
+language: [en, ha, yo, ig]
+tags: [medical, triage, maternal-health, child-health, nigeria, benchmark, n-atlas]
+pretty_name: NaijaTriage-Bench
+---
+
 # NaijaTriage-Bench
 
 A **parallel** maternal and child danger-sign triage benchmark in **English, Hausa, Yorùbá and Igbo**, with
@@ -19,12 +27,26 @@ A **parallel** maternal and child danger-sign triage benchmark in **English, Hau
 tags (reasoning type), combo_key, text_en, context, anchored, code_switch, ablation_lang`
 
 ## Size (seed 2026)
-- Test: 160 cases × 4 languages = **640 items**, plus up to 150 code-switched items
-- Train: 2,400 cases (600 parallel-anchored)
-- Label mix: about 40% emergency, 35% clinic, 25% home care
+- Test: **385 held-out cases**. After the N-ATLaS translation quality gate, **1,091 plain-text items**
+  (English 385, Hausa 341, Igbo 227, Yorùbá 138) plus **92 code-switched** items.
+- **Parallel core:** 95 cases faithful in all four languages, for a fair language comparison.
+- **Native-verified subset:** Igbo items a native speaker marked as the same meaning (`verified_ig.json`).
+- Train: 2,400 cases (1,000 flagged for parallel anchoring), split from test by clinical combination.
 - Reasoning tags: `combination` (e.g. two pre-eclampsia signs), `duration_threshold` (14-day cough/diarrhoea),
   `rr_threshold` (age-specific fast breathing), `temp_threshold` (young-infant fever/hypothermia)
 
+## Files
+| File | Contents |
+|---|---|
+| `data/cases_test.jsonl`, `data/cases_train.jsonl` | Structured cases, gold triage, triggers, English text |
+| `data/eval_items.jsonl` | Every benchmark item `{case_id, lang, variant, text}` |
+| `data/translation_stats.json` | N-ATLaS translation retention per language |
+| `data/verified_ig.json` | Igbo native-speaker verdicts (same / small difference / wrong) |
+| `data/advice_reviewed.json` | Reviewed Igbo advice messages |
+| `results/preds.jsonl` | Raw outputs of base N-ATLaS, base few-shot, AHỤIKE and the parallel variant |
+| `results/REPORT.md`, `results/metrics.json` | Scored results |
+
 ## Limitations
-Synthetic, N-ATLAS-translated text. The back-translation filter is coarse. See docs/ETHICS.md.
+Synthetic, N-ATLAS-translated text. The back-translation filter is coarse: our Igbo reviewer judged 19 of 40 sampled
+items that passed it to be wrong in meaning. See docs/ETHICS.md.
 Native-speaker-verified subsets are flagged separately in the results.

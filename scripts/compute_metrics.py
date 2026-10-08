@@ -17,12 +17,15 @@ if hasattr(sys.stdout, "reconfigure"):
 sys.path.insert(0, str(ROOT))
 
 from ahuike.metrics import (  # noqa: E402
-    CORE_LANGS, bootstrap_ci, clcc, confusion, paired, score_item, summarize,
+    CORE_LANGS, bootstrap_ci, clcc, confusion, paired, paired_cases, score_item, summarize,
 )
 from ahuike.prompts import input_hash  # noqa: E402
 from ahuike.protocol import EMERGENCY  # noqa: E402
 
-ORDER = ["base", "base_fewshot", "ablation", "ahuike"]
+ORDER = ["base", "base_fewshot", "ahuike_parallel", "ahuike"]
+# ahuike          - the shipped model: diverse cases, each case in ONE language (sft_ablation.jsonl, outputs/ablation-lora)
+# ahuike_parallel - the tested alternative: each case in all four languages (sft_anchored.jsonl, outputs/ahuike-lora)
+SHIPPED, VARIANT = "ahuike", "ahuike_parallel"
 
 
 def load_jsonl(p: Path) -> list[dict]:
@@ -121,6 +124,7 @@ def main() -> None:
 
     # ------------------------------------------------------------------ markdown report
     L = ["# NaijaTriage-Bench results", "",
+         "`ahuike` = the released AHỤIKE model. `ahuike_parallel` = the tested alternative (each training case in all four languages).", "",
          "Gold labels are produced by the AHỤIKE protocol engine (WHO IMCI + Nigerian CHEW Standing Orders).",
          "Brackets are 95% case-clustered bootstrap CIs. Under-triage = emergency cases not referred.", "",
          "## Headline: all faithful items (en/ha/yo/ig, plain text)", "",
@@ -184,6 +188,34 @@ def main() -> None:
         if v:
             a, e = v["accuracy_mcnemar"], v["emergency_detection_mcnemar"]
             L.append(f"| {s} | {a['a_only']} | {a['b_only']} | {a['p_value']:.2g} | {e['p_value']:.2g} |")
+    if SHIPPED in by_sys and VARIANT in by_sys:
+        a, b = by_sys[VARIANT], by_sys[SHIPPED]
+        both = [dict(i, _s=0) for i in a] + [dict(i, _s=1) for i in b]
+
+        def miss_gap(x):  # variant minus shipped under-triage, on emergency items
+            em = [i for i in x if i["gold"] == EMERGENCY]
+            r = [sum(i["under"] for i in em if i["_s"] == k) / max(1, sum(i["_s"] == k for i in em)) for k in (0, 1)]
+            return r[0] - r[1]
+
+        dd = {
+            "accuracy_mcnemar": paired(a, b, "correct"),
+            "emergency_mcnemar": paired(a, b, "correct", only_gold=EMERGENCY),
+            "emergency_case_sign_test": paired_cases(a, b, "correct", only_gold=EMERGENCY),
+            "under_triage_gap": miss_gap(both),
+            "under_triage_gap_ci": bootstrap_ci(both, miss_gap, args.boot),
+        }
+        report["data_design"] = dd
+        lo, hi = dd["under_triage_gap_ci"]
+        L += ["", f"## Data design: `{SHIPPED}` (diverse cases) vs `{VARIANT}` (each case in all 4 languages)", "",
+              "Same number of training examples and language mix. Paired on identical benchmark items.", "",
+              "| Test | Only variant right | Only shipped right | p |", "|---|---|---|---|"]
+        for label, k in (("All items (McNemar)", "accuracy_mcnemar"),
+                         ("Emergency items (McNemar)", "emergency_mcnemar"),
+                         ("Emergency cases, 4 languages = 1 unit (sign test)", "emergency_case_sign_test")):
+            L.append(f"| {label} | {dd[k]['a_only']} | {dd[k]['b_only']} | {dd[k]['p_value']:.2g} |")
+        L += ["", f"Missed-emergency rate, variant minus shipped: **{100 * dd['under_triage_gap']:.1f} points** "
+                  f"(95% case-clustered CI {100 * lo:.1f} to {100 * hi:.1f})."]
+        (out / "metrics.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     (out / "REPORT.md").write_text("\n".join(L) + "\n", encoding="utf-8")
     print("\n".join(L))
 

@@ -7,8 +7,8 @@ AHỤIKE uses N-ATLAS at every stage. No other foundation model is called at run
 | 1 | **N-ATLaS-8B LLM** (`NCAIR1/N-ATLaS`) as **translator** | Translates every English vignette into Hausa, Yorùbá and Igbo, plus code-switched variants | `scripts/translate_natlas.py` → `to_lang_prompt()` |
 | 2 | N-ATLaS-8B as **back-translator / quality gate** | Translates each output back to English; the item is kept only if every clinical finding and number survives | `scripts/translate_natlas.py` → `to_english_prompt()`, `ahuike/backcheck.py` |
 | 3 | N-ATLaS-8B as **baseline** | Zero-shot and few-shot triage with the protocol system prompt: the reference that AHỤIKE is measured against | `scripts/run_eval.py --systems base base_fewshot` |
-| 4 | N-ATLaS-8B **fine-tuned** (QLoRA) | AHỤIKE adapter trained on parallel-anchored protocol data | `scripts/finetune.py` |
-| 5 | **N-ATLaS derivative release** | Merged Q4_K_M GGUF published as `AHUIKE-N-ATLaS-8B-GGUF-Powered-by-Awarri`, under the N-ATLaS licence | `scripts/export_gguf.py` |
+| 4 | N-ATLaS-8B **fine-tuned** (QLoRA) | AHỤIKE adapter trained on protocol data (diverse cases, one language each), plus an equal-size parallel-anchored variant for comparison | `scripts/finetune.py` |
+| 5 | **N-ATLaS derivative release** | LoRA adapter published as [`SamEgwu/AHUIKE-N-ATLaS-8B-LoRA-Powered-by-Awarri`](https://huggingface.co/SamEgwu/AHUIKE-N-ATLaS-8B-LoRA-Powered-by-Awarri) under the N-ATLaS licence; merged GGUF export available for CPU use | `scripts/release_hf.py`, `scripts/export_gguf.py` |
 | 6 | **N-ATLAS ASR** Hausa (`NCAIR1/Hausa-ASR`) | Voice input for Hausa speakers | `ahuike/pipeline.py` → `ASR_MODELS["ha"]` |
 | 7 | **N-ATLAS ASR** Yorùbá (`NCAIR1/Yoruba-ASR`) | Voice input for Yorùbá speakers | `ASR_MODELS["yo"]` |
 | 8 | **N-ATLAS ASR** Igbo (`NCAIR1/Igbo-ASR`) | Voice input for Igbo speakers | `ASR_MODELS["ig"]` |
@@ -33,4 +33,4 @@ The benchmark difference therefore measures what fine-tuning taught the model, n
 - `results/preds.jsonl`: every raw N-ATLaS / AHỤIKE output
 - `results/REPORT.md`, `results/metrics.json`: benchmark vs base N-ATLAS
 - `outputs/*/train_stats.json`: training loss curve and runtime
-- `results/voice_eval.json`: ASR word error rate + end-to-end voice triage accuracy
+- `results/voice_eval.json`: ASR word error rate + end-to-end voice triage accuracy (`scripts/eval_voice.py`; runs once native-speaker recordings are collected)
