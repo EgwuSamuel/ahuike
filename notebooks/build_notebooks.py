@@ -15,7 +15,8 @@ TOKEN = ("code", "import os\nfrom kaggle_secrets import UserSecretsClient\n"
 CLONE = f"!git clone -q {REPO} /kaggle/working/ahuike || (cd /kaggle/working/ahuike && git pull -q)\n%cd /kaggle/working/ahuike"
 
 # vLLM installs its own PyTorch; Kaggle's preinstalled torchaudio then breaks transformers imports.
-VLLM = ("code", CLONE + "\n!pip install -q vllm\n!pip uninstall -y -q torchaudio\n!python scripts/check_setup.py")
+# An old preinstalled torchao (0.10) also makes peft refuse to load LoRA adapters.
+VLLM = ("code", CLONE + "\n!pip install -q vllm\n!pip uninstall -y -q torchaudio torchao\n!python scripts/check_setup.py")
 UNSLOTH = ("code", CLONE + "\n!pip install -q unsloth\n!pip uninstall -y -q torchaudio\n!python scripts/check_setup.py")
 SETTINGS = ("md", "Kaggle settings: **GPU T4 x2**, **Internet on**, Secret **HF_TOKEN** ticked for this notebook. "
                   "Run with **Save Version > Save & Run All (Commit)**.")
