@@ -3,7 +3,9 @@
   python scripts/ingest_review.py path/to/AHUIKE_Igbo_Review_Sheet_filled.docx --lang ig
 
 Writes:
-  data/advice_i18n.json     - Task 1: the reviewer's corrected advice replaces N-ATLAS's wording
+  data/advice_reviewed.json - Task 1: reviewed advice per language. Keys the reviewer marked wrong without a
+                              correction (or that are --hold) are stored as "" so the app falls back to
+                              English instead of showing unreviewed machine translation
   data/native_items.jsonl   - Task 3: cases written by the native speaker (variant "native"), benchmarked separately
   data/verified_<lang>.json - Task 4: SAME / SMALL / WRONG verdict per AI-translated case
   data/review_<lang>.json   - everything read, including glossary answers (Task 2), for the record
@@ -60,6 +62,8 @@ def main() -> None:
     ap.add_argument("docx")
     ap.add_argument("--lang", default="ig", choices=("ha", "yo", "ig"))
     ap.add_argument("--data", default=str(ROOT / "data"))
+    ap.add_argument("--hold", nargs="*", default=[],
+                    help="advice keys (e.g. child|EMERGENCY_REFER_NOW) to withhold pending confirmation")
     args = ap.parse_args()
 
     import docx  # python-docx
@@ -69,7 +73,7 @@ def main() -> None:
     report: dict = {"source": Path(args.docx).name, "lang": args.lang}
 
     # ---- Task 1: advice. Row order matches ADVICE_EN (child, pregnant, postpartum x E, C, H).
-    advice_path = data / "advice_i18n.json"
+    advice_path = data / "advice_reviewed.json"
     table = json.loads(advice_path.read_text(encoding="utf-8")) if advice_path.exists() else {}
     keys = [f"{g}|{lv}" for (g, lv) in ADVICE_EN]
     adv_rows = tabs.get("advice", [])
@@ -77,15 +81,23 @@ def main() -> None:
     for key, row in zip(keys, adv_rows):
         machine, verdict_raw, corrected = row[3], row[4], row[5]
         verdict = norm_verdict(verdict_raw, {"C": "correct", "S": "small_fix", "W": "wrong"})
+        # Reviewers sometimes append an explanation ("... Review: iri means eat"); keep it as a note.
+        note = ""
+        for marker in ("Review:", "review:", "Note:", "note:"):
+            if marker in corrected:
+                corrected, note = (x.strip() for x in corrected.split(marker, 1))
+                break
         # The reviewer's own wording wins; a "correct" verdict keeps N-ATLAS's text.
         final = corrected or (machine.split(" Check:")[0].strip() if verdict == "correct" else None)
-        advice_report.append({"key": key, "verdict": verdict, "corrected": bool(corrected), "final": final})
-        if final:
-            table.setdefault(args.lang, {})[key] = final
+        held = key in args.hold
+        advice_report.append({"key": key, "verdict": verdict, "corrected": bool(corrected), "note": note,
+                              "held": held, "final": None if held else final})
+        # "" = do not show this language for this message (English fallback) until resolved.
+        table.setdefault(args.lang, {})[key] = "" if held or not final else final
     if adv_rows:
         advice_path.write_text(json.dumps(table, ensure_ascii=False, indent=2), encoding="utf-8")
     report["advice"] = advice_report
-    unresolved = [a["key"] for a in advice_report if not a["final"]]
+    unresolved = [a["key"] for a in advice_report if not a["final"]]  # includes held keys
 
     # ---- Task 2: glossary answers (applied to the translator glossary by hand)
     report["glossary"] = [{"english": r[0], "ours": r[1], "check": r[2], "mothers_use": r[3]}

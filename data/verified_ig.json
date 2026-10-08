@@ -1,0 +1,162 @@
+{
+ "te00000": {
+  "verdict": "wrong",
+  "note": "She didn’t us the right word for the nipple and the blurry she used English."
+ },
+ "te00003": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00012": {
+  "verdict": "wrong",
+  "note": "Instead of Should I be Worried. It’s now asking if the person should think too much."
+ },
+ "te00026": {
+  "verdict": "wrong",
+  "note": ""
+ },
+ "te00029": {
+  "verdict": "wrong",
+  "note": ""
+ },
+ "te00042": {
+  "verdict": "wrong",
+  "note": "The word for sore throat not spelled correctly."
+ },
+ "te00044": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00048": {
+  "verdict": "wrong",
+  "note": "Good morning was not translated well."
+ },
+ "te00050": {
+  "verdict": "wrong",
+  "note": "Good evening not correct."
+ },
+ "te00059": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00064": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00086": {
+  "verdict": "wrong",
+  "note": "Please help me was translated wrongly."
+ },
+ "te00092": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00100": {
+  "verdict": "wrong",
+  "note": "Good evening was not spelt correctly."
+ },
+ "te00133": {
+  "verdict": "wrong",
+  "note": "Good evening not Correct"
+ },
+ "te00134": {
+  "verdict": "wrong",
+  "note": "Good morning not spelt well"
+ },
+ "te00140": {
+  "verdict": "wrong",
+  "note": "Good evening not spent well"
+ },
+ "te00146": {
+  "verdict": "small",
+  "note": "25 should be in Igbo not English."
+ },
+ "te00156": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00173": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00175": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00206": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00208": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00217": {
+  "verdict": "small",
+  "note": "Is not translating Please Help me Properly, Rather it’s saying is there anybody that can help me."
+ },
+ "te00218": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00225": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00246": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00262": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00275": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00277": {
+  "verdict": "wrong",
+  "note": "Instead of saying grandson it’s saying My Son."
+ },
+ "te00297": {
+  "verdict": "wrong",
+  "note": "Morning was not translated well, wife was not translated well it sounds like husband."
+ },
+ "te00303": {
+  "verdict": "small",
+  "note": "27 can be represented in Igbo"
+ },
+ "te00322": {
+  "verdict": "wrong",
+  "note": "Please help me was wrongly translated."
+ },
+ "te00331": {
+  "verdict": "wrong",
+  "note": "Please help me was wrongly translated."
+ },
+ "te00342": {
+  "verdict": "wrong",
+  "note": "Chew note was wrongly represented."
+ },
+ "te00345": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00359": {
+  "verdict": "same",
+  "note": ""
+ },
+ "te00369": {
+  "verdict": "wrong",
+  "note": ""
+ },
+ "te00371": {
+  "verdict": "small",
+  "note": "32 should have been translated to Igbo."
+ },
+ "te00384": {
+  "verdict": "wrong",
+  "note": ""
+ }
+}

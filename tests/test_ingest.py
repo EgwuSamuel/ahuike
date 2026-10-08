@@ -48,10 +48,10 @@ class TestIngest(unittest.TestCase):
             out = subprocess.run([sys.executable, str(ROOT / "scripts" / "ingest_review.py"), str(filled),
                                   "--lang", "ig", "--data", str(data)], capture_output=True, text=True, encoding="utf-8")
             self.assertEqual(out.returncode, 0, out.stderr)
-            advice = json.loads((data / "advice_i18n.json").read_text(encoding="utf-8"))["ig"]
+            advice = json.loads((data / "advice_reviewed.json").read_text(encoding="utf-8"))["ig"]
             self.assertTrue(advice["child|EMERGENCY_REFER_NOW"].startswith("IHE IZIZI"))
             self.assertIn("child|CLINIC_WITHIN_24H", advice)          # "correct" keeps N-ATLAS wording
-            self.assertNotIn("child|HOME_CARE", advice)               # untouched row stays unresolved
+            self.assertEqual(advice["child|HOME_CARE"], "")           # untouched row -> English fallback
             native = [json.loads(l) for l in (data / "native_items.jsonl").read_text(encoding="utf-8").splitlines()]
             self.assertEqual([(n["case_id"], n["variant"]) for n in native], [(native_id, "native")])
             verified = json.loads((data / "verified_ig.json").read_text(encoding="utf-8"))

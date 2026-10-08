@@ -1,0 +1,13 @@
+{
+  "ig": {
+    "child|EMERGENCY_REFER_NOW": "",
+    "child|CLINIC_WITHIN_24H": "Kuru nwa ahụ gaa na ebe a na-ahụ maka ahụike taa, n'ime awa iri abụọ na anọ, ka e lelee ya ma gwọọ ya. Nọgidenụ na-aṅụ ara na inye mmiri. Ọ bụrụ na nwa ahụ na-arịwanye elu ma ọ bụ gosipụta akara ọjọọ ọ bụla, gaa ozugbo.",
+    "child|HOME_CARE": "Ị nwere ike ilekọta ya n'ụlọ. Nọgidenụ na-azụ nwa gị ara ma nye mmiri na nri dị ukwuu. Gaa n'ebe a na-ahụ maka ahụike ma ọ bụrụ na nwatakịrị ahụ enweghị ike ịṅụ mmiri, na-awụpụ ihe niile, na-enwe mgbu, na-adaba n'ihi ike gwụrụ ya, na-eku ume ngwa ngwa, ma ọ bụ ka njọ.",
+    "pregnant|EMERGENCY_REFER_NOW": "",
+    "pregnant|CLINIC_WITHIN_24H": "Gaa n'ụlọọgwụ taa, n'ime awa iri abụọ na anọ, ka a lelee gị. Ọ bụrụ na ọnọdụ ahụ ka njọ, ma ọ bụ na ị na-ata ahụhụ, mgbagwoju anya, isi ọwụwa siri ike nwere nghọta na-adịghị mma ma ọ bụ mgbu dị egwu, gaa n'ụlọ ọgwụ ozugbo.",
+    "pregnant|HOME_CARE": "Nke a bụ ihe na-emekarị n'oge ime ime ma enwere ike ijikwa ya n'ụlọ. Zuo ike, rie nri nke ọma na ṅụọ mmiri zuru oke. Gaa n'ebe ahụike dị ma ọ bụrụ na ị nwere ọbara ọgbụgba, isi ọwụwa siri ike, anya na-adaba, ọkụ, mgbagwoju anya ma ọ bụ obere nwa na-eme ka ọ dị ntakịrị.",
+    "postpartum|EMERGENCY_REFER_NOW": "Ịdọ aka. Gaa na ụlọ ọgwụ kacha nso ugbu a na mmadụ ka o soro gị. Ekwela ka ihe ọ bụla jide ma kpachapụ anya ka ị ghara ichere ma ọ bụ were osisi. Weta nwa ahụ ma ọ bụrụ na ị na-azụ ya ara.",
+    "postpartum|CLINIC_WITHIN_24H": "Gaa n'ụlọọgwụ taa, n'ime awa iri abụọ na anọ, ka a lelee gị. Ọ bụrụ na ọnọdụ ahụ ka njọ, ma ọ bụ na ị na-ata ahụhụ nke ukwuu, na-agba ọsọ, na-enwe nnukwu ọkụ ma ọ bụ mgbu siri ike, banye n'ụlọ ọgwụ ozugbo.",
+    "postpartum|HOME_CARE": "Nke a na-eme mgbe niile ka emechara nwa ma enwere ike ijikwa ya n'ụlọ. Zuo ike, rie nri nke ọma, ṅụọ mmiri zuru oke ma gaa n'ihu na-aṅụ ara. Gaa n'ebe ahụike dị ma ọ bụrụ na ị nwere nnukwu mgbasa ọbara, ahụ ọkụ, ntanye na-esi ísì ọjọọ, isi ọwụwa siri ike ma ọ bụ mkpọnwụ."
+  }
+}
