@@ -6,3 +6,10 @@ voice/*.mp3
 voice/*.m4a
 results/interactions.jsonl
 .ipynb_checkpoints/
+
+# Private working files: never push
+docs/SUBMISSION_PACK.md
+docs/SUBMISSION_CHECKLIST.md
+docs/VIDEO_SCRIPT.md
+docs/VIDEO_NARRATION.md
+docs/review/

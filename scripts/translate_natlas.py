@@ -42,7 +42,7 @@ TRANSLATOR_SYSTEM = ("You are an expert translator for Nigerian languages. You t
                      "sentence for sentence, and never add or remove information.")
 
 # Common symptom words, given as hints only when the English sentence contains the term.
-# Native speakers should confirm these (docs/SUBMISSION_CHECKLIST.md).
+# Native speakers should confirm these.
 GLOSSARY: dict[str, list[tuple[tuple[str, ...], str, str]]] = {
     "ha": [(("cough",), "cough", "tari"),
            (("fever", "hot body", "body has been hot", "body is hot"), "fever", "zazzabi"),
