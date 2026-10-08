@@ -11,9 +11,6 @@ from __future__ import annotations
 import os
 from contextlib import nullcontext
 
-# Less fragmentation on 16 GB T4s (must be set before torch allocates).
-os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
-
 BASE_MODEL = os.environ.get("NATLAS_MODEL", "NCAIR1/N-ATLaS")
 # Fixed so that training and inference see exactly the same rendered system header.
 DATE_STRING = "01 Oct 2026"
@@ -26,6 +23,10 @@ class ChatEngine:
                  max_model_len: int = 4096, base_model: str = BASE_MODEL):
         self.base_model = base_model
         self._lora_ids: dict[str, int] = {}
+        if backend == "hf":
+            # Less fragmentation on 16 GB T4s. Only for transformers: it breaks vLLM's multi-GPU
+            # all-reduce and CUDA-graph capture, so it is never set when vLLM may run.
+            os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
         if backend == "auto":
             try:
                 self._init_vllm(enable_lora, max_model_len)
@@ -62,6 +63,10 @@ class ChatEngine:
             enable_lora=enable_lora,
             max_lora_rank=64,
             max_loras=2,
+            # T4s have no GPU peer-to-peer link; custom all-reduce failed during CUDA-graph
+            # capture with LoRA enabled. Eager mode with LoRA trades a little speed for stability.
+            disable_custom_all_reduce=True,
+            enforce_eager=enable_lora,
         )
 
     def _init_hf(self) -> None:
@@ -109,7 +114,12 @@ class ChatEngine:
         from peft import PeftModel
         name = f"a{abs(hash(adapter)) % 10**8}"
         if not self._peft:
-            self.model = PeftModel.from_pretrained(self.model, adapter, adapter_name=name).eval()
+            try:
+                self.model = PeftModel.from_pretrained(self.model, adapter, adapter_name=name).eval()
+            except ImportError as e:
+                if "torchao" in str(e):
+                    raise ImportError("An old torchao blocks peft. Run: pip uninstall -y torchao") from e
+                raise
             self._peft = True
         elif name not in self.model.peft_config:
             self.model.load_adapter(adapter, adapter_name=name)
