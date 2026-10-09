@@ -28,6 +28,7 @@ The triage rules were reviewed and signed off by a medical doctor on the team; h
 |---|---|
 | Model (LoRA on N-ATLaS-8B) | [SamEgwu/AHUIKE-N-ATLaS-8B-LoRA-Powered-by-Awarri](https://huggingface.co/SamEgwu/AHUIKE-N-ATLaS-8B-LoRA-Powered-by-Awarri) |
 | Benchmark | [SamEgwu/NaijaTriage-Bench](https://huggingface.co/datasets/SamEgwu/NaijaTriage-Bench) |
+| Live demo (free CPU, ~20–60 s per answer) | [huggingface.co/spaces/SamEgwu/AHUIKE](https://huggingface.co/spaces/SamEgwu/AHUIKE) |
 | Full results | [`results/REPORT.md`](results/REPORT.md) · raw outputs [`results/preds.jsonl`](results/preds.jsonl) |
 
 ## What's novel
@@ -126,6 +127,7 @@ GPU parts run on Kaggle (free 2×T4). Build the notebooks with `python notebooks
 2. `notebooks/02_finetune_unsloth.ipynb`: AHỤIKE + parallel-variant fine-tunes, GGUF export
 3. `notebooks/03_eval_and_demo.ipynb`: benchmark, live demo, voice evaluation
 4. `notebooks/04_release_and_demo.ipynb`: publish the model and benchmark on Hugging Face, live demo link
+5. `notebooks/05_permanent_demo.ipynb`: GGUF export (CPU) and the permanent demo Space (`space/`)
 
 In `results/preds.jsonl`, `ahuike` is the released model (adapter folder `outputs/ablation-lora`, trained on
 `sft_ablation.jsonl`) and `ahuike_parallel` is the parallel-anchored variant (`outputs/ahuike-lora`). The folder

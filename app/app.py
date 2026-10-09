@@ -1,7 +1,7 @@
 """AHỤIKE demo: speak or type a case in English, Hausa, Yoruba or Igbo -> triage card.
 
-  # CPU / HF Space (merged GGUF):
-  AHỤIKE_GGUF=<user>/AHUIKE-N-ATLaS-8B-GGUF-Powered-by-Awarri/<file>.gguf python app/app.py
+  # CPU / HF Space (merged GGUF; the Space itself starts from space/space_app.py):
+  AHUIKE_GGUF=<user>/AHUIKE-N-ATLaS-8B-GGUF-Powered-by-Awarri/<file>.gguf python app/app.py
   # GPU notebook (adapter):
   python app/app.py --backend hf --adapter outputs/ablation-lora --share
 """

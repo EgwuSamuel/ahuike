@@ -83,6 +83,26 @@ NOTEBOOKS = {
         ("md", "## 2. Live demo: open the **gradio.live** link printed below"),
         ("code", "!pip install -q gradio\n!python app/app.py --backend hf --adapter outputs/ablation-lora --share"),
     ],
+    "05_permanent_demo.ipynb": [
+        ("md", "# AHỤIKE 05: permanent demo on a free Hugging Face Space (~45 min, no GPU needed)\n"
+               "Merges the adapter into N-ATLaS on CPU, makes a 4.9 GB Q4_K_M GGUF with llama.cpp, pushes it to a "
+               "**private** model repo, then deploys the Space `<user>/AHUIKE`. The Space then builds itself "
+               "(~15-20 min) and stays at the same address.\n\n"
+               "Secrets: **HF_TOKEN** (write) and, optionally, **HF_READ_TOKEN**: a *read* token the Space will use. "
+               "Without it, add a read token yourself as secret `HF_TOKEN` in the Space settings."),
+        ("md", "Kaggle settings: Accelerator **None** (CPU) or GPU, **Internet on**, Secrets ticked for this notebook. "
+               "Run with **Save Version > Save & Run All (Commit)**."),
+        ("code", "import os\nfrom kaggle_secrets import UserSecretsClient\ns = UserSecretsClient()\n"
+                 "os.environ['HF_TOKEN'] = s.get_secret('HF_TOKEN')\n"
+                 "try:\n    os.environ['SPACE_HF_TOKEN'] = s.get_secret('HF_READ_TOKEN')\n"
+                 "except Exception:\n    print('No HF_READ_TOKEN secret: add a read token to the Space by hand later')"),
+        ("code", CLONE + "\n!pip uninstall -y -q torchao\n!python scripts/hub_sync.py pull outputs/ablation-lora"),
+        ("md", "## 1. Merge + GGUF (CPU, ~40 min)"),
+        ("code", "!python scripts/export_gguf.py --adapter outputs/ablation-lora "
+                 "--push SamEgwu/AHUIKE-N-ATLaS-8B-GGUF-Powered-by-Awarri"),
+        ("md", "## 2. Deploy the Space"),
+        ("code", "!python scripts/deploy_space.py"),
+    ],
 }
 
 

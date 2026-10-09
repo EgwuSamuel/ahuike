@@ -50,7 +50,7 @@ class TriageLLM:
         self.backend = backend
         if backend == "gguf":
             from llama_cpp import Llama
-            path = gguf_path or os.environ.get("AHỤIKE_GGUF")
+            path = gguf_path or os.environ.get("AHUIKE_GGUF") or os.environ.get("AHỤIKE_GGUF")
             if path and not Path(path).exists() and "/" in path:
                 # "<repo_id>/<filename>" on the Hugging Face Hub
                 from huggingface_hub import hf_hub_download
