@@ -1,0 +1,7 @@
+# CPU API server (Oracle Cloud Always Free ARM, or any Linux machine)
+fastapi>=0.110
+uvicorn>=0.29
+llama-cpp-python>=0.3.8
+huggingface_hub>=0.23
+transformers>=4.44   # tokenizer and chat template only; no PyTorch needed
+jinja2>=3.1

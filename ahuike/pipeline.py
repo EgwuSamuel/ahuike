@@ -80,7 +80,11 @@ class TriageLLM:
 
     def generate(self, text: str, max_new_tokens: int = 96) -> str:
         if self.backend == "gguf":
-            out = self.llm(self._prompt(text), max_tokens=max_new_tokens, temperature=0.0,
+            prompt = self._prompt(text)
+            # llama.cpp adds <|begin_of_text|> itself; drop the template's copy so it is not doubled.
+            if prompt.startswith("<|begin_of_text|>"):
+                prompt = prompt[len("<|begin_of_text|>"):]
+            out = self.llm(prompt, max_tokens=max_new_tokens, temperature=0.0,
                            stop=["<|eot_id|>", "<|end_of_text|>"])
             return out["choices"][0]["text"]
         return self.engine.chat([build_messages(text)], adapter=self.adapter,
