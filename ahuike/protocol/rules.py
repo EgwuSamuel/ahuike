@@ -150,19 +150,28 @@ def _child(case: dict, f: set[str]) -> list[tuple[str, str]]:
 def _infant(case: dict, f: set[str]) -> list[tuple[str, str]]:
     out = []
     # Any sign of possible serious bacterial infection -> urgent referral.
+    # Clinical review (8 Oct 2026): a red / draining umbilicus is referred to prevent sepsis.
     for sign in ("not_feeding_well", "convulsions", "chest_indrawing", "fast_breathing",
                  "fever", "low_temperature", "movement_only_when_stimulated",
-                 "jaundice_palms_soles"):
+                 "jaundice_palms_soles", "umbilicus_pus"):
         if sign in f:
             out.append((EMERGENCY, sign))
-    for sign in ("umbilicus_pus", "skin_pustules"):
-        if sign in f:
-            out.append((CLINIC, sign))
+    # Pustules stay at clinic: the reviewer noted urgency depends on severity, which cases don't encode.
+    if "skin_pustules" in f:
+        out.append((CLINIC, "skin_pustules"))
     return out
 
 
+PRE_ECLAMPSIA_SIGNS = frozenset({"severe_headache", "blurred_vision", "face_hand_swelling"})
+
+
+# Signs the clinical review moved up to EMERGENCY. The released model was trained before the review,
+# so any answer naming one of them is raised to EMERGENCY (ahuike.prompts.apply_review_guard).
+REVIEW_EMERGENCY_SIGNS = frozenset({"umbilicus_pus"}) | PRE_ECLAMPSIA_SIGNS
+
+
 def _pre_eclampsia(f: set[str]) -> bool:
-    return len(f & {"severe_headache", "blurred_vision", "face_hand_swelling"}) >= 2
+    return len(f & PRE_ECLAMPSIA_SIGNS) >= 2
 
 
 def _maternal(case: dict, f: set[str], postpartum: bool) -> list[tuple[str, str]]:
@@ -171,20 +180,22 @@ def _maternal(case: dict, f: set[str], postpartum: bool) -> list[tuple[str, str]
         e_singles = ("heavy_bleeding", "convulsions", "severe_abdominal_pain",
                      "difficulty_breathing", "high_fever_very_weak")
         c_singles = ("fever", "foul_discharge", "painful_red_breast", "low_mood",
-                     "burning_urination", "severe_headache", "blurred_vision",
-                     "face_hand_swelling")
+                     "burning_urination")
     else:
         e_singles = ("vaginal_bleeding", "convulsions", "severe_abdominal_pain",
                      "difficulty_breathing", "water_broke", "no_fetal_movement",
                      "high_fever_very_weak", "prolonged_labour")
         c_singles = ("fever", "reduced_fetal_movement", "vomiting_cannot_keep",
-                     "burning_urination", "severe_headache", "blurred_vision",
-                     "face_hand_swelling")
+                     "burning_urination")
     for sign in e_singles:
         if sign in f:
             out.append((EMERGENCY, sign))
+    # Clinical review (8 Oct 2026): blood pressure is not measured in the community, so even ONE
+    # pre-eclampsia sign is referred now for urgent BP assessment.
     if _pre_eclampsia(f):
         out.append((EMERGENCY, "pre_eclampsia_signs"))
+    else:
+        out += [(EMERGENCY, sign) for sign in sorted(f & PRE_ECLAMPSIA_SIGNS)]
     if postpartum and {"fever", "foul_discharge"} <= f:
         out.append((EMERGENCY, "puerperal_sepsis_signs"))
     for sign in c_singles:

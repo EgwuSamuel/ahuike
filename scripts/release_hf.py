@@ -26,7 +26,7 @@ DATA_FILES = ["data/cases_test.jsonl", "data/cases_train.jsonl", "data/eval_item
 
 
 def main() -> None:
-    from huggingface_hub import HfApi
+    from huggingface_hub import HfApi, snapshot_download
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--model-repo", default=None)
@@ -38,8 +38,14 @@ def main() -> None:
     model_repo = args.model_repo or f"{user}/AHUIKE-N-ATLaS-8B-LoRA-Powered-by-Awarri"
     dataset_repo = args.dataset_repo or f"{user}/NaijaTriage-Bench"
 
-    if not (ROOT / ADAPTER / "adapter_config.json").exists() or not (ROOT / "data/eval_items.jsonl").exists():
-        subprocess.run([sys.executable, str(ROOT / "scripts/hub_sync.py"), "pull", "data", ADAPTER], check=True)
+    # Fetch only what git does not hold. Pulling the whole data/ folder would overwrite the
+    # clinician-relabelled cases in git with the older labels in the work repo.
+    if not (ROOT / ADAPTER / "adapter_config.json").exists():
+        subprocess.run([sys.executable, str(ROOT / "scripts/hub_sync.py"), "pull", ADAPTER], check=True)
+    work_only = [f for f in ("data/eval_items.jsonl", "data/translation_stats.json") if not (ROOT / f).exists()]
+    if work_only:
+        snapshot_download(repo_id=f"{user}/lafiya-work", repo_type="dataset", local_dir=str(ROOT),
+                          allow_patterns=work_only, token=os.environ["HF_TOKEN"])
 
     api.create_repo(model_repo, repo_type="model", private=False, exist_ok=True)
     api.upload_folder(repo_id=model_repo, folder_path=str(ROOT / ADAPTER), commit_message="AHỤIKE LoRA adapter",

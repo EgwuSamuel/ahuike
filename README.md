@@ -20,8 +20,9 @@ For a danger sign in pregnancy it is a safety gap. AHỤIKE turns that gap into 
 (1) fine-tunes N-ATLaS on protocol-grounded data, (2) proves the gain on a 1,183-item benchmark with
 significance tests against base N-ATLaS, and (3) reports safety per language, not only on average.
 
-**Headline.** With the full protocol in its prompt, base N-ATLaS sends only 3.5% of emergencies to hospital (it misses 96.5%).
-AHỤIKE misses **5.7%**, with **90.9%** triage accuracy, and **0** missed emergencies on the Igbo items a native speaker verified.
+**Headline.** With the full protocol in its prompt, base N-ATLaS sends only 2.7% of emergencies to hospital (it misses 97.3%).
+AHỤIKE misses **3.3%**, with **92.7%** triage accuracy, and **0** missed emergencies on the Igbo items a native speaker verified.
+The triage rules were reviewed and signed off by a medical doctor on the team; her corrections are in the deployed tool.
 
 | Links | |
 |---|---|
@@ -36,49 +37,56 @@ AHỤIKE misses **5.7%**, with **90.9%** triage accuracy, and **0** missed emerg
 | **Protocol-compiled data** | WHO IMCI and Nigerian CHEW Standing Orders encoded as a rule engine ([`ahuike/protocol/rules.py`](ahuike/protocol/rules.py)). Cases are *generated from* the rules, so every gold label is correct by construction and auditable. |
 | **NaijaTriage-Bench** | 385 held-out clinical cases in English, translated by N-ATLaS and kept only where the meaning survived: 1,091 items (en 385, ha 341, ig 227, yo 138) + 92 code-switched. A 95-case *parallel core* exists in all four languages for fair language comparison. Train/test split by *clinical combination* so no test picture is seen in training. |
 | **CLCC metric** | *Cross-Lingual Clinical Consistency*: share of cases triaged identically in all four languages, plus the worst-language gap. Linguistic equity as a number. |
-| **Data-design experiment** | Two equal-size fine-tunes: each case repeated across languages (parallel anchoring) vs more distinct cases, each in one language. Diverse cases were significantly safer, so they became AHỤIKE. |
+| **Data-design experiment** | Two equal-size fine-tunes: each case repeated across languages (parallel anchoring) vs more distinct cases, each in one language. Diverse cases were safer, so they became AHỤIKE. |
+| **Clinical review** | A medical doctor (MBBS) reviewed all 57 rules, six judgement calls and the advice messages, agreeing with 55 rules and all 9 messages. Two rules were made stricter (a red umbilicus; a single pre-eclampsia sign). The app applies her changes with a deterministic guard; the benchmark uses her rules. See [`docs/ETHICS.md`](docs/ETHICS.md). |
 | **Native-speaker validation** | An Igbo speaker corrected the advice messages, confirmed the symptom glossary and judged 40 N-ATLaS translations, catching meaning errors the automatic back-check missed. |
 | **Full N-ATLAS stack** | N-ATLAS LLM (translation, baseline, fine-tuned model) + all four N-ATLAS ASR models (voice input). |
 
 ## Results
 
-All 1,091 faithful plain-text items; brackets are 95% case-clustered bootstrap CIs. Every system gets the same protocol system prompt.
+All 1,091 faithful plain-text items; brackets are 95% case-clustered bootstrap CIs. Every system gets the same protocol
+system prompt. Gold labels follow the clinician-reviewed rules; AHỤIKE is scored as deployed (model + review guard).
 
 | System | Accuracy | **Missed emergencies** ↓ | Over-triage | Danger-sign F1 | Consistent & correct in all 4 languages |
 |---|---|---|---|---|---|
-| Base N-ATLaS | 37.2 [31.9–42.1] | **96.5** [94.5–98.2] | 37.4 | 23.0 | 30.5 |
-| Base + 3 worked examples | 53.8 [49.8–57.8] | **34.6** [28.8–40.7] | 53.6 | 30.1 | 27.4 |
-| Parallel-anchored variant | 90.8 [88.4–92.9] | **9.4** [5.8–13.7] | 3.2 | 84.6 | 80.0 |
-| **AHỤIKE** (released) | **90.9** [88.3–93.2] | **5.7** [2.8–9.2] | 5.7 | **87.1** | **81.1** |
+| Base N-ATLaS | 25.6 [21.0–30.2] | **97.3** [95.7–98.6] | 46.7 | 23.1 | 17.9 |
+| Base + 3 worked examples | 50.7 [46.7–54.6] | **40.9** [35.3–46.6] | 58.0 | 30.3 | 20.0 |
+| Parallel-anchored variant | 91.8 [89.7–93.7] | **5.8** [3.7–8.3] | 4.3 | 76.6 | 77.9 |
+| **AHỤIKE** (released) | **92.7** [90.3–94.8] | **3.3** [1.5–5.3] | 5.1 | **79.4** | **87.4** |
 
-AHỤIKE vs base N-ATLaS: exact McNemar p = 7.5×10⁻¹²⁷ (all items), 4.3×10⁻¹³⁷ (emergencies).
+AHỤIKE vs base N-ATLaS: exact McNemar p = 2.5×10⁻¹⁷⁸ (all items), 3.9×10⁻¹⁸⁰ (emergencies).
+The guard alone does not explain the gain: applied to base N-ATLaS it still misses 79.1% of emergencies.
 
 **Missed emergencies by language, same 95 cases in every language (parallel core)**
 
 | System | English | Hausa | Yorùbá | Igbo |
 |---|---|---|---|---|
-| Base N-ATLaS | 88.1 | 95.2 | 100 | 100 |
-| Base + 3 worked examples | 35.7 | 23.8 | **57.1** | 50.0 |
-| **AHỤIKE** | 9.5 | 4.8 | **7.1** | 7.1 |
+| Base N-ATLaS | 90.7 | 96.3 | 100 | 100 |
+| Base + 3 worked examples | 50.0 | 33.3 | **66.7** | 57.4 |
+| **AHỤIKE** | 1.9 | 3.7 | **7.4** | 3.7 |
 
-Even with worked examples, base N-ATLaS misses a Yorùbá-speaking mother's emergency more than twice as often as a Hausa speaker's.
-After fine-tuning, the gap is gone: an emergency is missed in at least one language for 14.3% of cases, vs 100% for base N-ATLaS.
+Even with worked examples, base N-ATLaS misses a Yorùbá-speaking mother's emergency twice as often as a Hausa speaker's.
+After fine-tuning, every language is under 8%: an emergency is missed in at least one language for 9.3% of cases, vs 100%
+for base N-ATLaS.
 
 **Human-validated subset.** On the 14 Igbo benchmark items our native speaker marked as faithful translations, AHỤIKE is
-92.9% accurate with **no missed emergencies** (base N-ATLaS: 21.4%, all emergencies missed).
+92.9% accurate with **no missed emergencies** (base N-ATLaS: 14.3%, all emergencies missed).
 
-**Code-switched input** (Hausa/Yorùbá/Igbo mixed with English, 92 items): AHỤIKE 81.5% accuracy, 4.8% missed emergencies.
+**Code-switched input** (Hausa/Yorùbá/Igbo mixed with English, 92 items): AHỤIKE 83.7% accuracy, 12.5% missed emergencies,
+its weakest condition and a target for the next training round.
+
+**Danger-sign F1** is lower than it would be after retraining: the review added signs to some emergency labels that the
+model, trained before the review, was not taught to name.
 
 ### Finding: more distinct cases beat repeating each case across languages
 
 We trained two models with the same number of examples and the same language mix. The *parallel-anchored* model sees each
 case in every language its translation passed (English plus one to three Nigerian languages); AHỤIKE sees each case once,
-in one language, so it learns from several times as many distinct clinical pictures. Accuracy is the same
-(McNemar p = 0.92), but AHỤIKE misses fewer emergencies: 26 vs 43 of 457. That holds when each case's four language
-versions count as one unit: AHỤIKE is safer on 15 emergency cases, the variant on 4 (exact sign test p = 0.019; gap
-4.0 points, 95% CI 1.4–7.1). The cost is a little more over-referral (5.7% vs 3.2%), the right trade for a danger-sign tool.
-For anyone fine-tuning N-ATLaS on a limited translation budget: **spend it on variety**. Cross-language consistency
-(CLCC 81.1 for both) comes from multilingual protocol training, not from the parallel structure.
+in one language, so it learns from several times as many distinct clinical pictures. Accuracy is similar (McNemar p = 0.73),
+but AHỤIKE misses fewer emergencies (19 vs 34 of 584), is more consistent across languages (CLCC 87.4 vs 77.9) and has
+half the worst-language gap (3.2 vs 6.3 points). Counting each case's four language versions as one unit, AHỤIKE is safer
+on 16 emergency cases and the variant on 6 (exact sign test p = 0.052). Under the pre-review rules the same comparison was
+26 vs 43 missed (p = 0.019). For anyone fine-tuning N-ATLaS on a limited translation budget: **spend it on variety**.
 
 ### Finding: back-translation checks are not enough
 Our Igbo reviewer judged 40 N-ATLaS translations that had passed the automatic back-check: 17 same meaning, 4 small

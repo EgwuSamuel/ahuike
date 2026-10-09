@@ -53,6 +53,7 @@ def card_html(res: dict) -> str:
   <div style="color:{fg};font-size:22px;font-weight:800;letter-spacing:.3px">{title}</div>
   <div style="color:{fg};margin:2px 0 12px">{sub}</div>
   {f'<div style="font-weight:600;margin-bottom:4px">Danger signs found</div><ul style="margin:0 0 12px 18px">{sign_html}</ul>' if signs else ''}
+  {f'<div style="font-size:13px;color:{fg};margin-bottom:10px">Raised to emergency by the clinician-reviewed protocol</div>' if res.get('raised_by_review') else ''}
   {f'<div style="font-size:17px;line-height:1.45">{advice}</div>' if advice else ''}
   <div style="color:#667085;font-size:12px;margin-top:12px">Response time {res.get('latency_s', '–')} s · Powered by N-ATLAS · Powered by Awarri</div>
 </div>"""

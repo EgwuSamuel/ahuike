@@ -83,14 +83,18 @@ class TestYoungInfant(unittest.TestCase):
         self.assertEqual(triage(infant([], vitals={"rr": 40, "temp": 37.5})), (EMERGENCY, ["fever"]))
         self.assertEqual(triage(infant([], vitals={"rr": 40, "temp": 35.4})), (EMERGENCY, ["low_temperature"]))
 
-    def test_local_infection_is_clinic(self):
-        self.assertEqual(triage(infant(["umbilicus_pus"])), (CLINIC, ["umbilicus_pus"]))
+    def test_local_infection(self):
+        # Clinical review: a red / draining umbilicus is referred (sepsis risk); pustules stay at clinic.
+        self.assertEqual(triage(infant(["umbilicus_pus"])), (EMERGENCY, ["umbilicus_pus"]))
+        self.assertEqual(triage(infant(["skin_pustules"])), (CLINIC, ["skin_pustules"]))
         self.assertEqual(triage(infant(["milk_spit_up", "blocked_nose"])), (HOME, []))
 
 
 class TestMaternal(unittest.TestCase):
     def test_pre_eclampsia_combination(self):
-        self.assertEqual(triage(preg(["severe_headache"])), (CLINIC, ["severe_headache"]))
+        # Clinical review: one sign is already an emergency (BP is not measured in the community).
+        self.assertEqual(triage(preg(["severe_headache"])), (EMERGENCY, ["severe_headache"]))
+        self.assertEqual(triage(pp(["blurred_vision"])), (EMERGENCY, ["blurred_vision"]))
         self.assertEqual(triage(preg(["severe_headache", "blurred_vision"])),
                          (EMERGENCY, ["pre_eclampsia_signs"]))
         self.assertEqual(triage(pp(["face_hand_swelling", "blurred_vision"])),

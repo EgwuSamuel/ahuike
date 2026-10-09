@@ -12,7 +12,7 @@ import time
 from pathlib import Path
 
 from .inference import BASE_MODEL, DATE_STRING
-from .prompts import advice_for, build_messages, load_advice, parse_output
+from .prompts import advice_for, apply_review_guard, build_messages, load_advice, parse_output
 
 ASR_MODELS = {
     "en": "NCAIR1/NigerianAccentedEnglish",
@@ -106,7 +106,7 @@ class Ahuike:
     def triage_text(self, text: str, lang: str, source: str = "text") -> dict:
         t0 = time.time()
         raw = self.llm.generate(text)
-        res = parse_output(raw)
+        res = apply_review_guard(parse_output(raw))
         res["advice"] = advice_for(res, lang, self.advice)
         res.update({"input": text, "lang": lang, "raw": raw, "source": source,
                     "latency_s": round(time.time() - t0, 2)})

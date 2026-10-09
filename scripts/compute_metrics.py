@@ -49,6 +49,8 @@ def main() -> None:
     ap.add_argument("--out", default=str(ROOT / "results"))
     ap.add_argument("--reference", default="base", help="system to compare others against")
     ap.add_argument("--boot", type=int, default=1000)
+    ap.add_argument("--guard", nargs="*", default=[SHIPPED, VARIANT],
+                    help="systems scored as deployed, i.e. after the clinical-review guard")
     args = ap.parse_args()
 
     gold = {c["id"]: c for c in load_jsonl(Path(args.cases))}
@@ -68,7 +70,7 @@ def main() -> None:
         latest[(p["system"], *key)] = p
     by_sys: dict[str, list[dict]] = defaultdict(list)
     for p in latest.values():
-        by_sys[p["system"]].append(score_item(p, gold[p["case_id"]]))
+        by_sys[p["system"]].append(score_item(p, gold[p["case_id"]], guard=p["system"] in args.guard))
     systems = sorted(by_sys, key=lambda s: (ORDER.index(s) if s in ORDER else 99, s))
 
     report: dict = {}
@@ -124,7 +126,9 @@ def main() -> None:
 
     # ------------------------------------------------------------------ markdown report
     L = ["# NaijaTriage-Bench results", "",
-         "`ahuike` = the released AHỤIKE model. `ahuike_parallel` = the tested alternative (each training case in all four languages).", "",
+         "`ahuike` = the released AHỤIKE model. `ahuike_parallel` = the tested alternative (each training case in all four languages).",
+         "Gold labels follow the clinician-reviewed rules (8 Oct 2026). Fine-tuned systems are scored as deployed, after the "
+         "review guard (`ahuike.prompts.apply_review_guard`).", "",
          "Gold labels are produced by the AHỤIKE protocol engine (WHO IMCI + Nigerian CHEW Standing Orders).",
          "Brackets are 95% case-clustered bootstrap CIs. Under-triage = emergency cases not referred.", "",
          "## Headline: all faithful items (en/ha/yo/ig, plain text)", "",

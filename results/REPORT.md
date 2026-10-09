@@ -1,6 +1,7 @@
 # NaijaTriage-Bench results
 
 `ahuike` = the released AHỤIKE model. `ahuike_parallel` = the tested alternative (each training case in all four languages).
+Gold labels follow the clinician-reviewed rules (8 Oct 2026). Fine-tuned systems are scored as deployed, after the review guard (`ahuike.prompts.apply_review_guard`).
 
 Gold labels are produced by the AHỤIKE protocol engine (WHO IMCI + Nigerian CHEW Standing Orders).
 Brackets are 95% case-clustered bootstrap CIs. Under-triage = emergency cases not referred.
@@ -9,72 +10,72 @@ Brackets are 95% case-clustered bootstrap CIs. Under-triage = emergency cases no
 
 | System | N | Accuracy | Macro-F1 | Under-triage ↓ | Over-triage | Danger-sign F1 | CLCC ↑ | Worst-lang gap ↓ | JSON valid |
 |---|---|---|---|---|---|---|---|---|---|
-| base | 1091 | 37.2 [31.9–42.1] | 21.9 | 96.5 [94.5–98.2] | 37.4 | 23.0 | 88.4 [83.3–93.4] | 5.3 | 98.2 |
-| base_fewshot | 1091 | 53.8 [49.8–57.8] | 48.5 | 34.6 [28.8–40.7] | 53.6 | 30.1 | 49.5 [41.3–57.6] | 8.4 | 96.7 |
-| ahuike_parallel | 1091 | 90.8 [88.4–92.9] | 90.7 | 9.4 [5.8–13.7] | 3.2 | 84.6 | 81.1 [75.0–87.5] | 6.3 | 100.0 |
-| ahuike | 1091 | 90.9 [88.3–93.2] | 90.7 | 5.7 [2.8–9.2] | 5.7 | 87.1 | 81.1 [75.0–87.3] | 2.1 | 100.0 |
+| base | 1091 | 25.6 [21.0–30.2] | 16.7 | 97.3 [95.7–98.6] | 46.7 | 23.1 | 88.4 [83.3–93.4] | 5.3 | 98.2 |
+| base_fewshot | 1091 | 50.7 [46.7–54.6] | 45.0 | 40.9 [35.3–46.6] | 58.0 | 30.3 | 49.5 [41.3–57.6] | 10.5 | 96.7 |
+| ahuike_parallel | 1091 | 91.8 [89.7–93.7] | 90.3 | 5.8 [3.7–8.3] | 4.3 | 76.6 | 77.9 [71.4–84.7] | 6.3 | 100.0 |
+| ahuike | 1091 | 92.7 [90.3–94.8] | 90.9 | 3.3 [1.5–5.3] | 5.1 | 79.4 | 87.4 [82.7–92.6] | 3.2 | 100.0 |
 
 ## Accuracy / under-triage by language (all faithful items; case mix differs by language)
 
 | System | en acc | en under | ha acc | ha under | yo acc | yo under | ig acc | ig under |
 |---|---|---|---|---|---|---|---|---|
-| base | 39.2 | 93.1 | 37.8 | 96.5 | 34.8 | 100.0 | 34.4 | 100.0 |
-| base_fewshot | 60.8 | 28.7 | 49.6 | 24.8 | 48.6 | 50.9 | 51.5 | 48.5 |
-| ahuike_parallel | 94.3 | 6.9 | 89.7 | 10.6 | 92.0 | 10.5 | 85.9 | 11.1 |
-| ahuike | 93.2 | 5.0 | 90.9 | 6.4 | 89.9 | 5.3 | 87.7 | 6.1 |
+| base | 27.5 | 94.6 | 25.5 | 97.3 | 22.5 | 100.0 | 24.2 | 100.0 |
+| base_fewshot | 56.4 | 37.6 | 51.0 | 29.5 | 42.0 | 56.8 | 45.8 | 54.1 |
+| ahuike_parallel | 94.8 | 3.4 | 90.6 | 6.6 | 92.0 | 9.5 | 88.5 | 6.6 |
+| ahuike | 94.5 | 2.0 | 92.1 | 4.4 | 91.3 | 5.4 | 91.2 | 2.5 |
 
 ## Parallel core: the same cases in every language (fair language comparison)
 
 | System | Cases | en acc | en under | ha acc | ha under | yo acc | yo under | ig acc | ig under |
 |---|---|---|---|---|---|---|---|---|---|
-| base | 95 | 36.8 | 88.1 | 33.7 | 95.2 | 32.6 | 100.0 | 31.6 | 100.0 |
-| base_fewshot | 95 | 57.9 | 35.7 | 50.5 | 23.8 | 49.5 | 57.1 | 51.6 | 50.0 |
-| ahuike_parallel | 95 | 94.7 | 9.5 | 93.7 | 9.5 | 90.5 | 14.3 | 88.4 | 14.3 |
-| ahuike | 95 | 91.6 | 9.5 | 91.6 | 4.8 | 92.6 | 7.1 | 90.5 | 7.1 |
+| base | 95 | 24.2 | 90.7 | 21.1 | 96.3 | 20.0 | 100.0 | 18.9 | 100.0 |
+| base_fewshot | 95 | 45.3 | 50.0 | 47.4 | 33.3 | 36.8 | 66.7 | 43.2 | 57.4 |
+| ahuike_parallel | 95 | 96.8 | 3.7 | 94.7 | 5.6 | 90.5 | 13.0 | 90.5 | 9.3 |
+| ahuike | 95 | 95.8 | 1.9 | 93.7 | 3.7 | 92.6 | 7.4 | 93.7 | 3.7 |
 
 ## Cross-lingual consistency
 
 | System | Cases (all 4 langs) | CLCC | Consistent & correct | Emergency missed in ≥1 language | Worst language |
 |---|---|---|---|---|---|
-| base | 95 | 88.4 | 30.5 | 100.0 | ig |
-| base_fewshot | 95 | 49.5 | 27.4 | 69.0 | yo |
-| ahuike_parallel | 95 | 81.1 | 80.0 | 23.8 | ig |
-| ahuike | 95 | 81.1 | 81.1 | 14.3 | ig |
+| base | 95 | 88.4 | 17.9 | 100.0 | ig |
+| base_fewshot | 95 | 49.5 | 20.0 | 75.9 | yo |
+| ahuike_parallel | 95 | 77.9 | 77.9 | 24.1 | yo |
+| ahuike | 95 | 87.4 | 87.4 | 9.3 | yo |
 
 ## Code-switched input (ha/yo/ig mixed with English)
 
 | System | N | Accuracy | Under-triage |
 |---|---|---|---|
-| base | 92 | 32.6 | 97.6 |
-| base_fewshot | 92 | 47.8 | 50.0 |
-| ahuike_parallel | 92 | 84.8 | 11.9 |
-| ahuike | 92 | 81.5 | 4.8 |
+| base | 92 | 18.5 | 98.2 |
+| base_fewshot | 92 | 40.2 | 57.1 |
+| ahuike_parallel | 92 | 89.1 | 5.4 |
+| ahuike | 92 | 83.7 | 12.5 |
 
 ## Human-validated subsets
 
 | System | Subset | Language | N | Accuracy | Under-triage |
 |---|---|---|---|---|---|
-| base | AI translation verified by native speaker | ig | 14 | 21.4 | 100.0 |
-| base_fewshot | AI translation verified by native speaker | ig | 14 | 50.0 | 57.1 |
-| ahuike_parallel | AI translation verified by native speaker | ig | 14 | 85.7 | 0.0 |
+| base | AI translation verified by native speaker | ig | 14 | 14.3 | 100.0 |
+| base_fewshot | AI translation verified by native speaker | ig | 14 | 42.9 | 62.5 |
+| ahuike_parallel | AI translation verified by native speaker | ig | 14 | 85.7 | 12.5 |
 | ahuike | AI translation verified by native speaker | ig | 14 | 92.9 | 0.0 |
 
 ## Accuracy by population and reasoning type
 
 | System | child | infant | postpartum | pregnant | combination | duration_threshold | rr_threshold | temp_threshold |
 |---|---|---|---|---|---|---|---|---|
-| base | 46.0 | 15.3 | 36.9 | 33.4 | 50.5 | 51.5 | 52.6 | 0.0 |
-| base_fewshot | 51.4 | 72.9 | 55.3 | 51.3 | 59.7 | 53.2 | 61.4 | 20.0 |
-| ahuike_parallel | 87.7 | 88.2 | 88.5 | 95.7 | 88.9 | 86.8 | 87.7 | 100.0 |
-| ahuike | 86.4 | 85.9 | 90.3 | 96.7 | 87.2 | 84.7 | 80.7 | 80.0 |
+| base | 46.0 | 15.3 | 15.2 | 13.3 | 27.0 | 51.5 | 52.6 | 0.0 |
+| base_fewshot | 51.4 | 72.9 | 57.6 | 41.5 | 53.4 | 53.2 | 61.4 | 20.0 |
+| ahuike_parallel | 87.7 | 88.2 | 93.5 | 95.7 | 90.9 | 86.8 | 87.7 | 100.0 |
+| ahuike | 86.4 | 89.4 | 93.5 | 99.0 | 90.2 | 84.7 | 80.7 | 80.0 |
 
 ## Paired significance vs `base` (exact McNemar)
 
 | System | Items only ref right | Items only system right | p (all) | p (emergency cases) |
 |---|---|---|---|---|
-| base_fewshot | 155 | 350 | 2.3e-18 | 1.2e-91 |
-| ahuike_parallel | 59 | 692 | 5.9e-138 | 4.5e-131 |
-| ahuike | 81 | 712 | 7.5e-127 | 4.3e-137 |
+| base_fewshot | 105 | 399 | 2.3e-41 | 2.2e-106 |
+| ahuike_parallel | 55 | 843 | 4e-182 | 7.9e-177 |
+| ahuike | 63 | 855 | 2.5e-178 | 3.9e-180 |
 
 ## Data design: `ahuike` (diverse cases) vs `ahuike_parallel` (each case in all 4 languages)
 
@@ -82,8 +83,8 @@ Same number of training examples and language mix. Paired on identical benchmark
 
 | Test | Only variant right | Only shipped right | p |
 |---|---|---|---|
-| All items (McNemar) | 47 | 45 | 0.92 |
-| Emergency items (McNemar) | 5 | 25 | 0.00032 |
-| Emergency cases, 4 languages = 1 unit (sign test) | 4 | 15 | 0.019 |
+| All items (McNemar) | 35 | 39 | 0.73 |
+| Emergency items (McNemar) | 9 | 20 | 0.061 |
+| Emergency cases, 4 languages = 1 unit (sign test) | 6 | 16 | 0.052 |
 
-Missed-emergency rate, variant minus shipped: **4.0 points** (95% case-clustered CI 1.4 to 7.1).
+Missed-emergency rate, variant minus shipped: **1.7 points** (95% case-clustered CI -0.5 to 3.8).

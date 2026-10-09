@@ -23,19 +23,26 @@ Code, benchmark and full results: https://github.com/EgwuSamuel/ahuike
 
 ## Results (NaijaTriage-Bench, 1,091 plain-text items in 4 languages)
 
-Every system gets the same protocol system prompt. Brackets are 95% case-clustered bootstrap CIs.
+Every system gets the same protocol system prompt. Gold labels follow the clinician-reviewed rules; this model is scored
+as deployed, with the review guard. Brackets are 95% case-clustered bootstrap CIs.
 
 | System | Accuracy | Missed emergencies ↓ | Danger-sign F1 | Consistent & correct in all 4 languages |
 |---|---|---|---|---|
-| Base N-ATLaS | 37.2 [31.9–42.1] | 96.5 [94.5–98.2] | 23.0 | 30.5 |
-| Base + 3 worked examples | 53.8 [49.8–57.8] | 34.6 [28.8–40.7] | 30.1 | 27.4 |
-| **This model** | **90.9** [88.3–93.2] | **5.7** [2.8–9.2] | **87.1** | **81.1** |
+| Base N-ATLaS | 25.6 [21.0–30.2] | 97.3 [95.7–98.6] | 23.1 | 17.9 |
+| Base + 3 worked examples | 50.7 [46.7–54.6] | 40.9 [35.3–46.6] | 30.3 | 20.0 |
+| **This model** | **92.7** [90.3–94.8] | **3.3** [1.5–5.3] | **79.4** | **87.4** |
 
-- vs base N-ATLaS: exact McNemar p = 7.5×10⁻¹²⁷ (all items), 4.3×10⁻¹³⁷ (emergency items).
-- Missed emergencies on the same 95 cases in every language: English 9.5, Hausa 4.8, Yorùbá 7.1, Igbo 7.1 (base: 88–100).
+- vs base N-ATLaS: exact McNemar p = 2.5×10⁻¹⁷⁸ (all items), 3.9×10⁻¹⁸⁰ (emergency items).
+- Missed emergencies on the same 95 cases in every language: English 1.9, Hausa 3.7, Yorùbá 7.4, Igbo 3.7 (base: 91–100).
 - Igbo items verified as faithful by a native speaker (n = 14): 92.9% accuracy, 0 missed emergencies.
-- Code-switched input (92 items): 81.5% accuracy, 4.8% missed emergencies.
-- Over-triage (non-emergencies sent up a level): 5.7%. The protocol errs toward referral by design.
+- Code-switched input (92 items): 83.7% accuracy, 12.5% missed emergencies (weakest condition).
+- Over-triage (non-emergencies sent up a level): 5.1%. The protocol errs toward referral by design.
+
+## Clinical review and the review guard
+A medical doctor (MBBS) on the team reviewed the triage rules after training and made two stricter: a red or draining
+umbilicus in a young infant, and any single pre-eclampsia sign, are now emergencies. This adapter was trained before that
+review, so apply `ahuike.prompts.apply_review_guard` to its parsed output: if it names one of those signs, the answer is
+raised to `EMERGENCY_REFER_NOW`. The guard never lowers urgency. The next training round will use the relabelled data.
 
 ## Training
 - QLoRA (r=16, α=32, all attention + MLP projections), 1 epoch, lr 2e-4, Unsloth, Kaggle T4 GPUs.
@@ -44,8 +51,8 @@ Every system gets the same protocol system prompt. Brackets are 95% case-cluster
   and the Nigerian CHEW Standing Orders.
 - Hausa/Yorùbá/Igbo text translated by N-ATLaS and filtered by back-translation.
 - We also trained a *parallel-anchored* variant of the same size (each case repeated in every language its translation
-  passed). Accuracy was the same, but it missed more emergencies (9.4% vs 5.7%; case-level sign test p = 0.019), so this
-  diverse-cases model is the release.
+  passed). It had similar accuracy but missed more emergencies (5.8% vs 3.3% with the reviewed rules; 9.4% vs 5.7% before
+  the review, case-level sign test p = 0.019), so this diverse-cases model is the release.
 
 ## Use
 
@@ -58,7 +65,8 @@ base = AutoModelForCausalLM.from_pretrained("NCAIR1/N-ATLaS", device_map="auto",
 model = PeftModel.from_pretrained(base, "SamEgwu/AHUIKE-N-ATLaS-8B-LoRA-Powered-by-Awarri")
 ```
 
-Use the system prompt and output parser in `ahuike/prompts.py` (`SYSTEM_PROMPT`, `build_messages`, `parse_output`).
+Use the system prompt, parser and guard in `ahuike/prompts.py` (`SYSTEM_PROMPT`, `build_messages`, `parse_output`,
+`apply_review_guard`).
 The model replies with one JSON object, for example
 `{"triage": "EMERGENCY_REFER_NOW", "patient": "pregnant", "danger_signs": ["vaginal_bleeding"]}`.
 

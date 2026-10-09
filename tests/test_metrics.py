@@ -6,7 +6,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from ahuike.metrics import clcc, detect_lang, mcnemar_exact, paired_cases, score_item, summarize  # noqa: E402
-from ahuike.prompts import parse_output, target_json  # noqa: E402
+from ahuike.prompts import apply_review_guard, parse_output, target_json  # noqa: E402
 
 
 def out(tri, signs=(), patient="child"):
@@ -86,6 +86,13 @@ class TestMetrics(unittest.TestCase):
         self.assertTrue(advice_for(p, "yo", table).startswith("DANGER SIGN"))  # falls back to English
         p2 = parse_output(out("HOME_CARE", [], "pregnant"))
         self.assertIn("pregnancy", advice_for(p2, "en", table))
+
+    def test_review_guard_only_raises(self):
+        raised = apply_review_guard(parse_output(out("CLINIC_WITHIN_24H", ["severe_headache"], "pregnant")))
+        self.assertEqual((raised["triage"], raised["raised_by_review"]), ("EMERGENCY_REFER_NOW", ["severe_headache"]))
+        same = apply_review_guard(parse_output(out("CLINIC_WITHIN_24H", ["fever"], "pregnant")))
+        self.assertEqual(same["triage"], "CLINIC_WITHIN_24H")
+        self.assertNotIn("raised_by_review", same)
 
     def test_target_roundtrip(self):
         s = out("CLINIC_WITHIN_24H", ["fever"], "pregnant")

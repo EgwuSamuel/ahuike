@@ -10,7 +10,7 @@ import json
 import re
 
 from .protocol.findings import POSTPARTUM, PREGNANT
-from .protocol.rules import CLINIC, EMERGENCY, HOME, LEVELS
+from .protocol.rules import CLINIC, EMERGENCY, HOME, LEVELS, REVIEW_EMERGENCY_SIGNS
 
 LANGS = {"en": "English", "ha": "Hausa", "yo": "Yoruba", "ig": "Igbo"}
 
@@ -139,3 +139,15 @@ def parse_output(text: str) -> dict:
         if m:
             out["triage"] = m.group(0)
     return out
+
+
+def apply_review_guard(parsed: dict) -> dict:
+    """Raise to EMERGENCY when the model names a sign the clinical review made an emergency.
+
+    The model decides which signs are present; the reviewed protocol decides how urgent they are.
+    Adds "raised_by_review": [signs] when it changes the answer. Never lowers urgency.
+    """
+    hit = sorted(set(parsed.get("danger_signs") or []) & REVIEW_EMERGENCY_SIGNS)
+    if hit and parsed.get("triage") != EMERGENCY:
+        return {**parsed, "triage": EMERGENCY, "raised_by_review": hit}
+    return parsed

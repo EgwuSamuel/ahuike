@@ -20,7 +20,7 @@ import random
 import re
 from collections import Counter, defaultdict
 
-from .prompts import parse_output
+from .prompts import apply_review_guard, parse_output
 from .protocol.rules import EMERGENCY, LEVELS, SEVERITY
 
 CORE_LANGS = ("en", "ha", "yo", "ig")
@@ -57,8 +57,11 @@ def detect_lang(text: str) -> str:
 
 # ----------------------------------------------------------------------------- scoring
 
-def score_item(pred: dict, gold: dict) -> dict:
+def score_item(pred: dict, gold: dict, guard: bool = False) -> dict:
+    """Score one reply. guard=True scores it as deployed: after apply_review_guard."""
     p = parse_output(pred.get("output", ""))
+    if guard:
+        p = apply_review_guard(p)
     gt = gold["triage"]
     pt = p["triage"]
     gold_signs = set(gold["triggers"])

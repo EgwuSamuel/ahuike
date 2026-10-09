@@ -21,6 +21,8 @@ A **parallel** maternal and child danger-sign triage benchmark in **English, Hau
 4. **Translation**: N-ATLaS translates into ha/yo/ig, plus code-switched variants. N-ATLaS back-translates,
    and items are kept only if every finding and number survives (`ahuike/backcheck.py`).
 5. **Split by clinical combination** (`combo_key`): no test combination of findings appears in training.
+6. **Clinical review** (8 Oct 2026): a medical doctor reviewed the rules; two were made stricter and every case was
+   relabelled (`scripts/relabel.py`). 45 of 385 test cases moved from clinic to emergency.
 
 ## Fields (`cases_*.jsonl`)
 `id, population, age_months|age_days|ga_weeks|pp_days, sex, persona, findings, durations, vitals, triage, triggers,
