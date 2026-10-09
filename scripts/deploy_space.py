@@ -3,8 +3,7 @@
   hf auth login                           # once, with a WRITE token
   SPACE_HF_TOKEN=<read token> python scripts/deploy_space.py
 
-ZeroGPU is free for personal accounts in good standing (verified email, account older than 30 days, at most 2 such
-Spaces); CPU Gradio Spaces now need a paid plan. Uploads space/ (zerogpu_app.py, requirements, Space card), the ahuike
+Gradio Spaces, including ZeroGPU, need a Hugging Face paid plan (PRO) as of October 2026. Uploads space/ (zerogpu_app.py, requirements, Space card), the ahuike
 package, app/app.py and the advice messages. The Space needs its own READ token as the secret HF_TOKEN (gated N-ATLaS
 model and ASR models): pass it as SPACE_HF_TOKEN, or add it under the Space's Settings > Variables and secrets.
 """
@@ -43,7 +42,7 @@ def main() -> None:
             f"Could not create {space} on ZeroGPU ({e.response.status_code if e.response is not None else e}).\n"
             "Create it in the browser instead: huggingface.co/new-space -> SDK Gradio -> Hardware 'ZeroGPU',\n"
             f"name it '{space.split('/')[-1]}', then run this script again to upload the code.\n"
-            "ZeroGPU needs a verified email and an account older than 30 days (max 2 ZeroGPU Spaces).")
+            "Gradio/ZeroGPU Spaces need a Hugging Face paid plan (PRO).")
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
