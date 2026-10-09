@@ -4,9 +4,9 @@ emoji: 🩺
 colorFrom: green
 colorTo: yellow
 sdk: gradio
-sdk_version: 6.20.0
-python_version: "3.11"
-app_file: space_app.py
+sdk_version: 6.30.0
+python_version: "3.10"
+app_file: zerogpu_app.py
 pinned: false
 license: other
 short_description: Maternal and child danger-sign triage on N-ATLAS
@@ -18,8 +18,18 @@ short_description: Maternal and child danger-sign triage on N-ATLAS
 Yorùbá or Igbo and get a triage card: **emergency**, **clinic within 24 hours** or **home care**, with the danger signs
 that triggered it. The advice shown is never AI-written: it is one of nine reviewed messages per language.
 
-Runs N-ATLaS-8B fine-tuned for triage (Q4_K_M, llama.cpp) on a free CPU, so each answer takes about 20–60 seconds.
-After a quiet period the Space sleeps; the first visit then takes a few minutes to wake it.
+Runs N-ATLaS-8B with the released AHỤIKE adapter on ZeroGPU, a shared GPU that Hugging Face attaches for each request.
+Answers take a few seconds; at busy times a request may wait briefly in the GPU queue. Use is free: Hugging Face gives every
+visitor a small daily GPU allowance, so signing in to Hugging Face gives you more requests per day.
+
+**Live API.** Two endpoints, documented under **"Use via API"** at the bottom of this page:
+`/triage` (text, lang) and `/triage_voice` (audio, lang), where lang is `en`, `ha`, `yo` or `ig`.
+
+```python
+from gradio_client import Client
+client = Client("SamEgwu/AHUIKE")
+print(client.predict("I am 32 weeks pregnant and have a very severe headache.", "en", api_name="/triage"))
+```
 
 **Decision support, not a diagnosis.** If you are worried, go to the health centre.
 

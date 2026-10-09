@@ -1,11 +1,45 @@
-# AHỤIKE HTTP API
+# AHỤIKE API
 
-A small REST API that runs the released AHỤIKE model (N-ATLaS-8B + LoRA, merged and quantised to GGUF Q4_K_M)
-on CPU with llama.cpp. Interactive documentation, where every endpoint can be tried in the browser, is at `/docs`.
+AHỤIKE can be called in two ways: the **hosted API** on a free Hugging Face ZeroGPU Space (no setup), or a
+**self-hosted** FastAPI server that runs the model on CPU with llama.cpp. Both run the same pipeline as the benchmark:
+N-ATLaS-8B with the released adapter, the output parser, the clinician-reviewed guard and reviewed advice.
 
-**Decision support only, not a diagnosis.** Answers take about 10–30 seconds on a 4-core ARM server.
+**Decision support only, not a diagnosis.**
 
-## Endpoints
+## Hosted API (Hugging Face ZeroGPU, free)
+
+The public deployment runs on a Hugging Face Space with ZeroGPU: https://huggingface.co/spaces/SamEgwu/AHUIKE.
+The same page is the demo, and **"Use via API"** at the bottom lists the endpoints with ready-to-copy code.
+It uses the merged N-ATLaS-8B + AHỤIKE model on a GPU, so answers take a few seconds. Hugging Face gives every
+visitor a small daily GPU allowance (more when signed in); a request may queue briefly at busy times.
+
+| Endpoint | Inputs | Output |
+|---|---|---|
+| `/triage` | `text` (string), `lang` (`en`, `ha`, `yo`, `ig`) | the JSON fields described below |
+| `/triage_voice` | `audio` (wav/mp3 file), `lang` | the same fields plus `transcript` |
+
+Python (`pip install gradio_client`):
+
+```python
+from gradio_client import Client, handle_file
+client = Client("SamEgwu/AHUIKE")
+print(client.predict("I am 32 weeks pregnant. I have a very severe headache.", "en", api_name="/triage"))
+print(client.predict(handle_file("case.wav"), "ha", api_name="/triage_voice"))
+```
+
+REST (two steps: submit, then read the result):
+
+```bash
+curl -X POST https://samegwu-ahuike.hf.space/gradio_api/call/triage      -H "Content-Type: application/json"      -d '{"data": ["My baby is 3 weeks old and is not feeding well.", "en"]}'
+# -> {"event_id": "abc123"}
+curl -N https://samegwu-ahuike.hf.space/gradio_api/call/triage/abc123
+```
+
+## Self-hosted API (FastAPI, CPU)
+
+The FastAPI server in `api/server.py` serves the same model on CPU. Its endpoints:
+
+### Endpoints
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -14,7 +48,7 @@ on CPU with llama.cpp. Interactive documentation, where every endpoint can be tr
 | `GET` | `/docs` | Interactive documentation (OpenAPI / Swagger UI) |
 | `GET` | `/openapi.json` | Machine-readable API description |
 
-### `POST /triage`
+#### `POST /triage`
 
 Request:
 

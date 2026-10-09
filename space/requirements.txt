@@ -1,4 +1,7 @@
---extra-index-url https://download.pytorch.org/whl/cpu
-torch
-transformers
-llama-cpp-python>=0.3.8
+# ZeroGPU Space (Python 3.10, Gradio 6.30). torch must be a version ZeroGPU supports.
+torch==2.13.0
+transformers==5.19.0
+peft==0.21.2
+accelerate==1.15.0
+librosa>=0.10
+soundfile>=0.12
